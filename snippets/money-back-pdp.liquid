@@ -1,0 +1,593 @@
+{% if section.settings.on_country != blank %}
+  {% assign country = section.settings.on_country | split: ',' %}
+{% endif %}
+<style>
+    .money_back {
+        padding: 100px 0;
+        background-color: #f8f8f8;
+    }
+
+    .money_back .flx {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .money_back>* {
+        width: 95%;
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+
+    .money_back h2 {
+        text-align: center;
+        margin-bottom: 60px;
+        color: #000000;
+        font-size: 36px;
+        font-weight: 700;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .money_back .schedule {
+        background-color: #fff;
+        border-radius: 25px;
+        margin-bottom: 60px;
+        padding: 30px 10%;
+    }
+
+    .money_back .schedule select {
+        width: fit-content;
+    }
+
+    .money_back .spots {
+        color: #1E415F;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .money_back .spots>p {
+        width: 200px;
+        text-align: center;
+        padding: 50px 35px;
+        line-height: 1.1;
+    }
+    .money_back .spots>p:first-child {
+       background: url("https://conversionratestore.github.io/projects/somnifix/img/spot1.svg") center center no-repeat;
+       background-size: contain;
+    }
+
+    .money_back .spots>p:nth-child(2) {
+       background: url("https://conversionratestore.github.io/projects/somnifix/img/spot2.svg") center center no-repeat;
+       background-size: contain;
+    }
+
+    .money_back .spots>p:last-child {
+       background: url("https://conversionratestore.github.io/projects/somnifix/img/spot3.svg") center center no-repeat;
+       background-size: contain;
+    }
+
+    .money_back .delivery_time {
+        position:relative;
+    }
+
+    .money_back .delivery_time>div:not(.line) {
+        position:absolute;
+        top: -70px;
+    }
+
+    .money_back .delivery_time>div:nth-child(3) {
+        left: 20%;
+    }
+
+    .money_back .delivery_time>div:last-child {
+        left: 65%;
+        top: -98px
+    }
+
+    .money_back .delivery_time>div:not(.line)>p:first-child {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1E415F;
+    }
+
+    .money_back .delivery_time>div:not(.line)>p:nth-child(2) {
+        font-size: 14px;
+        color: #1E415F;
+    }
+
+    .money_back .delivery_time>div:not(.line)>p:last-child {
+        font-size: 14px;
+        margin-top: 40px;
+        color: #5E778B;
+    }
+  .new_money_back.money_back .delivery_time>div:not(.line)>p.delivery_date:last-child{
+    font-weight: 400;
+  }
+
+
+    .money_back .line {
+        margin: 85px 0 35px;
+        height: 10px;
+        width: 100%;
+        background-color: #E3F4FF;
+        border-radius: 10px;
+        position:relative;
+    }
+
+    .money_back .line span {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #2374B5;
+        position:absolute;
+        top: -5px;
+        left: 0;
+    }
+
+    .money_back .line span.point2 {
+        left: calc(20% - 10px);
+    }
+
+    .money_back .line span.point3 {
+        left: calc(65% - 10px);
+    }
+
+    .money_back .line p {
+        height: 10px;
+        width: 65%;
+        background-color: #2374b5;
+        border-radius: 10px;
+    }
+
+    .money_back .for_country_select {
+      position: relative;
+    }
+
+    .money_back .for_country_select::after {
+      content: "";
+      display: block;
+      background: url("{{'expandmore.svg' | asset_url }}") center center no-repeat;
+      background-size: contain;
+      width: 12px;
+      height: 6px;
+      position: absolute;
+      top: 50%;
+      right: 3px;
+      transform: translateY(-50%);
+  }
+
+    .money_back .country_select {
+      background: none;
+      border: none;
+      font-weight: 500;
+      font-size: 13px;
+      display: inline-block;
+      text-decoration: underline;
+      color: #1E415F;
+      width: fit-content;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      padding-right: 10px;
+    }
+
+    /* money back new */
+    .new_money_back.money_back {
+      padding: 50px 0;
+      max-width: 1200px;
+      margin: 60px auto 0 ;
+      border-radius: 30px;
+    }
+    .new_money_back.money_back .for_country_select{
+      margin-left: 0px;
+    }
+    .new_money_back.money_back .schedule {
+      max-width: 996px;
+      margin: 0 auto 60px;
+      padding: 30px 3% 36px 8.5%;
+    }
+    .new_money_back.money_back h2 {
+      margin-bottom: 40px;
+      font-size: 30px;
+      line-height: 38px;
+      color: #20425E;
+      letter-spacing: normal;
+      font-family: 'Rubik', sans-serif;
+    }
+    .new_money_back.money_back .schedule > p {
+      font-size: 14px;
+      line-height: 22px;
+    }
+    .new_money_back.money_back .line span {
+      width: 18px;
+      height: 18px;
+    }
+    .new_money_back.money_back .line span.point2, .new_money_back.money_back .delivery_time>div:nth-child(3) {
+      left: 24%;
+    }
+    .new_money_back.money_back .delivery_time>div:last-child, .new_money_back.money_back .line span.point3 {
+      left: 59%;
+    }
+    .new_money_back.money_back .line {
+      height: 9px;
+    }
+    .new_money_back.money_back .line p {
+      width: 60%;
+      height: 9px;
+    }
+    .new_money_back.money_back .delivery_time>div:last-child {
+      top: -70px;
+    }
+    .new_money_back.money_back .delivery_time>div:not(.line)>p:last-child {
+      font-size: 14px;
+      margin-top: 40px;
+    }
+    .new_money_back.money_back .spots {
+      max-width: 790px;
+      justify-content: space-between;
+    }
+    .new_money_back.money_back .spots img {
+      height: 38.33px;
+      width: 38.33px;
+      margin-bottom: 11px;
+    }
+    .new_money_back.money_back .spots>p {
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 26px;
+      color: #20425E;
+    }
+    .new_money_back.money_back .spots>p:first-child {
+       width: 236px;
+       height: 172px;
+        padding: 20px 14px;
+       background: url("{{ 'spot1.svg' | asset_url }}") no-repeat center / contain;
+    }
+
+    .new_money_back.money_back .spots>p:nth-child(2) {
+       width: 258px;
+       height: 192px;
+      padding: 30px 35px;
+       background: url("{{ 'spot2.svg' | asset_url }}") no-repeat center / contain;
+    }
+
+    .new_money_back.money_back .spots>p:last-child {
+       width: 208px;
+       height: 180px;
+        padding: 24px 54px;
+       background: url("{{ 'spot3.svg' | asset_url }}") no-repeat center / contain;
+    }
+  @media (max-width: 1040px) {
+    .money_back .delivery_time>div:not(.line)>p:first-child{
+      font-size: 18px;
+    }
+  }
+  @media (max-width: 940px) {
+    .money_back .delivery_time>div:not(.line)>p:first-child{
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 768px) {
+    .new_money_back.money_back {
+      padding: 30px 20px;
+      margin: 9px -20px 0;
+      width: calc(100% + 40px);
+      border-radius: 0;
+    }
+    .new_money_back.money_back h2 {
+      font-size: 24px;
+      line-height: 32px;
+      text-align: left;
+      margin: 0 0 20px 0;
+    }
+    .new_money_back.money_back .schedule {
+      margin: 0 0 20px 0;
+      padding: 16px;
+      width: 100%;
+    }
+    .new_money_back.money_back .for_country_select {
+      display: block;
+      width: fit-content;
+      margin-bottom: 23px;
+    }
+    .new_money_back.money_back .delivery_time>div:not(.line) {
+      position: relative;
+      left: 0;
+      top: 0;
+    }
+     .new_money_back.money_back .delivery_time>div:not(.line,:last-child) {
+      margin-bottom: 30px;
+     }
+    .new_money_back.money_back .delivery_time>div:not(.line)>p:last-child {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40%;
+      margin: 0;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: #5E778B;
+      padding-left: 16px;
+    }
+     .new_money_back.money_back .delivery_time>div:not(.line)>p:first-child, .new_money_back.money_back .delivery_time>div:not(.line)>p:nth-child(2) {
+       width: 60%;
+       font-weight: 400;
+       font-size: 14px;
+       line-height: 22px;
+       text-align: right;
+       padding-right: 34px;
+    }
+    .new_money_back.money_back .delivery_time>div:not(.line)>p:first-child {
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 24px;
+      margin: 0 0 4px 0;
+    }
+    .new_money_back.money_back .line, .new_money_back.money_back .line p {
+      margin: 0;
+      position: absolute;
+      right: calc(40% + 6px);
+      top: 3px;
+      border-radius: 24px;
+      height: calc(100% - 3px);
+      width: 6px;
+    }
+    .new_money_back.money_back .line p {
+      right: 0;
+      height: 170px;
+    }
+    .new_money_back.money_back .line span {
+      left: 50%!important;
+      top: 0;
+      transform: translateX(-50%) ;
+    }
+    .new_money_back.money_back .line span.point2 {
+      top: 80px;
+    }
+    .new_money_back.money_back .line span.point3 {
+      top: 160px;
+    }
+    .new_money_back.money_back .spots {
+      width: 100%;
+    }
+    .new_money_back.money_back .spots>p {
+      width: 33.33%!important;
+      padding: 13px!important;
+      font-size: 14px;
+      line-height: 18px;
+      background-position: center top!important;
+      height: auto!important;
+    }
+    .new_money_back.money_back .spots img {
+        height: 27px;
+        width: 27px;
+        margin-bottom: 6px;
+    }
+    .new_money_back.money_back .spots>p:first-child {
+      background-image: url({{ 'spot_1_mob.svg' | asset_url }});
+    }
+    .new_money_back.money_back .spots>p:nth-child(2) {
+      background-image: url({{ 'spot_2_mob.svg' | asset_url }});
+    }
+    .new_money_back.money_back .spots>p:nth-child(3) {
+      background-image: url({{ 'spot_3_mob.svg' | asset_url }});
+      padding: 13px 16px!important
+    }
+
+    .money_back {
+      padding: 50px 0;
+    }
+
+    .money_back .schedule>p {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .money_back h2 {
+      margin-bottom: 30px;
+      font-size: 24px;
+    }
+
+    .money_back .schedule {
+      border-radius: 15px;
+      margin-bottom: 25px;
+      padding: 20px;
+    }
+
+    .money_back .schedule p {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .money_back .spots>p {
+      padding: 5px 22px;
+      font-size: 12px;
+    }
+
+    .money_back .delivery_time>div:not(.line) {
+      top: -55px;
+    }
+
+    .money_back .delivery_time>div:nth-child(3) {
+      left: 30%;
+    }
+
+    .money_back .delivery_time>div:not(.line)>p:nth-child(2) {
+      font-size: 12px;
+    }
+
+    .money_back .delivery_time>div:nth-child(2)>p:first-child,
+    .money_back .delivery_time>div:nth-child(3)>p:first-child {
+        margin-top: 14px;
+        font-size: 12px;
+     }
+
+    .money_back .delivery_time>div:not(.line)>p:first-child {
+      font-size: 11px;
+    width: 130px;
+    }
+
+    .money_back .delivery_time>div:not(.line)>p:last-child {
+      font-size: 12px;
+        width:90px;
+    }
+
+
+    .money_back .line {
+      margin: 70px 0 35px;
+      height: 3px;
+    }
+
+    .money_back .line span {
+      width: 9px;
+      height: 9px;
+      top: -3px;
+    }
+
+    .money_back .line span.point2 {
+      left: calc(30% - 10px);
+    }
+
+    .money_back .line p {
+      height: 3px;
+      width: 63%;
+    }
+  }
+</style>
+
+<div class="money_back {{ new_style_money_back }}" id="money_back">
+  <h2>
+    {% if snippet_variable != null %} {{ snippet_variable }} {% else %} Money back guarantee {% endif %}
+  </h2>
+  <div class="schedule">
+    <p>Ship to:</p>
+    <label class="for_country_select"
+      ><select class="country_select" name="country">
+        {% for c in country %}
+          {% assign cval = c | split: '/' %}
+          {% assign minDay = cval[1] | split: '-' %}
+          {% assign minday = minDay[0] | times: 24 | times: 60 | times: 60 %}
+          {% assign maxday = minDay[1] | times: 24 | times: 60 | times: 60 %}
+
+          <option
+            value="{{ cval[0] }}"
+            data-free="{{ cval[2] }}"
+            {% if forloop.firsy %}
+              selected
+            {% endif %}
+            data-value="{{ "now" | date: "%s" | plus: minday | date: "%d %b" }} - {{ "now"  | date: "%s" | plus: maxday | date:  "%d %b" }}"
+          >
+            {{ cval[0] }}
+          </option>
+        {% endfor %}
+      </select></label
+    >
+    <div class="delivery_time">
+      <div class="line">
+        <span class="point1"></span>
+        <span class="point2"></span>
+        <span class="point3"></span>
+        <p></p>
+      </div>
+      <div>
+        <p>Buy SomniFix</p>
+        <p>Today</p>
+        <p class="today">{{ 'now' | date: '%b %d, %Y' }}</p>
+      </div>
+      <div>
+        <p>Shipping</p>
+        <p>1-4 days</p>
+        <p class="delivery_date"></p>
+      </div>
+      <div>
+        <p>100% money back guarantee through</p>
+        <p>After 30 days</p>
+        <p class="money_back_date"></p>
+      </div>
+    </div>
+  </div>
+  <div class="flx spots">
+    <p>
+      <img src="https://conversionratestore.github.io/projects/somnifix/img/check.svg" alt="check"><br>
+      Free shipping above $50
+    </p>
+    <p>
+      <img src="https://conversionratestore.github.io/projects/somnifix/img/check.svg" alt="check"><br>
+      30-day money back guarantee
+    </p>
+    <p>
+      <img src="https://conversionratestore.github.io/projects/somnifix/img/check.svg" alt="check"><br>
+      Made in USA
+    </p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('we are here')
+      if (document.querySelector('.for_country_select')) {
+
+        let link = `
+          <div class="navbar-item header__item " data-navlink-handle="guarantee"> 
+            <a href="#" class="navbar-link header__link  is-arrowless to_money_back">guarantee</a>
+          </div>
+        `;
+
+        document.querySelector('nav.header__menu-items').insertAdjacentHTML('beforeend', link);
+
+        document.querySelector('.to_money_back').addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector('#money_back').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelector('.money_back select').addEventListener('change', function (e) {
+          document.querySelectorAll('select[name="country"]')[0].value = this.value;
+          let d = e.target.options[e.target.selectedIndex].dataset.value;
+          console.log(d);
+          document.querySelectorAll('.delivery_date')[0].innerHTML = d;
+          document.querySelectorAll('.money_back_date')[0].innerHTML = d;
+          setDateDelivery(d);
+        });
+
+        let monthTable = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function setDateDelivery(str) {
+          let parseStr = str.split(' ').filter((item) => item !== '-');
+          let day = new Date().getDate();
+          let month = new Date().getMonth();
+          let year = new Date().getFullYear();
+          let year2 = new Date().getFullYear();
+          let day1 = +parseStr[0];
+          let day2 = +parseStr[2];
+          let month1 = monthTable.indexOf(parseStr[1]);
+          let month2 = monthTable.indexOf(parseStr[3]);
+          let date = new Date(year, month, day);
+          if (month1 === 0 && month === 11) {
+            year2 = year2 + 1;
+          }
+          let date1 = new Date(year2, month1, day1);
+          let date2 = new Date(year2, month2, day2);
+          let daysLag1 = Math.ceil(Math.abs(date1.getTime() - date.getTime()) / (1000 * 3600 * 24));
+          let daysLag2 = Math.ceil(Math.abs(date2.getTime() - date.getTime()) / (1000 * 3600 * 24));
+          let daysLag3 = new Date(date1.setDate(date1.getDate() + 30));
+          let daysLag4 = new Date(date2.setDate(date2.getDate() + 30));
+
+          document.querySelector(
+            '.delivery_time>div:nth-child(3)>p:nth-child(2)'
+          ).innerHTML = `${daysLag1}-${daysLag2} days`;
+          document.querySelector('.delivery_time .today').innerHTML = `${monthTable[month]} ${day}, ${year}`;
+          document.querySelector(
+            '.delivery_time .delivery_date'
+          ).innerHTML = `${parseStr[1]} ${parseStr[0]} - ${parseStr[3]} ${parseStr[2]}, ${year2}`;
+          document.querySelector('.delivery_time .money_back_date').innerHTML = `${
+            monthTable[daysLag3.getMonth()]
+          } ${daysLag3.getDate()} - ${
+            monthTable[daysLag4.getMonth()]
+          } ${daysLag4.getDate()}, ${daysLag3.getFullYear()}  `;
+        }
+
+        document.querySelector('.money_back select').dispatchEvent(new Event('change'));
+      }
+  });
+</script>

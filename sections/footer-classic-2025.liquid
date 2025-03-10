@@ -1,0 +1,440 @@
+{% comment %}
+** Footer - classic - static **
+{% endcomment %}
+
+{% liquid
+  assign id = section.id
+
+  assign css_class = section.settings.css_class
+  assign custom_css = section.settings.custom_css
+%}
+
+<style>
+  .footer-2025 {
+    position: relative;
+    margin-top: clamp(9.063rem, 5.277rem + 7.89vw, 12.375rem);
+
+    .section {
+      max-width: 1400px;
+    }
+
+    background-color: #1F5C8A;
+
+    .footer__content {
+      background-color: #1F5C8A;
+      padding-top: clamp(2.5rem, 1.071rem + 2.98vw, 3.75rem);
+    }
+
+    .footer__content > .section {
+      flex-direction: column;
+    }
+
+    .footer-2025__content-left {
+      width: 50%;
+    }
+
+    .footer-2025__content-right {
+      width: 50%;
+    }
+
+    /* ========================= */
+    /* == Footer Subscribe == */
+    /* ========================= */
+
+    .footer-2025-subscribe {
+      max-width: 380px;
+
+      h4 {
+        color: #FFF;
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(2.5rem, 1.929rem + 1.19vw, 3rem);
+        font-weight: 400;
+        line-height: clamp(2.75rem, 2.107rem + 1.34vw, 3.313rem);
+        margin-bottom: 20px;
+      }
+
+      .footer-2025-subscribe__description {
+        color: rgba(255, 255, 255, 0.80);
+        font-family: Inter, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: clamp(1.25rem, -0.75rem + 4.17vw, 3rem);
+      }
+    }
+
+    /* ========================= */
+    /* == Footer main content == */
+    /* ========================= */
+
+    .footer-2025__main-content {
+      .footer-2025__content-right {
+        display: flex;
+        column-gap: clamp(1.5rem, -2.5rem + 8.33vw, 5rem);
+        row-gap: clamp(2rem, -1.429rem + 7.14vw, 5rem);
+      }
+    }
+
+    .footer__heading {
+      color: #FFF;
+      font-family: "Instrument Serif", serif;
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 31px;
+      margin-bottom: 20px;
+    }
+
+    .footer__menu-link {
+      margin-bottom: 24px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      a {
+        color: rgba(255, 255, 255, 0.80);
+        font-family: Inter, sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 16px;
+        transition: color .3s linear;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+
+    .social-icons {
+      li {
+        padding-right: 16px;
+
+        &:last-child {
+          padding-right: 0;
+        }
+      }
+    }
+
+    .footer-2025__extra-content {
+      padding-top: clamp(2.5rem, -0.357rem + 5.95vw, 5rem);
+      padding-bottom: 16px;
+      gap: clamp(1.25rem, 0.679rem + 1.19vw, 1.75rem);
+
+      .footer-2025__content-right {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+
+        .footer__menu {
+          .footer__heading {
+            display: none;
+          }
+        }
+
+        ul {
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+
+          li {
+            margin: 0;
+
+            a {
+              color: rgba(255, 255, 255, 0.5);
+              font-family: Inter, sans-serif;
+              font-size: 16px;
+              font-weight: 400;
+              line-height: 24px;
+              transition: color .3s linear;
+
+              &:hover {
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+
+      .footer-2025__copyright {
+        p, a {
+          color: rgba(255, 255, 255, 0.5);
+          font-family: Inter, sans-serif;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          transition: color .3s linear;
+        }
+
+        a {
+          &:hover {
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .footer-2025__decorative-element {
+      position: absolute;
+      top: calc(clamp(9.063rem, 5.277rem + 7.89vw, 12.375rem) * -1);
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .footer-2025__decorative-element-mobile {
+        display: none;
+    }
+
+    @media screen and (max-width: 1024px) {
+      .footer-2025__decorative-element {
+        object-fit: cover;
+      }
+
+      .footer-2025__content-left,
+      .footer-2025__content-right {
+        width: 100%;
+      }
+
+      .footer-2025-subscribe {
+        margin: 0 auto;
+      }
+
+      .social-icons {
+        justify-content: center;
+      }
+
+      .footer-2025__main-content {
+        flex-wrap: wrap;
+        gap: 40px;
+
+        .footer-2025__content-right {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+
+      .footer-2025__extra-content {
+        flex-wrap: wrap;
+
+        .footer-2025__content-right {
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: end;
+
+          .footer__menu {
+            order: 1;
+            width: 100%;
+
+            ul {
+              justify-content: center;
+            }
+          }
+        }
+
+        .footer-2025__content-left {
+          text-align: center;
+        }
+
+        .footer-2025__copyright {
+          order: 2;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+
+    @media screen and (max-width: 576px) {
+      .footer-2025-subscribe {
+        margin: 0;
+      }
+
+      .social-icons {
+        justify-content: flex-start;
+      }
+
+      .footer-2025__socials-wrapper {
+        width: 100%;
+      }
+
+      .footer-2025__main-content {
+        .footer-2025__content-right {
+          justify-content: flex-start;
+          column-gap: 56px;
+        }
+      }
+
+      .footer-2025__extra-content {
+
+        .footer-2025__content-left {
+          text-align: left;
+        }
+
+        .footer-2025__content-right {
+          .footer__menu {
+            ul {
+              justify-content: space-between;
+            }
+          }
+        }
+
+        .footer-2025__copyright {
+          text-align: left;
+        }
+      }
+
+      .footer-2025__decorative-element {
+          display: none;
+      }
+
+      .footer-2025__decorative-element-mobile {
+          display: block;
+          position: relative;
+          top: calc(clamp(3.438rem, 2.656rem + 3.91vw, 4.063rem) * -1);
+          width: 100%;
+      }
+    }
+  }
+</style>
+
+{% style %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup {% endcomment %}
+<footer class="footer__container {{ css_class }}">
+  <img class="footer-2025__decorative-element-mobile" src="{{ 'footer-decorative-element-mobile.png' | asset_url }}" alt="footer decorative element">
+  <img class="footer-2025__decorative-element" src="{{ 'footer-decorative-element.png' | asset_url }}" alt="footer decorative element">
+  <section class="footer__content
+                  section">
+    <div class="container is-flex-column">
+      <div class="footer-2025__main-content is-flex">
+        <div class="footer-2025__content-left">
+          <div class="footer-2025__subscribe footer-2025-subscribe">
+            <h4>{{ section.settings.subscribe_title }}</h4>
+            <div class="footer-2025-subscribe__description">{{ section.settings.subscribe_description }}</div>
+            {%
+                    render 'newsletter-form-2025',
+                    type: 'block',
+                    id: 'footer',
+            %}
+          </div>
+        </div>
+        <div class="footer-2025__content-right">
+          {% render 'footer__menu-2025', menu_link: section.settings.menu_1, menu_title: section.settings.menu_1_title %}
+          {% render 'footer__menu-2025', menu_link: section.settings.menu_2, menu_title: section.settings.menu_2_title %}
+            {% if section.settings.social_icons_footer %}
+              <div class="footer-2025__socials-wrapper is-justify-space-between">
+                  <p class="footer__heading">Socials</p>
+                  {% render 'social-icons-2025' %}
+              </div>
+            {% endif %}
+        </div>
+      </div>
+
+      <div class="footer-2025__extra-content is-flex">
+        <div class="footer-2025__content-left">
+          <a href="{{ shop.url }}">
+            <img src="{{ section.settings.footer_logo | img_url }}" alt="{{ shop.name }}" />
+          </a>
+        </div>
+
+        <div class="footer-2025__content-right">
+          <div class="footer-2025__copyright">
+            <p>copyright&copy; {{ "now" | date: "%Y" }} {{ shop.name | link_to: routes.root_url }}</p>
+            {{ section.settings.copyright_text }}
+          </div>
+          {% render 'footer__menu-2025', menu_link: section.settings.menu_3, menu_title: 'Socials' %}
+        </div>
+      </div>
+    </div>
+  </section>
+</footer>
+
+{% schema %}
+  {
+    "name": "Footer 2025",
+    "class": "footer footer--classic footer-2025",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "subscribe_title",
+        "label": "Subscribe Title"
+      },
+      {
+        "type": "textarea",
+        "id": "subscribe_description",
+        "label": "Subscribe Description"
+      },
+      {
+        "type": "text",
+        "id": "menu_1_title",
+        "label": "Menu 1 Title",
+        "default": "About"
+      },
+      {
+        "type": "link_list",
+        "id": "menu_1",
+        "label": "Menu 1",
+        "info": "Select the first menu."
+      },
+      {
+        "type": "text",
+        "id": "menu_2_title",
+        "label": "Menu 2 Title",
+        "default": "Socials"
+      },
+      {
+        "type": "link_list",
+        "id": "menu_2",
+        "label": "Menu 2",
+        "info": "Select the second menu."
+      },
+      {
+        "type": "checkbox",
+        "id": "social_icons_footer",
+        "label": "Show social media icons",
+        "default": false
+      },
+      {
+        "type": "image_picker",
+        "id": "footer_logo",
+        "label": "Image"
+      },
+      {
+        "type": "richtext",
+        "id": "copyright_text",
+        "label": "Copyright text"
+      },
+      {
+        "type": "link_list",
+        "id": "menu_3",
+        "label": "Menu 3",
+        "info": "Select the third menu."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+      },
+      {
+        "type": "text",
+        "id": "css_class",
+        "label": "CSS Class"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_css",
+        "label": "Custom CSS"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Footer 2025",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}

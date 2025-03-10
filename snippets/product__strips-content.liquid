@@ -1,0 +1,2048 @@
+{%- for variant in product.variants -%}
+  {% assign variant_title = variant.title | downcase %}
+  {% if variant_title contains '1 pack' %}
+    {% assign pack_1 = variant %}
+  {% elsif variant_title contains '3 pack' %}
+    {% assign pack_3 = variant %}
+  {% elsif variant_title contains '12 pack' %}
+    {% assign pack_12 = variant %}
+  {% endif %}
+{%- endfor -%}
+
+<style>
+    .d-flex {
+      display: flex;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .part2 .sale {
+      background: #2975B3;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 16px;
+      padding: 0 8px;
+      margin-right: 4px;
+      color: #FFFFFF;
+    }
+
+    .part2 .sale {
+      background: #F2742A;
+    }
+
+    .tooltip-wrap {
+      position: relative;
+      z-index: 3;
+      display: inline-flex;
+      margin-left: 4px;
+    }
+
+    .tooltip-wrap .tooltip {
+      position: absolute;
+      top: calc(100% + 5px);
+      right: -8px;
+      background: #FFFFFF;
+      box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 17px;
+      color: #20425E;
+      padding: 12px;
+      width: 219px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      margin: 0;
+      text-transform: none;
+    }
+
+    .tooltip-wrap .tooltip span:after {
+      content: none;
+    }
+
+    .tooltip-wrap .tooltip:before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 8px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 6px 5px 6px;
+      border-color: transparent transparent #fff transparent;
+      z-index: 1;
+    }
+
+    .tooltip-wrap:hover .tooltip {
+      opacity: 1;
+    }
+
+    .part2 .sale,
+    .footer-prices .sale {
+      height: fit-content;
+      padding: 3px 7px;
+    }
+
+    .sale .tooltip {
+      padding: 8px;
+      width: 248px;
+    }
+
+    .flx {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile {
+      display: none;
+    }
+
+    .product__information .title,
+    .mobile.title_mobile .product_name.title {
+      font-size: 32px;
+      color: #1e415f;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      width: 100%;
+      text-align: center;
+    }
+
+    .mobile.title_mobile .product_name.title {
+      font-size: 36px;
+      text-transform: capitalize;
+      color: #11415f;
+      letter-spacing: normal;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .gray_bg {
+      background-color: #f5f6f7;
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .part2.gray_bg {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product__information > *:nth-child(2) {
+      align-items: stretch;
+    }
+
+    .product__information .part1 {
+      width: 58%;
+    }
+
+    .product__information .part2 {
+      width: 39%;
+    }
+
+    .product__information.one-half {
+      width: 60%;
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .product__images.one-half {
+      width: 40%;
+      margin: 0;
+    }
+
+    .product__information .made_in,
+    .mobile .made_in {
+      font-weight: 500;
+      font-size: 12px;
+      color: white;
+      background-color: #4090d1;
+      padding: 7px;
+      border-radius: 5px;
+    }
+
+    .product__information .made_in:before,
+    .mobile .made_in:before {
+      content: '';
+      display: inline-block;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxNCAxMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPG1hc2sgaWQ9Im1hc2swIiBtYXNrLXR5cGU9ImFscGhhIiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4PSIwIiB5PSIwIiB3aWR0aD0iMTQiIGhlaWdodD0iMTAiPgo8cGF0aCBkPSJNMTMgMEgxQzAuNDQ3NzE1IDAgMCAwLjQ0NzcxNSAwIDFWOUMwIDkuNTUyMjggMC40NDc3MTUgMTAgMSAxMEgxM0MxMy41NTIzIDEwIDE0IDkuNTUyMjggMTQgOVYxQzE0IDAuNDQ3NzE1IDEzLjU1MjMgMCAxMyAwWiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2swKSI+CjxwYXRoIGQ9Ik0xMyAwSDFDMC40NDc3MTUgMCAwIDAuNDQ3NzE1IDAgMVY5QzAgOS41NTIyOCAwLjQ0NzcxNSAxMCAxIDEwSDEzQzEzLjU1MjMgMTAgMTQgOS41NTIyOCAxNCA5VjFDMTQgMC40NDc3MTUgMTMuNTUyMyAwIDEzIDBaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE0IDkuMzMzMzNWMTBIMFY5LjMzMzMzSDE0Wk0xNCA4VjguNjY2NjdIMFY4SDE0Wk0xNCA2LjY2NjY3VjcuMzMzMzNIMFY2LjY2NjY3SDE0Wk0xNCA1LjMzMzMzVjZIMFY1LjMzMzMzSDE0Wk0xNCA0VjQuNjY2NjdIMFY0SDE0Wk0xNCAyLjY2NjY3VjMuMzMzMzNIMFYyLjY2NjY3SDE0Wk0xNCAxLjMzMzMzVjJIMFYxLjMzMzMzSDE0Wk0xNCAwVjAuNjY2NjY3SDBWMEgxNFoiIGZpbGw9IiNEMDJGNDQiLz4KPHBhdGggZD0iTTYgMEgwVjQuNjY2NjdINlYwWiIgZmlsbD0iIzQ2NDY3RiIvPgo8ZyBmaWx0ZXI9InVybCgjZmlsdGVyMF9kKSI+CjxwYXRoIGQ9Ik01LjAwMDA4IDMuMzMzMzRDNS4xODQxOCAzLjMzMzM0IDUuMzMzNDIgMy40ODI1OCA1LjMzMzQyIDMuNjY2NjdDNS4zMzM0MiAzLjg1MDc3IDUuMTg0MTggNCA1LjAwMDA4IDRDNC44MTU5OSA0IDQuNjY2NzUgMy44NTA3NyA0LjY2Njc1IDMuNjY2NjdDNC42NjY3NSAzLjQ4MjU4IDQuODE1OTkgMy4zMzMzNCA1LjAwMDA4IDMuMzMzMzRaTTMuNjY2NzUgMy4zMzMzNEMzLjg1MDg0IDMuMzMzMzQgNC4wMDAwOCAzLjQ4MjU4IDQuMDAwMDggMy42NjY2N0M0LjAwMDA4IDMuODUwNzcgMy44NTA4NCA0IDMuNjY2NzUgNEMzLjQ4MjY1IDQgMy4zMzM0MSAzLjg1MDc3IDMuMzMzNDEgMy42NjY2N0MzLjMzMzQxIDMuNDgyNTggMy40ODI2NSAzLjMzMzM0IDMuNjY2NzUgMy4zMzMzNFpNMi4zMzM0MSAzLjMzMzM0QzIuNTE3NTEgMy4zMzMzNCAyLjY2Njc1IDMuNDgyNTggMi42NjY3NSAzLjY2NjY3QzIuNjY2NzUgMy44NTA3NyAyLjUxNzUxIDQgMi4zMzM0MSA0QzIuMTQ5MzIgNCAyLjAwMDA4IDMuODUwNzcgMi4wMDAwOCAzLjY2NjY3QzIuMDAwMDggMy40ODI1OCAyLjE0OTMyIDMuMzMzMzQgMi4zMzM0MSAzLjMzMzM0Wk0xLjAwMDA4IDMuMzMzMzRDMS4xODQxOCAzLjMzMzM0IDEuMzMzNDEgMy40ODI1OCAxLjMzMzQxIDMuNjY2NjdDMS4zMzM0MSAzLjg1MDc3IDEuMTg0MTggNCAxLjAwMDA4IDRDMC44MTU5ODYgNCAwLjY2Njc0OCAzLjg1MDc3IDAuNjY2NzQ4IDMuNjY2NjdDMC42NjY3NDggMy40ODI1OCAwLjgxNTk4NiAzLjMzMzM0IDEuMDAwMDggMy4zMzMzNFpNMS42NjY3NSAyLjY2NjY3QzEuODUwODQgMi42NjY2NyAyLjAwMDA4IDIuODE1OTEgMi4wMDAwOCAzQzIuMDAwMDggMy4xODQxIDEuODUwODQgMy4zMzMzNCAxLjY2Njc1IDMuMzMzMzRDMS40ODI2NSAzLjMzMzM0IDEuMzMzNDEgMy4xODQxIDEuMzMzNDEgM0MxLjMzMzQxIDIuODE1OTEgMS40ODI2NSAyLjY2NjY3IDEuNjY2NzUgMi42NjY2N1pNMy4wMDAwOCAyLjY2NjY3QzMuMTg0MTggMi42NjY2NyAzLjMzMzQxIDIuODE1OTEgMy4zMzM0MSAzQzMuMzMzNDEgMy4xODQxIDMuMTg0MTggMy4zMzMzNCAzLjAwMDA4IDMuMzMzMzRDMi44MTU5OSAzLjMzMzM0IDIuNjY2NzUgMy4xODQxIDIuNjY2NzUgM0MyLjY2Njc1IDIuODE1OTEgMi44MTU5OSAyLjY2NjY3IDMuMDAwMDggMi42NjY2N1pNNC4zMzM0MSAyLjY2NjY3QzQuNTE3NTEgMi42NjY2NyA0LjY2Njc1IDIuODE1OTEgNC42NjY3NSAzQzQuNjY2NzUgMy4xODQxIDQuNTE3NTEgMy4zMzMzNCA0LjMzMzQxIDMuMzMzMzRDNC4xNDkzMiAzLjMzMzM0IDQuMDAwMDggMy4xODQxIDQuMDAwMDggM0M0LjAwMDA4IDIuODE1OTEgNC4xNDkzMiAyLjY2NjY3IDQuMzMzNDEgMi42NjY2N1pNNS4wMDAwOCAyQzUuMTg0MTggMiA1LjMzMzQyIDIuMTQ5MjQgNS4zMzM0MiAyLjMzMzM0QzUuMzMzNDIgMi41MTc0MyA1LjE4NDE4IDIuNjY2NjcgNS4wMDAwOCAyLjY2NjY3QzQuODE1OTkgMi42NjY2NyA0LjY2Njc1IDIuNTE3NDMgNC42NjY3NSAyLjMzMzM0QzQuNjY2NzUgMi4xNDkyNCA0LjgxNTk5IDIgNS4wMDAwOCAyWk0zLjY2Njc1IDJDMy44NTA4NCAyIDQuMDAwMDggMi4xNDkyNCA0LjAwMDA4IDIuMzMzMzRDNC4wMDAwOCAyLjUxNzQzIDMuODUwODQgMi42NjY2NyAzLjY2Njc1IDIuNjY2NjdDMy40ODI2NSAyLjY2NjY3IDMuMzMzNDEgMi41MTc0MyAzLjMzMzQxIDIuMzMzMzRDMy4zMzM0MSAyLjE0OTI0IDMuNDgyNjUgMiAzLjY2Njc1IDJaTTIuMzMzNDEgMkMyLjUxNzUxIDIgMi42NjY3NSAyLjE0OTI0IDIuNjY2NzUgMi4zMzMzNEMyLjY2Njc1IDIuNTE3NDMgMi41MTc1MSAyLjY2NjY3IDIuMzMzNDEgMi42NjY2N0MyLjE0OTMyIDIuNjY2NjcgMi4wMDAwOCAyLjUxNzQzIDIuMDAwMDggMi4zMzMzNEMyLjAwMDA4IDIuMTQ5MjQgMi4xNDkzMiAyIDIuMzMzNDEgMlpNMS4wMDAwOCAyQzEuMTg0MTggMiAxLjMzMzQxIDIuMTQ5MjQgMS4zMzM0MSAyLjMzMzM0QzEuMzMzNDEgMi41MTc0MyAxLjE4NDE4IDIuNjY2NjcgMS4wMDAwOCAyLjY2NjY3QzAuODE1OTg2IDIuNjY2NjcgMC42NjY3NDggMi41MTc0MyAwLjY2Njc0OCAyLjMzMzM0QzAuNjY2NzQ4IDIuMTQ5MjQgMC44MTU5ODYgMiAxLjAwMDA4IDJaTTEuNjY2NzUgMS4zMzMzNEMxLjg1MDg0IDEuMzMzMzQgMi4wMDAwOCAxLjQ4MjU4IDIuMDAwMDggMS42NjY2N0MyLjAwMDA4IDEuODUwNzcgMS44NTA4NCAyIDEuNjY2NzUgMkMxLjQ4MjY1IDIgMS4zMzM0MSAxLjg1MDc3IDEuMzMzNDEgMS42NjY2N0MxLjMzMzQxIDEuNDgyNTggMS40ODI2NSAxLjMzMzM0IDEuNjY2NzUgMS4zMzMzNFpNMy4wMDAwOCAxLjMzMzM0QzMuMTg0MTggMS4zMzMzNCAzLjMzMzQxIDEuNDgyNTggMy4zMzM0MSAxLjY2NjY3QzMuMzMzNDEgMS44NTA3NyAzLjE4NDE4IDIgMy4wMDAwOCAyQzIuODE1OTkgMiAyLjY2Njc1IDEuODUwNzcgMi42NjY3NSAxLjY2NjY3QzIuNjY2NzUgMS40ODI1OCAyLjgxNTk5IDEuMzMzMzQgMy4wMDAwOCAxLjMzMzM0Wk00LjMzMzQxIDEuMzMzMzRDNC41MTc1MSAxLjMzMzM0IDQuNjY2NzUgMS40ODI1OCA0LjY2Njc1IDEuNjY2NjdDNC42NjY3NSAxLjg1MDc3IDQuNTE3NTEgMiA0LjMzMzQxIDJDNC4xNDkzMiAyIDQuMDAwMDggMS44NTA3NyA0LjAwMDA4IDEuNjY2NjdDNC4wMDAwOCAxLjQ4MjU4IDQuMTQ5MzIgMS4zMzMzNCA0LjMzMzQxIDEuMzMzMzRaTTEuMDAwMDggMC42NjY2NzJDMS4xODQxOCAwLjY2NjY3MiAxLjMzMzQxIDAuODE1OTEgMS4zMzM0MSAxLjAwMDAxQzEuMzMzNDEgMS4xODQxIDEuMTg0MTggMS4zMzMzNCAxLjAwMDA4IDEuMzMzMzRDMC44MTU5ODYgMS4zMzMzNCAwLjY2Njc0OCAxLjE4NDEgMC42NjY3NDggMS4wMDAwMUMwLjY2Njc0OCAwLjgxNTkxIDAuODE1OTg2IDAuNjY2NjcyIDEuMDAwMDggMC42NjY2NzJaTTIuMzMzNDEgMC42NjY2NzJDMi41MTc1MSAwLjY2NjY3MiAyLjY2Njc1IDAuODE1OTEgMi42NjY3NSAxLjAwMDAxQzIuNjY2NzUgMS4xODQxIDIuNTE3NTEgMS4zMzMzNCAyLjMzMzQxIDEuMzMzMzRDMi4xNDkzMiAxLjMzMzM0IDIuMDAwMDggMS4xODQxIDIuMDAwMDggMS4wMDAwMUMyLjAwMDA4IDAuODE1OTEgMi4xNDkzMiAwLjY2NjY3MiAyLjMzMzQxIDAuNjY2NjcyWk0zLjY2Njc1IDAuNjY2NjcyQzMuODUwODQgMC42NjY2NzIgNC4wMDAwOCAwLjgxNTkxIDQuMDAwMDggMS4wMDAwMUM0LjAwMDA4IDEuMTg0MSAzLjg1MDg0IDEuMzMzMzQgMy42NjY3NSAxLjMzMzM0QzMuNDgyNjUgMS4zMzMzNCAzLjMzMzQxIDEuMTg0MSAzLjMzMzQxIDEuMDAwMDFDMy4zMzM0MSAwLjgxNTkxIDMuNDgyNjUgMC42NjY2NzIgMy42NjY3NSAwLjY2NjY3MlpNNS4wMDAwOCAwLjY2NjY3MkM1LjE4NDE4IDAuNjY2NjcyIDUuMzMzNDIgMC44MTU5MSA1LjMzMzQyIDEuMDAwMDFDNS4zMzM0MiAxLjE4NDEgNS4xODQxOCAxLjMzMzM0IDUuMDAwMDggMS4zMzMzNEM0LjgxNTk5IDEuMzMzMzQgNC42NjY3NSAxLjE4NDEgNC42NjY3NSAxLjAwMDAxQzQuNjY2NzUgMC44MTU5MSA0LjgxNTk5IDAuNjY2NjcyIDUuMDAwMDggMC42NjY2NzJaIiBmaWxsPSJibGFjayIvPgo8L2c+CjxwYXRoIGQ9Ik01LjAwMDA4IDMuMzMzMzRDNS4xODQxOCAzLjMzMzM0IDUuMzMzNDIgMy40ODI1OCA1LjMzMzQyIDMuNjY2NjdDNS4zMzM0MiAzLjg1MDc3IDUuMTg0MTggNCA1LjAwMDA4IDRDNC44MTU5OSA0IDQuNjY2NzUgMy44NTA3NyA0LjY2Njc1IDMuNjY2NjdDNC42NjY3NSAzLjQ4MjU4IDQuODE1OTkgMy4zMzMzNCA1LjAwMDA4IDMuMzMzMzRaTTMuNjY2NzUgMy4zMzMzNEMzLjg1MDg0IDMuMzMzMzQgNC4wMDAwOCAzLjQ4MjU4IDQuMDAwMDggMy42NjY2N0M0LjAwMDA4IDMuODUwNzcgMy44NTA4NCA0IDMuNjY2NzUgNEMzLjQ4MjY1IDQgMy4zMzM0MSAzLjg1MDc3IDMuMzMzNDEgMy42NjY2N0MzLjMzMzQxIDMuNDgyNTggMy40ODI2NSAzLjMzMzM0IDMuNjY2NzUgMy4zMzMzNFpNMi4zMzM0MSAzLjMzMzM0QzIuNTE3NTEgMy4zMzMzNCAyLjY2Njc1IDMuNDgyNTggMi42NjY3NSAzLjY2NjY3QzIuNjY2NzUgMy44NTA3NyAyLjUxNzUxIDQgMi4zMzM0MSA0QzIuMTQ5MzIgNCAyLjAwMDA4IDMuODUwNzcgMi4wMDAwOCAzLjY2NjY3QzIuMDAwMDggMy40ODI1OCAyLjE0OTMyIDMuMzMzMzQgMi4zMzM0MSAzLjMzMzM0Wk0xLjAwMDA4IDMuMzMzMzRDMS4xODQxOCAzLjMzMzM0IDEuMzMzNDEgMy40ODI1OCAxLjMzMzQxIDMuNjY2NjdDMS4zMzM0MSAzLjg1MDc3IDEuMTg0MTggNCAxLjAwMDA4IDRDMC44MTU5ODYgNCAwLjY2Njc0OCAzLjg1MDc3IDAuNjY2NzQ4IDMuNjY2NjdDMC42NjY3NDggMy40ODI1OCAwLjgxNTk4NiAzLjMzMzM0IDEuMDAwMDggMy4zMzMzNFpNMS42NjY3NSAyLjY2NjY3QzEuODUwODQgMi42NjY2NyAyLjAwMDA4IDIuODE1OTEgMi4wMDAwOCAzQzIuMDAwMDggMy4xODQxIDEuODUwODQgMy4zMzMzNCAxLjY2Njc1IDMuMzMzMzRDMS40ODI2NSAzLjMzMzM0IDEuMzMzNDEgMy4xODQxIDEuMzMzNDEgM0MxLjMzMzQxIDIuODE1OTEgMS40ODI2NSAyLjY2NjY3IDEuNjY2NzUgMi42NjY2N1pNMy4wMDAwOCAyLjY2NjY3QzMuMTg0MTggMi42NjY2NyAzLjMzMzQxIDIuODE1OTEgMy4zMzM0MSAzQzMuMzMzNDEgMy4xODQxIDMuMTg0MTggMy4zMzMzNCAzLjAwMDA4IDMuMzMzMzRDMi44MTU5OSAzLjMzMzM0IDIuNjY2NzUgMy4xODQxIDIuNjY2NzUgM0MyLjY2Njc1IDIuODE1OTEgMi44MTU5OSAyLjY2NjY3IDMuMDAwMDggMi42NjY2N1pNNC4zMzM0MSAyLjY2NjY3QzQuNTE3NTEgMi42NjY2NyA0LjY2Njc1IDIuODE1OTEgNC42NjY3NSAzQzQuNjY2NzUgMy4xODQxIDQuNTE3NTEgMy4zMzMzNCA0LjMzMzQxIDMuMzMzMzRDNC4xNDkzMiAzLjMzMzM0IDQuMDAwMDggMy4xODQxIDQuMDAwMDggM0M0LjAwMDA4IDIuODE1OTEgNC4xNDkzMiAyLjY2NjY3IDQuMzMzNDEgMi42NjY2N1pNNS4wMDAwOCAyQzUuMTg0MTggMiA1LjMzMzQyIDIuMTQ5MjQgNS4zMzM0MiAyLjMzMzM0QzUuMzMzNDIgMi41MTc0MyA1LjE4NDE4IDIuNjY2NjcgNS4wMDAwOCAyLjY2NjY3QzQuODE1OTkgMi42NjY2NyA0LjY2Njc1IDIuNTE3NDMgNC42NjY3NSAyLjMzMzM0QzQuNjY2NzUgMi4xNDkyNCA0LjgxNTk5IDIgNS4wMDAwOCAyWk0zLjY2Njc1IDJDMy44NTA4NCAyIDQuMDAwMDggMi4xNDkyNCA0LjAwMDA4IDIuMzMzMzRDNC4wMDAwOCAyLjUxNzQzIDMuODUwODQgMi42NjY2NyAzLjY2Njc1IDIuNjY2NjdDMy40ODI2NSAyLjY2NjY3IDMuMzMzNDEgMi41MTc0MyAzLjMzMzQxIDIuMzMzMzRDMy4zMzM0MSAyLjE0OTI0IDMuNDgyNjUgMiAzLjY2Njc1IDJaTTIuMzMzNDEgMkMyLjUxNzUxIDIgMi42NjY3NSAyLjE0OTI0IDIuNjY2NzUgMi4zMzMzNEMyLjY2Njc1IDIuNTE3NDMgMi41MTc1MSAyLjY2NjY3IDIuMzMzNDEgMi42NjY2N0MyLjE0OTMyIDIuNjY2NjcgMi4wMDAwOCAyLjUxNzQzIDIuMDAwMDggMi4zMzMzNEMyLjAwMDA4IDIuMTQ5MjQgMi4xNDkzMiAyIDIuMzMzNDEgMlpNMS4wMDAwOCAyQzEuMTg0MTggMiAxLjMzMzQxIDIuMTQ5MjQgMS4zMzM0MSAyLjMzMzM0QzEuMzMzNDEgMi41MTc0MyAxLjE4NDE4IDIuNjY2NjcgMS4wMDAwOCAyLjY2NjY3QzAuODE1OTg2IDIuNjY2NjcgMC42NjY3NDggMi41MTc0MyAwLjY2Njc0OCAyLjMzMzM0QzAuNjY2NzQ4IDIuMTQ5MjQgMC44MTU5ODYgMiAxLjAwMDA4IDJaTTEuNjY2NzUgMS4zMzMzNEMxLjg1MDg0IDEuMzMzMzQgMi4wMDAwOCAxLjQ4MjU4IDIuMDAwMDggMS42NjY2N0MyLjAwMDA4IDEuODUwNzcgMS44NTA4NCAyIDEuNjY2NzUgMkMxLjQ4MjY1IDIgMS4zMzM0MSAxLjg1MDc3IDEuMzMzNDEgMS42NjY2N0MxLjMzMzQxIDEuNDgyNTggMS40ODI2NSAxLjMzMzM0IDEuNjY2NzUgMS4zMzMzNFpNMy4wMDAwOCAxLjMzMzM0QzMuMTg0MTggMS4zMzMzNCAzLjMzMzQxIDEuNDgyNTggMy4zMzM0MSAxLjY2NjY3QzMuMzMzNDEgMS44NTA3NyAzLjE4NDE4IDIgMy4wMDAwOCAyQzIuODE1OTkgMiAyLjY2Njc1IDEuODUwNzcgMi42NjY3NSAxLjY2NjY3QzIuNjY2NzUgMS40ODI1OCAyLjgxNTk5IDEuMzMzMzQgMy4wMDAwOCAxLjMzMzM0Wk00LjMzMzQxIDEuMzMzMzRDNC41MTc1MSAxLjMzMzM0IDQuNjY2NzUgMS40ODI1OCA0LjY2Njc1IDEuNjY2NjdDNC42NjY3NSAxLjg1MDc3IDQuNTE3NTEgMiA0LjMzMzQxIDJDNC4xNDkzMiAyIDQuMDAwMDggMS44NTA3NyA0LjAwMDA4IDEuNjY2NjdDNC4wMDAwOCAxLjQ4MjU4IDQuMTQ5MzIgMS4zMzMzNCA0LjMzMzQxIDEuMzMzMzRaTTEuMDAwMDggMC42NjY2NzJDMS4xODQxOCAwLjY2NjY3MiAxLjMzMzQxIDAuODE1OTEgMS4zMzM0MSAxLjAwMDAxQzEuMzMzNDEgMS4xODQxIDEuMTg0MTggMS4zMzMzNCAxLjAwMDA4IDEuMzMzMzRDMC44MTU5ODYgMS4zMzMzNCAwLjY2Njc0OCAxLjE4NDEgMC42NjY3NDggMS4wMDAwMUMwLjY2Njc0OCAwLjgxNTkxIDAuODE1OTg2IDAuNjY2NjcyIDEuMDAwMDggMC42NjY2NzJaTTIuMzMzNDEgMC42NjY2NzJDMi41MTc1MSAwLjY2NjY3MiAyLjY2Njc1IDAuODE1OTEgMi42NjY3NSAxLjAwMDAxQzIuNjY2NzUgMS4xODQxIDIuNTE3NTEgMS4zMzMzNCAyLjMzMzQxIDEuMzMzMzRDMi4xNDkzMiAxLjMzMzM0IDIuMDAwMDggMS4xODQxIDIuMDAwMDggMS4wMDAwMUMyLjAwMDA4IDAuODE1OTEgMi4xNDkzMiAwLjY2NjY3MiAyLjMzMzQxIDAuNjY2NjcyWk0zLjY2Njc1IDAuNjY2NjcyQzMuODUwODQgMC42NjY2NzIgNC4wMDAwOCAwLjgxNTkxIDQuMDAwMDggMS4wMDAwMUM0LjAwMDA4IDEuMTg0MSAzLjg1MDg0IDEuMzMzMzQgMy42NjY3NSAxLjMzMzM0QzMuNDgyNjUgMS4zMzMzNCAzLjMzMzQxIDEuMTg0MSAzLjMzMzQxIDEuMDAwMDFDMy4zMzM0MSAwLjgxNTkxIDMuNDgyNjUgMC42NjY2NzIgMy42NjY3NSAwLjY2NjY3MlpNNS4wMDAwOCAwLjY2NjY3MkM1LjE4NDE4IDAuNjY2NjcyIDUuMzMzNDIgMC44MTU5MSA1LjMzMzQyIDEuMDAwMDFDNS4zMzM0MiAxLjE4NDEgNS4xODQxOCAxLjMzMzM0IDUuMDAwMDggMS4zMzMzNEM0LjgxNTk5IDEuMzMzMzQgNC42NjY3NSAxLjE4NDEgNC42NjY3NSAxLjAwMDAxQzQuNjY2NzUgMC44MTU5MSA0LjgxNTk5IDAuNjY2NjcyIDUuMDAwMDggMC42NjY2NzJaIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXIpIi8+CjwvZz4KPGRlZnM+CjxmaWx0ZXIgaWQ9ImZpbHRlcjBfZCIgeD0iLTMuMzMzMjUiIHk9Ii0yLjMzMzMzIiB3aWR0aD0iMTIuNjY2NyIgaGVpZ2h0PSIxMS4zMzMzIiBmaWx0ZXJVbml0cz0idXNlclNwYWNlT25Vc2UiIGNvbG9yLWludGVycG9sYXRpb24tZmlsdGVycz0ic1JHQiI+CjxmZUZsb29kIGZsb29kLW9wYWNpdHk9IjAiIHJlc3VsdD0iQmFja2dyb3VuZEltYWdlRml4Ii8+CjxmZUNvbG9yTWF0cml4IGluPSJTb3VyY2VBbHBoYSIgdHlwZT0ibWF0cml4IiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDEyNyAwIi8+CjxmZU9mZnNldCBkeT0iMSIvPgo8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIyIi8+CjxmZUNvbG9yTWF0cml4IHR5cGU9Im1hdHJpeCIgdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwLjA2IDAiLz4KPGZlQmxlbmQgbW9kZT0ibm9ybWFsIiBpbjI9IkJhY2tncm91bmRJbWFnZUZpeCIgcmVzdWx0PSJlZmZlY3QxX2Ryb3BTaGFkb3ciLz4KPGZlQmxlbmQgbW9kZT0ibm9ybWFsIiBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJlZmZlY3QxX2Ryb3BTaGFkb3ciIHJlc3VsdD0ic2hhcGUiLz4KPC9maWx0ZXI+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjMuMDAwMDgiIHkxPSIwLjY2NjY3MiIgeDI9IjMuMDAwMDgiIHkyPSI0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IndoaXRlIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0YwRjBGMCIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=');
+      height: 10px;
+      width: 14px;
+      margin-right: 7px;
+      border-radius: 1px;
+    }
+
+    .product_name + .flx {
+      margin-bottom: 15px;
+    }
+
+    .subheading {
+      color: #1e415f;
+      margin: 10px 0;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Kontora bold' !important;
+    }
+
+    .title_mobile {
+      margin: 0 10px;
+      padding-top: 30px;
+    }
+
+    .stamped-product-reviews-badge {
+      margin-bottom: 10px !important;
+    }
+
+    .product__information .middle-block p,
+    .product__information .middle-block p {
+      font-size: 14px;
+      line-height: 23px;
+    }
+
+    .product__information .description {
+      display: none;
+    }
+
+    .is-width-standard .product_section .shopify-product-form {
+      color: #1e415f;
+    }
+
+    .stamped-badge-caption span {
+      color: #000;
+    }
+
+    .product__information .product_name.title {
+      font-size: 32px;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+
+    .product__information .subtitle,
+    .mobile.title_mobile .subtitle {
+      font-size: 24px;
+      margin-top: 0 !important;
+      color: #1e415f;
+      font-family: 'Kontora bold' !important;
+    }
+
+    . {
+      color: #1e415f;
+      margin: 10px 0;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Kontora bold' !important;
+    }
+
+    .checkmark {
+      padding: 0 20px;
+      margin-top: 30px;
+    }
+
+    .checkmark li {
+      display: flex;
+      width: 100%;
+      text-align: left;
+      font-size: 12px;
+      color: #1e415f;
+      margin-bottom: 8px;
+    }
+
+    .checkmark li::before {
+      content: '';
+      background-image: url(https://i.ibb.co/2W120Wv/cil-check-circle.png);
+      display: inline-block;
+      height: 20px;
+      width: 20px;
+      margin-right: 5px;
+      vertical-align: middle;
+      background-repeat: no-repeat;
+      font-size: 12px;
+    }
+
+    .checkmark li span {
+      box-sizing: border-box;
+      position: absolute;
+      background: #fff;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
+      top: calc(100% + 15px);
+      width: 180px;
+      margin: 0 0 5px 0;
+      padding: 9px 12px;
+      border-radius: 4px;
+      white-space: normal;
+      font-size: 10px;
+      font-style: normal;
+      text-align: center;
+      color: #1e415f;
+      display: block;
+      z-index: 20;
+      transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
+      transform: rotateX(20deg) scale(0.8);
+      transform-origin: 90% 120%;
+      visibility: hidden;
+      opacity: 0;
+      transform-origin: center 120%;
+      right: 50%;
+      margin-right: -90px;
+    }
+
+    .tooltip span:after {
+      content: '';
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      right: 50%;
+      margin-right: -7px;
+      top: -7px;
+      background: #fff;
+      box-shadow: -2px -2px 4px rgb(0 0 0 / 15%);
+      transform: rotate(45deg);
+    }
+
+    .checkmark .tooltip:hover span {
+      transform: rotateX(0) scale(1);
+      pointer-events: auto;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tooltip {
+      position: relative;
+      margin: 0 10px;
+    }
+
+    .desktop .checklist {
+      border-bottom: 1px solid #fff;
+      padding-bottom: 12px;
+      margin-bottom: 8px;
+    }
+
+    .checklist {
+      color: #1e415f;
+      list-style: none;
+      font-size: 14px;
+    }
+
+    .checklist li::before {
+      content: '✓';
+      margin-right: 10px;
+      font-weight: 700;
+    }
+
+    .swatchCustom__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin: 10px 0;
+      padding: 10px;
+      background: #ffffff;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      color: #1e415f;
+      cursor: pointer;
+    }
+
+    .swatchCustom__item.swatchCustom__item--active {
+      cursor: default;
+      background: #f1f7fc;
+      border: 2px solid #4090d1;
+    }
+
+    .swatchCustom span {
+      display: block;
+    }
+
+    .swatchCustom__item--first .week {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      display: block;
+    }
+
+    .swatchCustom__item--first .days {
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    .swatchCustom__item--second {
+      display: flex;
+      align-items: flex-end;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 0.05em;
+      text-decoration-line: line-through;
+      color: rgba(30, 65, 95, 0.7);
+    }
+
+    .swatchCustom__item--third {
+      text-align: right;
+    }
+
+    .swatchCustom__item--third .sale {
+      color: #f27113;
+      font-size: 12px;
+      display: block;
+    }
+
+    .swatchCustom__item--third .price {
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .shipping-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background: #f5f6f7;
+      border-radius: 22px;
+    }
+
+    .is-width-standard .on-free-shipping-label {
+      background: #4090d1;
+      border-radius: 5px;
+      color: #fff;
+      padding: 5px;
+      font-size: 12px;
+    }
+
+    .on-pack-wrapper {
+      margin-bottom: 10px;
+    }
+
+    .on-select {
+      background: none;
+      width: 51%;
+      border: none;
+      color: inherit;
+      text-decoration: underline;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .on-select:focus {
+      outline: none !important;
+    }
+
+    .custom-select {
+      width: 65%;
+    }
+
+    .stock {
+      margin: 10px 0;
+    }
+
+    .stock__header {
+      font-family: Roboto;
+      font-style: normal;
+      color: #29c470 !important;
+      font-weight: 700 !important;
+      font-size: 16px !important;
+      line-height: 19px !important;
+      margin: 10px 0;
+    }
+
+    .stock__select {
+      padding: 5px;
+      background: #ffffff;
+      border: 1px solid rgba(31, 64, 92, 0.2);
+      box-sizing: border-box;
+      border-radius: 5px;
+      height: 35px;
+      width: fit-content;
+    }
+
+    .subscribe-custom {
+      display: block;
+      color: #1e415f;
+      padding: 14px 14px 14px 43px;
+      margin: auto 0 10px;
+      background: #fef7e8;
+      border: 1px solid #f5f6f7;
+      border-radius: 22px;
+      position: relative;
+      line-height: 17px;
+    }
+
+    .subscribe-custom > span {
+      font-size: 12px;
+      line-height: 17px !important;
+      font-weight: 400;
+      display: block;
+    }
+
+    h5.subscribe-custom__header {
+      font-family: 'Roboto';
+      font-weight: 500;
+      display: inline;
+      font-size: 16px;
+      line-height: 24px;
+      color: #14425e;
+      letter-spacing: normal;
+    }
+
+    .subscribe-custom__header span {
+      color: #f27113;
+    }
+
+    .subscribe-custom__checkbox {
+      width: 20px;
+      height: 20px;
+      margin: 0 5px 0 0;
+    }
+
+    .moneyback {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .moneyback p {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 126.19%;
+      margin: 10px;
+      color: #1e415f;
+    }
+
+    .total_price {
+      font-weight: 600;
+      color: #1e415f;
+      font-size: 32px;
+      margin-bottom: 20px;
+      line-height: 1;
+      font-family: 'Rubik', sans-serif !important;
+    }
+
+    .free-shipping-label {
+      display: inline-block;
+      color: white;
+      background-color: #4090d1;
+      border-radius: 5px;
+      padding: 7px;
+      font-size: 12px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      width: fit-content;
+    }
+
+    .part2 .free-shipping-label + .flx {
+      font-size: 14px;
+    }
+
+    .part2 .free-shipping-label + .flx b {
+      flex-shrink: 0;
+    }
+
+    .country_select {
+      background: none;
+      border: none;
+      font-weight: 500;
+      font-size: 13px;
+      display: inline-block;
+      text-decoration: underline;
+      color: #1e415f;
+      width: fit-content;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      padding-right: 10px;
+    }
+
+    .for_country_select {
+      position: relative;
+    }
+
+    .for_country_select::after {
+      content: '';
+      display: block;
+      background: url("{{'expandmore.svg' | asset_url }}") center center no-repeat;
+      background-size: contain;
+      width: 12px;
+      height: 6px;
+      position: absolute;
+      top: 50%;
+      right: 3px;
+      transform: translateY(-50%);
+    }
+
+    .delivery_date {
+      font-size: 14px;
+      margin-bottom: 25px;
+      display: inline-block;
+      color: #1e415f;
+    }
+
+    .to_checkout {
+      border: none;
+      text-transform: uppercase;
+      color: white;
+      font-size: 16px;
+      padding: 14px;
+      width: 100%;
+      display: block;
+      background: #1e415f;
+      border-radius: 30px;
+      font-weight: 700;
+      font-family: 'Roboto', sans-serif;
+      margin-top: auto;
+      cursor: pointer;
+    }
+
+    .mobile .to_checkout {
+      margin-top: 30px;
+    }
+
+    .tablet {
+      display: none;
+    }
+
+    @media (max-width: 1023px) {
+      .checklist {
+        display: none;
+      }
+
+      .desktop {
+        display: none;
+      }
+
+      .mobile,
+      .tablet {
+        display: block;
+      }
+
+      .dark_bg {
+        background: rgba(25, 25, 25, 0.8);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        display: none;
+      }
+
+      .dark_bg.active {
+        display: block;
+      }
+
+      .variant_select_popup {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 10px;
+      }
+
+      .variant_select_popup > p {
+        font-size: 17px;
+        color: #1e4670;
+        margin: 8px 0;
+        margin-left: 15px;
+      }
+
+      .variant_select_popup > .flx {
+        width: 100%;
+        overflow-x: scroll;
+      }
+
+      .swatchCustom__item__mobile {
+        border: 1px dashed #4090d1;
+        border-radius: 10px;
+        opacity: 0.6;
+        padding: 10px;
+        padding-top: 5px;
+        min-width: 140px;
+        margin: 0 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      .swatchCustom__item__mobile img {
+        height: 60px;
+        margin: 20px 0;
+      }
+
+      .swatchCustom__item__mobile .week {
+        font-weight: bold;
+        font-size: 16px;
+        color: #1e415f;
+      }
+
+      .swatchCustom__item__mobile .days {
+        font-size: 12px;
+        color: #747474;
+        margin: 20px 0;
+      }
+
+      .swatchCustom__item__mobile .sale {
+        position: absolute;
+        background: rgba(242, 113, 19, 0.29);
+        font-size: 11px;
+        color: #f27113;
+        padding: 0 4px;
+        top: 15px;
+        left: 15px;
+      }
+
+      .swatchCustom__item__mobile .price {
+        font-family: Rubik;
+        font-weight: 500;
+        font-size: 14px;
+        letter-spacing: 0.05em;
+        color: #1e415f;
+      }
+
+      .swatchCustom__item__mobile .compare {
+        font-family: Rubik;
+        font-weight: 500;
+        font-size: 10px;
+        letter-spacing: 0.05em;
+        text-decoration-line: line-through;
+        color: #747474;
+      }
+
+      .swatchCustom__item--active {
+        background: rgba(64, 144, 209, 0.1);
+        opacity: 1;
+        border: 2px solid #4090d1;
+      }
+
+      .swatchCustom__item--active .close_btn {
+        position: absolute;
+        top: -30px;
+        right: 20px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #ffffff;
+        text-transform: uppercase;
+      }
+
+      .select_pack {
+        position: relative;
+        border: 2px solid #4090d1;
+        border-radius: 5px;
+        background: #f1f7fc;
+        padding: 10px 15px;
+        color: rgb(30, 65, 95);
+        font-size: 16px;
+        margin: 15px 0;
+        cursor: pointer;
+      }
+
+      .select_pack svg {
+        position: absolute;
+        width: 15px;
+        top: 50%;
+        right: 25px;
+        transform: translateY(-50%);
+      }
+
+      .select_pack p {
+        line-height: 1;
+      }
+
+      .mobile .subscribe-custom {
+        margin: 20px 0;
+      }
+
+      .country_select {
+        margin-bottom: 0;
+      }
+
+      .free-shipping-label {
+        padding: 5px 20px;
+        font-size: 16px;
+      }
+
+      .moneyback {
+        justify-content: center;
+      }
+
+      .delivery_date {
+        margin-bottom: 10px;
+      }
+
+      .free-shipping-label {
+        margin-bottom: 10px;
+      }
+
+      .close_btn {
+        position: absolute;
+        top: -30px;
+        right: 20px;
+        transform: translateY(0);
+        transition: all 0.3s ease;
+        font-family: Roboto;
+        font-weight: bold;
+        font-size: 16px;
+        color: #ffffff;
+        text-transform: uppercase;
+        background: transparent;
+        border: none;
+        outline: none;
+      }
+
+      .swatchCustom__item__mobile > .flx {
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .mobile .checklist + span {
+        color: #1e415f;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .checklist {
+        display: block;
+      }
+
+      .tablet {
+        display: none;
+      }
+
+      .is-width-standard .product_section {
+        flex-direction: column;
+      }
+
+      .product__information.one-half {
+        width: 100%;
+        padding-left: 0;
+      }
+
+      .product__images.one-half {
+        width: 100%;
+      }
+
+      .mobile .checklist {
+        padding-top: 20px;
+      }
+
+      .moneyback {
+        height: 96px;
+        margin-top: 12px;
+      }
+
+      .subscibe-custom__info {
+        max-width: 225px;
+      }
+
+      .product__information.column {
+        margin: 0;
+        width: 100%;
+      }
+    }
+
+    .loader_custom {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background: rgba(0 0 0 / 50%);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100000;
+    }
+
+    .loader_custom.active {
+      display: flex;
+    }
+
+    .lds-dual-ring {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+    }
+
+    .lds-dual-ring:after {
+      content: ' ';
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      border-color: #fff transparent #fff transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /*** new style ***/
+    .choose-pack {
+      font-size: 14px;
+      line-height: 23px;
+      margin-top: 12px;
+      margin-bottom: -6px;
+    }
+
+    .parent-items {
+      font-weight: 400;
+      color: #1e415f;
+      display: grid;
+    }
+
+    @media (max-width: 1023px) {
+      .parent-items .swatchCustom__item_new:not(.active) {
+        background: #f5f6f7 !important;
+      }
+    }
+
+    .footer-prices {
+      margin: 22px 0 10px;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 23px;
+      color: #20425e;
+      width: fit-content;
+    }
+
+    .footer-prices .sale {
+      margin: 0 0 0 16px !important;
+    }
+
+    .footer-prices .pr {
+      font-family: 'Rubik';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 32px;
+    }
+
+    .mobile .free-shipping-label {
+      margin-top: -50px;
+      display: block;
+      margin-left: auto;
+      margin-bottom: 20px;
+    }
+
+    .footer-prices .tooltip-wrap .tooltip {
+      top: auto;
+      right: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(50%);
+    }
+
+    .footer-prices .tooltip-wrap .tooltip:before {
+      top: 100%;
+      right: 50%;
+      bottom: calc(100% + 12px);
+      transform: translateX(50%) scaleY(-1);
+      bottom: auto;
+    }
+
+    .part2.gray_bg .popup_btn {
+      margin-top: 0;
+    }
+
+    .stock__pack {
+      margin-bottom: auto;
+    }
+
+    .subscribe-custom__checkbox {
+      display: none;
+    }
+
+    .check-customer {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      background: #ffffff no-repeat center / 14px auto;
+      border: 1px solid #14425e;
+      border-radius: 2px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .subscribe-custom__checkbox:checked ~ .check-customer {
+      background-image: url({{'checkbox.svg'|asset_url}});
+    }
+
+    @media (max-width: 1023px) {
+      .product__information .swatchCustom__item_new[data-title='12 Pack'],
+      .product__information .swatchCustom__item_new[data-title='12 Pack / Extra'],
+      .product__information .swatchCustom__item_new[data-title='12 Pack / Gentle'] {
+        order: 0;
+      }
+      .product__information .swatchCustom__item_new[data-title='3 Pack'],
+      .product__information .swatchCustom__item_new[data-title='3 Pack / Extra'],
+      .product__information .swatchCustom__item_new[data-title='3 Pack / Gentle'] {
+        order: 1;
+      }
+      .product__information .swatchCustom__item_new[data-title='1 Pack'],
+      .product__information .swatchCustom__item_new[data-title='1 Pack / Extra'],
+      .product__information .swatchCustom__item_new[data-title='1 Pack / Gentle'] {
+        order: 2;
+      }
+    }
+    .product__information .swatchCustom__item_new {
+      padding: 7px 10px !important;
+      min-height: 74px;
+      background: #fff !important;
+      border-radius: 15px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+    .product__information .swatchCustom__item_new.active {
+      background: #f1f7fc !important;
+      border: 2px solid #4090d1;
+      border-radius: 15px;
+    }
+    .product__information .swatchCustom__item_new.active .svg-strips path {
+      fill: #f0752d;
+    }
+    .product__information .svg-strips {
+      margin-right: 24px;
+    }
+    .product__information .for-week {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 19px;
+      margin-bottom: 5px;
+    }
+    .product__information .item_total {
+      font-size: 13px;
+      line-height: 19px;
+    }
+    .product__information .l-through {
+      text-decoration-line: line-through;
+      color: #5e788d;
+    }
+
+    .product_section .top-seller,
+    .product_section .best-deal,
+    .product_section .sale,
+    .product_section .footer-prices .sale,
+    .slide_in_pdp .sale,
+    .slide_in_pdp .top-seller,
+    .slide_in_pdp .best-deal {
+      font-size: 10px;
+      line-height: 14px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #ffffff;
+      padding: 2px 7px;
+      margin-bottom: 4px;
+      border-radius: 5px;
+      width: fit-content;
+      margin-left: auto;
+    }
+    .product_section .top-seller,
+    .product_section .best-deal,
+    .slide_in_pdp .best-deal,
+    .slide_in_pdp .top-seller {
+      padding: 2px;
+      width: 66px;
+      text-align: center;
+    }
+    .product_section .best-deal,
+    .slide_in_pdp .best-deal {
+      background: #1e415f;
+    }
+    .product_section .top-seller,
+    .slide_in_pdp .top-seller {
+      background: #3f90d1;
+    }
+    .product_section .sale,
+    .product_section .footer-prices .sale,
+    .slide_in_pdp .sale {
+      font-weight: 500;
+      background: #f0752d;
+    }
+    .months {
+      font-size: 12px;
+      line-height: 16px;
+      text-align: right;
+      color: #1e415f;
+    }
+
+
+    .subscribe-custom__checkbox {
+      display: none;
+  }
+
+  .check-customer {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      background: #FFFFFF no-repeat center / 14px auto;
+      border: 1px solid #14425E;
+      border-radius: 2px;
+      width: 20px;
+      height: 20px;
+  }
+
+  .subscribe-custom__checkbox:checked~.check-customer {
+      background-image: url({{ 'checkbox.svg' | asset_url}})
+  }
+</style>
+
+<div class="flx desktop">
+  <div class="part1 gray_bg">
+    {% comment %} Name {% endcomment %}
+    <h1 class="product_name title">{{ product.title }}</h1>
+    <h2 class="subtitle">The Original Mouth Tape&#8482;</h2>
+    <p class="subheading">4 week pack (28 strips in a pack)</p>
+
+    {% comment %} Review stars {% endcomment %}
+    <div class="flx">
+      <span
+        class="stamped-product-reviews-badge stamped-main-badge"
+        data-id="{{ product.id }}"
+        style="display: inline-block;"
+      >
+        {{- product.metafields.stamped.badge -}}
+      </span>
+      <span class="made_in">Made in USA</span>
+    </div>
+
+    <ul class="checklist">
+      <li>Promote nose breathing</li>
+      <li>Reduce open-mouth snoring</li>
+      <li>Boost CPAP experience</li>
+      <li>Improve sleep quality</li>
+    </ul>
+
+    <div class="middle-block">
+      <p>Number of weeks:</p>
+    </div>
+
+    <div class="parent-items">
+      {% for variant in product.variants %}
+        {% assign comparePrice = variant.compare_at_price | plus: 0 %}
+        {% assign price = variant.price | plus: 0 %}
+
+        {% assign active = '' %}
+        {% assign price_week = '' %}
+
+        {% if variant.title contains '12 Pack' %}
+          {% assign week = '52 week pack' %}
+          {% assign days = '364 strips - 364 days' %}
+          {% assign sale = 'Save 30%' %}
+          {% assign strips = '364' %}
+          {% assign month = '12 months' %}
+          {% assign compare = comparePrice | money %}
+          {% assign price_week = variant.price | divided_by: 52.0 | round: 2 | money %}
+          {% assign icon = '<svg class="svg-strips" width="52" height="42" viewBox="0 0 52 42" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M11.9509 4.64345C7.31333 6.19199 3.91838 8.24845 2.32864 10.2747L1.70118 9.71947L2.3293 10.2738C2.27287 10.346 2.19076 10.5197 2.13196 10.839C2.07602 11.1429 2.05456 11.5042 2.06142 11.8739L2.06149 11.878C2.07299 12.6931 2.42918 13.4619 3.04371 13.9769L3.05076 13.9828C4.49599 15.2215 7.00081 17.2815 8.6412 18.3599L8.65227 18.3673C9.42034 18.8904 10.3301 19.1873 11.2804 19.2446C12.8905 19.3249 15.3979 19.4195 17.2472 19.3566C17.7758 19.3331 18.2966 19.0923 18.9284 18.633C19.3311 18.3402 19.7112 18.0139 20.1393 17.6463C20.4237 17.4021 20.7294 17.1396 21.0771 16.8567C22.7513 15.4941 24.9324 14.0825 28.327 14.0478L28.3348 14.0477L28.7079 14.0478C32.1027 14.0825 34.2802 15.4943 35.9528 16.857C36.2973 17.138 36.6013 17.3989 36.8839 17.6418C37.3139 18.0113 37.6956 18.3391 38.0999 18.6328C38.7317 19.0916 39.2546 19.3331 39.7881 19.3566C41.6219 19.4194 44.1288 19.3249 45.7548 19.2446C46.7012 19.1875 47.599 18.8921 48.3878 18.3638L48.4047 18.3528C49.0014 17.9741 49.7198 17.4404 50.4665 16.8578L46.936 5.31646C42.0753 3.39588 35.6463 2.10967 28.7152 2.10967H28.3502C22.262 2.10967 16.5534 3.10665 11.9509 4.64345ZM11.461 2.98863C16.2283 1.39678 22.1026 0.375 28.3502 0.375H28.7152C35.9996 0.375 42.7776 1.75805 47.8847 3.84291C48.1146 3.93674 48.2922 4.13576 48.3683 4.38453L52.2015 16.9152C52.3097 17.2686 52.1937 17.6558 51.9134 17.8781C51.0029 18.6003 50.0492 19.3293 49.251 19.8367C48.2175 20.5265 47.0512 20.9047 45.8427 20.9767L45.8349 20.9772C44.2065 21.0577 41.638 21.1558 39.7319 21.0903L39.7254 21.09C38.7463 21.0484 37.9182 20.6023 37.1779 20.0647C36.7315 19.7404 36.2513 19.3293 35.7734 18.9202C35.4986 18.6849 35.2246 18.4503 34.9583 18.2332C33.4332 16.9906 31.596 15.8131 28.696 15.7824H28.339C25.4386 15.8131 23.5975 16.9908 22.0707 18.2335C21.8023 18.452 21.5261 18.6883 21.2492 18.9252C20.7729 19.3327 20.2947 19.7419 19.8511 20.0644C19.1122 20.6016 18.2858 21.0483 17.3097 21.09L17.3031 21.0903C15.3819 21.1558 12.8135 21.0576 11.1999 20.9772L11.1925 20.9768C9.98639 20.9049 8.80058 20.5275 7.77605 19.8313C6.04104 18.6898 3.47201 16.573 2.02808 15.3355C1.03311 14.4997 0.44775 13.244 0.428276 11.9061C0.420026 11.456 0.444279 10.9656 0.528896 10.5061C0.610796 10.0613 0.764445 9.55946 1.07306 9.1651L1.07372 9.16427C2.96727 6.75082 6.7289 4.56875 11.461 2.98863Z"
+                          fill="#1E415F" />
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M47.6995 3.80921C48.0094 3.85406 48.2681 4.08315 48.3656 4.39904L52.2292 16.9458C52.3114 17.2131 52.2664 17.5061 52.1088 17.732C51.951 17.9578 51.7001 18.0885 51.4354 18.0826C50.0054 18.0504 48.5507 18.002 47.5014 17.9368C46.2458 17.8755 45.0558 17.2215 44.312 16.1322L44.3093 16.1285V16.1285C44.0694 15.7733 43.8156 15.3614 43.6287 14.9369C43.4503 14.5321 43.2896 14.0215 43.3377 13.4912C43.5073 10.8829 44.7618 7.61959 46.9091 4.18851C47.0825 3.9117 47.3893 3.7644 47.6995 3.80921ZM47.3555 6.7001C45.8712 9.3904 45.0831 11.7858 44.9664 13.6223C44.9659 13.6333 44.9651 13.6442 44.9638 13.6551C44.9565 13.7295 44.9768 13.9035 45.1083 14.2018C45.2329 14.4844 45.4196 14.7957 45.6356 15.1155C46.0768 15.7607 46.8002 16.1672 47.5802 16.2042L47.5913 16.2047V16.2048C48.3344 16.251 49.2969 16.289 50.3174 16.3187L47.3555 6.7001Z"
+                          fill="#1E415F" />
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M23.7449 8.80564C23.7439 8.80772 23.7427 8.81171 23.7427 8.81879C23.7427 8.82584 23.7439 8.82983 23.7449 8.8319C23.7459 8.83429 23.7471 8.83633 23.7488 8.8381C23.7505 8.83986 23.7524 8.84147 23.7554 8.84271C23.7578 8.84382 23.7624 8.84528 23.7698 8.84528H31.8924C31.9 8.84528 31.9046 8.84382 31.907 8.84271C31.9096 8.84147 31.9119 8.83986 31.9135 8.8381C31.9153 8.83633 31.9166 8.83429 31.9174 8.8319C31.9182 8.82983 31.9195 8.82584 31.9195 8.81879C31.9195 8.81171 31.9182 8.80772 31.9174 8.80564C31.9166 8.80328 31.9153 8.80124 31.9135 8.79947C31.9119 8.79769 31.9096 8.79608 31.907 8.79483C31.9046 8.79372 31.9 8.79227 31.8924 8.79227H23.7698C23.7624 8.79227 23.7578 8.79372 23.7554 8.79483C23.7524 8.79608 23.7505 8.79769 23.7488 8.79947C23.7471 8.80124 23.7459 8.80328 23.7449 8.80564ZM22.7627 8.81879C22.7627 8.22367 23.2123 7.75146 23.7698 7.75146H31.8924C32.4501 7.75146 32.8997 8.22367 32.8997 8.81879C32.8997 9.41388 32.4501 9.88608 31.8924 9.88608H23.7698C23.2123 9.88608 22.7627 9.41388 22.7627 8.81879Z"
+                          fill="#1E415F" />
+                  </g>
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M9.46032 35.7703C9.12529 35.5368 9.08012 35.1204 9.35954 34.8403L15.4274 28.755C15.7066 28.4749 16.2046 28.4372 16.5394 28.6708C16.8744 28.9043 16.9193 29.3207 16.6401 29.6008L10.5721 35.6861C10.2931 35.9662 9.79513 36.0039 9.46032 35.7703Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M16.5594 35.7575C16.2383 36.0016 15.7502 35.9733 15.4695 35.6942L9.36715 29.6308C9.08646 29.3518 9.1191 28.9277 9.44021 28.6836C9.7611 28.4395 10.2492 28.4679 10.5301 28.7469L16.6323 34.8103C16.9132 35.0894 16.8805 35.5135 16.5594 35.7575Z"
+                      fill="#1E415F" />
+                  <path
+                      d="M21.6865 30.9033H22.6709C23.0537 30.9033 23.3704 30.8372 23.6211 30.7051C23.8763 30.5729 24.0654 30.3906 24.1885 30.1582C24.3115 29.9258 24.373 29.6592 24.373 29.3584C24.373 29.0439 24.3161 28.7751 24.2021 28.5518C24.0928 28.3239 23.9242 28.1484 23.6963 28.0254C23.473 27.9023 23.1882 27.8408 22.8418 27.8408C22.5501 27.8408 22.2858 27.9001 22.0488 28.0186C21.8164 28.1325 21.6318 28.2965 21.4951 28.5107C21.3584 28.7204 21.29 28.971 21.29 29.2627H19.6357C19.6357 28.734 19.7747 28.2646 20.0527 27.8545C20.3307 27.4443 20.709 27.123 21.1875 26.8906C21.6706 26.6536 22.2129 26.5352 22.8145 26.5352C23.457 26.5352 24.0176 26.6423 24.4961 26.8564C24.9792 27.0661 25.3551 27.3805 25.624 27.7998C25.8929 28.2191 26.0273 28.7386 26.0273 29.3584C26.0273 29.641 25.9613 29.9281 25.8291 30.2197C25.6969 30.5114 25.501 30.778 25.2412 31.0195C24.9814 31.2565 24.6579 31.4502 24.2705 31.6006C23.8831 31.7464 23.4342 31.8193 22.9238 31.8193H21.6865V30.9033ZM21.6865 32.1885V31.2861H22.9238C23.5072 31.2861 24.0039 31.3545 24.4141 31.4912C24.8288 31.6279 25.166 31.8171 25.4258 32.0586C25.6855 32.2956 25.8747 32.5667 25.9932 32.8721C26.1162 33.1774 26.1777 33.501 26.1777 33.8428C26.1777 34.3076 26.0934 34.7223 25.9248 35.0869C25.7607 35.4469 25.526 35.7523 25.2207 36.0029C24.9154 36.2536 24.5576 36.4427 24.1475 36.5703C23.7419 36.6979 23.2998 36.7617 22.8213 36.7617C22.3929 36.7617 21.9827 36.7025 21.5908 36.584C21.1989 36.4655 20.848 36.29 20.5381 36.0576C20.2282 35.8206 19.9821 35.5267 19.7998 35.1758C19.6221 34.8203 19.5332 34.4102 19.5332 33.9453H21.1807C21.1807 34.2415 21.249 34.5036 21.3857 34.7314C21.527 34.9548 21.723 35.1302 21.9736 35.2578C22.2288 35.3854 22.5205 35.4492 22.8486 35.4492C23.195 35.4492 23.4935 35.3877 23.7441 35.2646C23.9948 35.1416 24.1862 34.9593 24.3184 34.7178C24.4551 34.4762 24.5234 34.1846 24.5234 33.8428C24.5234 33.4554 24.4482 33.141 24.2979 32.8994C24.1475 32.6579 23.9333 32.4801 23.6553 32.3662C23.3773 32.2477 23.0492 32.1885 22.6709 32.1885H21.6865ZM32.6855 26.6104H32.8906V27.957H32.7744C32.1865 27.957 31.6784 28.0482 31.25 28.2305C30.8262 28.4128 30.4775 28.6634 30.2041 28.9824C29.9307 29.3014 29.7256 29.6751 29.5889 30.1035C29.4567 30.5273 29.3906 30.9785 29.3906 31.457V33.0225C29.3906 33.4189 29.4339 33.7699 29.5205 34.0752C29.6071 34.376 29.7279 34.6289 29.8828 34.834C30.0423 35.0345 30.2246 35.1872 30.4297 35.292C30.6348 35.3968 30.8558 35.4492 31.0928 35.4492C31.3389 35.4492 31.5622 35.3991 31.7627 35.2988C31.9632 35.194 32.1341 35.0505 32.2754 34.8682C32.4167 34.6859 32.5238 34.4694 32.5967 34.2188C32.6696 33.9681 32.7061 33.6947 32.7061 33.3984C32.7061 33.1159 32.6696 32.8516 32.5967 32.6055C32.5283 32.3548 32.4258 32.1361 32.2891 31.9492C32.1523 31.7578 31.9814 31.6097 31.7764 31.5049C31.5758 31.3955 31.3434 31.3408 31.0791 31.3408C30.751 31.3408 30.4525 31.4183 30.1836 31.5732C29.9193 31.7282 29.7051 31.931 29.541 32.1816C29.3815 32.4277 29.2949 32.6898 29.2812 32.9678L28.6523 32.7627C28.6888 32.3389 28.7822 31.9583 28.9326 31.6211C29.0876 31.2839 29.2904 30.9967 29.541 30.7598C29.7917 30.5228 30.0811 30.3428 30.4092 30.2197C30.7419 30.0921 31.1064 30.0283 31.5029 30.0283C31.986 30.0283 32.4053 30.1195 32.7607 30.3018C33.1162 30.484 33.4102 30.7324 33.6426 31.0469C33.8796 31.3568 34.055 31.7122 34.1689 32.1133C34.2874 32.5098 34.3467 32.9245 34.3467 33.3574C34.3467 33.8359 34.2738 34.2826 34.1279 34.6973C33.9821 35.1074 33.7679 35.4674 33.4854 35.7773C33.2074 36.0872 32.8678 36.3288 32.4668 36.502C32.0703 36.6751 31.6191 36.7617 31.1133 36.7617C30.5801 36.7617 30.1038 36.6592 29.6846 36.4541C29.2699 36.249 28.9167 35.9665 28.625 35.6064C28.3379 35.2464 28.1191 34.8317 27.9688 34.3623C27.8184 33.8929 27.7432 33.3962 27.7432 32.8721V32.1885C27.7432 31.432 27.8389 30.7188 28.0303 30.0488C28.2217 29.3743 28.5156 28.7796 28.9121 28.2646C29.3132 27.7497 29.8258 27.3464 30.4502 27.0547C31.0745 26.7585 31.8197 26.6104 32.6855 26.6104ZM42.5225 33.0771V34.3896H35.3447L35.29 33.3984L39.583 26.6719H40.9023L39.4736 29.1191L37.0059 33.0771H42.5225ZM41.2783 26.6719V36.625H39.6309V26.6719H41.2783Z"
+                      fill="#1E415F" />
+              </svg>' %}
+          {% assign planId = '2086633587' %}
+
+        {% elsif variant.title contains '3 Pack' %}
+          {% assign week = '12 week pack' %}
+          {% assign days = '84 strips - 84 days' %}
+          {% assign sale = 'Save 22%' %}
+          {% assign strips = '84' %}
+          {% assign month = '3 months' %}
+          {% assign compare = comparePrice | money %}
+          {% assign price_week = variant.price | divided_by: 12.0 | round: 2 | money %}
+          {% assign icon = '<svg class="svg-strips" width="52" height="36" viewBox="0 0 52 36" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M13.1505 3.96356C8.73967 5.40149 5.51077 7.31107 3.9988 9.19255L3.40203 8.67701L3.99943 9.19178C3.94576 9.25874 3.86766 9.42005 3.81174 9.71656C3.75853 9.99873 3.73813 10.3343 3.74465 10.6776L3.74472 10.6814C3.75565 11.4383 4.09442 12.1521 4.67889 12.6303L4.68559 12.6358C6.06014 13.7861 8.44243 15.6989 10.0026 16.7003L10.0131 16.7071C10.7436 17.1929 11.6089 17.4686 12.5127 17.5218C14.0441 17.5963 16.4288 17.6841 18.1876 17.6258C18.6904 17.604 19.1858 17.3803 19.7866 16.9539C20.1696 16.682 20.5311 16.379 20.9382 16.0377C21.2088 15.8109 21.4995 15.5672 21.8302 15.3044C23.4225 14.0391 25.497 12.7284 28.7256 12.6962L28.733 12.6961L29.0877 12.6961C32.3166 12.7284 34.3876 14.0394 35.9782 15.3047C36.306 15.5656 36.595 15.8079 36.8638 16.0334C37.2729 16.3765 37.6359 16.681 38.0204 16.9537C38.6214 17.3797 39.1186 17.604 39.6259 17.6258C41.37 17.6841 43.7543 17.5963 45.3008 17.5218C46.2011 17.4688 47.0549 17.1945 47.8052 16.7038L47.8212 16.6937C48.3888 16.3421 49.072 15.8465 49.7821 15.3055L46.4244 4.5885C41.8013 2.8051 35.6869 1.61077 29.0947 1.61077H28.7476C22.9571 1.61077 17.5278 2.53653 13.1505 3.96356ZM12.6845 2.42694C17.2186 0.948795 22.8056 0 28.7476 0H29.0947C36.0228 0 42.4692 1.28427 47.3265 3.2202C47.5452 3.30733 47.7142 3.49214 47.7866 3.72313L51.4322 15.3588C51.535 15.6869 51.4248 16.0464 51.1583 16.2529C50.2924 16.9235 49.3852 17.6005 48.626 18.0716C47.6432 18.7121 46.5337 19.0633 45.3844 19.1302L45.377 19.1306C43.8284 19.2053 41.3853 19.2965 39.5725 19.2356L39.5664 19.2354C38.6351 19.1967 37.8476 18.7825 37.1436 18.2833C36.719 17.9822 36.2621 17.6004 35.8078 17.2205C35.5464 17.0021 35.2857 16.7842 35.0325 16.5827C33.582 15.4288 31.8347 14.3354 29.0764 14.3069H28.737C25.9784 14.3354 24.2274 15.429 22.7752 16.5829C22.5199 16.7858 22.2572 17.0052 21.9939 17.2252C21.5409 17.6036 21.0861 17.9836 20.6642 18.283C19.9615 18.7818 19.1754 19.1966 18.2471 19.2354L18.2408 19.2356C16.4135 19.2965 13.9708 19.2053 12.4362 19.1306L12.4291 19.1302C11.282 19.0635 10.1542 18.7131 9.17977 18.0666C7.52962 17.0066 5.08623 15.041 3.71294 13.8919C2.76663 13.1158 2.20991 11.9498 2.19138 10.7075C2.18354 10.2895 2.20661 9.83412 2.28708 9.40742C2.36498 8.99446 2.51111 8.52843 2.80463 8.16223L2.80526 8.16146C4.60618 5.92041 8.18383 3.89419 12.6845 2.42694Z"
+                          fill="#1E415F" />
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M47.1528 3.18902C47.4476 3.23066 47.6937 3.44338 47.7863 3.73672L51.4609 15.3873C51.5392 15.6355 51.4964 15.9076 51.3465 16.1173C51.1965 16.327 50.9579 16.4484 50.706 16.4428C49.3461 16.413 47.9625 16.368 46.9643 16.3075C45.7702 16.2506 44.6385 15.6432 43.9309 14.6318L43.9286 14.6283V14.6283C43.7004 14.2985 43.459 13.9161 43.2811 13.5219C43.1114 13.146 42.9587 12.6719 43.0044 12.1795C43.1655 9.7574 44.3587 6.72722 46.4011 3.54122C46.566 3.28419 46.8578 3.1474 47.1528 3.18902ZM46.8257 5.87341C45.4141 8.37155 44.6645 10.5959 44.5535 12.3012C44.5528 12.3114 44.5521 12.3215 44.551 12.3317C44.544 12.4007 44.5633 12.5623 44.6884 12.8392C44.8068 13.1017 44.9844 13.3908 45.1898 13.6877C45.6095 14.2868 46.2976 14.6643 47.0393 14.6986L47.05 14.6991V14.6992C47.7566 14.7421 48.6722 14.7774 49.6428 14.805L46.8257 5.87341Z"
+                          fill="#1E415F" />
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M24.3705 7.82849C24.3696 7.83041 24.3685 7.83412 24.3685 7.84069C24.3685 7.84724 24.3696 7.85095 24.3705 7.85287C24.3715 7.85509 24.3726 7.85699 24.3743 7.85862C24.3759 7.86026 24.3777 7.86175 24.3805 7.86291C24.3828 7.86394 24.3873 7.86529 24.3942 7.86529H32.1195C32.1267 7.86529 32.1311 7.86394 32.1334 7.86291C32.136 7.86175 32.138 7.86026 32.1397 7.85862C32.1413 7.85699 32.1425 7.85509 32.1434 7.85287C32.1441 7.85095 32.1452 7.84724 32.1452 7.84069C32.1452 7.83412 32.1441 7.83041 32.1434 7.82849C32.1425 7.8263 32.1413 7.8244 32.1397 7.82276C32.138 7.8211 32.136 7.81961 32.1334 7.81845C32.1311 7.81742 32.1267 7.81607 32.1195 7.81607H24.3942C24.3873 7.81607 24.3828 7.81742 24.3805 7.81845C24.3777 7.81961 24.3759 7.8211 24.3743 7.82276C24.3726 7.8244 24.3715 7.8263 24.3705 7.82849ZM23.4364 7.84069C23.4364 7.28808 23.864 6.84961 24.3942 6.84961H32.1195C32.6499 6.84961 33.0775 7.28808 33.0775 7.84069C33.0775 8.39328 32.6499 8.83175 32.1195 8.83175H24.3942C23.864 8.83175 23.4364 8.39328 23.4364 7.84069Z"
+                          fill="#1E415F" />
+                  
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M13.2682 35.3953C12.9519 35.1618 12.9092 34.7454 13.173 34.4653L18.9039 28.38C19.1676 28.0999 19.6379 28.0622 19.9541 28.2958C20.2704 28.5293 20.3129 28.9457 20.0493 29.2258L14.3184 35.3111C14.0547 35.5912 13.5844 35.6289 13.2682 35.3953Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M19.973 35.3825C19.6698 35.6266 19.2088 35.5983 18.9436 35.3192L13.1803 29.2558C12.9151 28.9768 12.946 28.5527 13.2493 28.3086C13.5525 28.0645 14.0134 28.0929 14.2786 28.3719L20.0419 34.4353C20.3071 34.7144 20.2762 35.1385 19.973 35.3825Z"
+                      fill="#1E415F" />
+                  <path
+                      d="M29.8749 32.9844C29.8749 33.6402 29.7268 34.1922 29.4305 34.6406C29.1343 35.0891 28.7299 35.429 28.2174 35.6604C27.7096 35.887 27.136 36.0003 26.4965 36.0003C25.857 36.0003 25.281 35.887 24.7685 35.6604C24.256 35.429 23.8516 35.0891 23.5554 34.6406C23.2592 34.1922 23.1111 33.6402 23.1111 32.9844C23.1111 32.5505 23.1934 32.1575 23.3579 31.8055C23.5225 31.4487 23.7553 31.1426 24.0562 30.887C24.3618 30.6267 24.7192 30.4266 25.1282 30.2867C25.542 30.1469 25.9934 30.077 26.4824 30.077C27.1313 30.077 27.712 30.2 28.2245 30.4459C28.737 30.6918 29.139 31.0317 29.4305 31.4656C29.7268 31.8996 29.8749 32.4058 29.8749 32.9844ZM28.168 32.8976C28.168 32.5457 28.0975 32.2371 27.9565 31.9719C27.8154 31.7067 27.6179 31.5018 27.364 31.3571C27.1101 31.2125 26.8162 31.1402 26.4824 31.1402C26.1439 31.1402 25.85 31.2125 25.6008 31.3571C25.3516 31.5018 25.1564 31.7067 25.0154 31.9719C24.879 32.2371 24.8108 32.5457 24.8108 32.8976C24.8108 33.2544 24.879 33.563 25.0154 33.8234C25.1517 34.0789 25.3469 34.2742 25.6008 34.4092C25.8547 34.5442 26.1533 34.6117 26.4965 34.6117C26.8397 34.6117 27.136 34.5442 27.3852 34.4092C27.6344 34.2742 27.8272 34.0789 27.9635 33.8234C28.0999 33.563 28.168 33.2544 28.168 32.8976ZM29.6421 28.0953C29.6421 28.6209 29.5058 29.0886 29.233 29.4984C28.965 29.9082 28.5936 30.2313 28.1187 30.4675C27.6438 30.699 27.1031 30.8147 26.4965 30.8147C25.8852 30.8147 25.3398 30.699 24.8602 30.4675C24.3853 30.2313 24.0115 29.9082 23.7388 29.4984C23.4708 29.0886 23.3368 28.6209 23.3368 28.0953C23.3368 27.4685 23.4708 26.9405 23.7388 26.5114C24.0115 26.0775 24.3853 25.7472 24.8602 25.5206C25.3351 25.294 25.8782 25.1807 26.4894 25.1807C27.1007 25.1807 27.6438 25.294 28.1187 25.5206C28.5936 25.7472 28.965 26.0775 29.233 26.5114C29.5058 26.9405 29.6421 27.4685 29.6421 28.0953ZM27.9424 28.1532C27.9424 27.8398 27.8812 27.5649 27.759 27.3287C27.6414 27.0876 27.4745 26.8996 27.2582 26.7646C27.0419 26.6296 26.7857 26.5621 26.4894 26.5621C26.1932 26.5621 25.937 26.6271 25.7207 26.7573C25.5044 26.8875 25.3375 27.0707 25.2199 27.307C25.1024 27.5432 25.0436 27.8253 25.0436 28.1532C25.0436 28.4762 25.1024 28.7583 25.2199 28.9994C25.3375 29.2356 25.5044 29.4213 25.7207 29.5563C25.9417 29.6913 26.2003 29.7588 26.4965 29.7588C26.7927 29.7588 27.049 29.6913 27.2653 29.5563C27.4816 29.4213 27.6485 29.2356 27.766 28.9994C27.8836 28.7583 27.9424 28.4762 27.9424 28.1532Z"
+                      fill="#1E415F" />
+                  <path
+                      d="M38.4442 32.1021V33.4907H31.0386L30.9822 32.442L35.4114 25.3253H36.7727L35.2986 27.9145L32.7525 32.1021H38.4442ZM37.1606 25.3253V35.8557H35.4608V25.3253H37.1606Z"
+                      fill="#1E415F" />
+              </svg>' %}
+          {% assign planId = '2086568051' %}
+
+        {% elsif variant.title contains '1 Pack' %}
+          {% assign week = '4 week pack' %}
+          {% assign days = '28 strips - 28 days' %}
+          {% assign sale = '' %}
+          {% assign strips = '28' %}
+          {% assign compare = '' %}
+          {% assign price_week = variant.price | divided_by: 4.0 | round: 2 | money %}
+          {% assign month = '1 month' %}
+          {% assign icon = '
+            <svg class="svg-strips" width="52" height="37" viewBox="0 0 50 37" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.758 35.8691C13.4537 35.6255 13.4127 35.1913 13.6664 34.8992L19.1767 28.5528C19.4303 28.2607 19.8825 28.2214 20.1866 28.465C20.4908 28.7085 20.5316 29.1428 20.2781 29.4349L14.7676 35.7813C14.5142 36.0734 14.062 36.1127 13.758 35.8691Z" fill="#1E415F"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M20.2048 35.8558C19.9132 36.1103 19.4699 36.0807 19.215 35.7897L13.6733 29.4662C13.4184 29.1751 13.4481 28.7329 13.7397 28.4783C14.0311 28.2238 14.4743 28.2533 14.7295 28.5444L20.2709 34.8679C20.526 35.1589 20.4964 35.6012 20.2048 35.8558Z" fill="#1E415F"/>
+              <path d="M30.031 34.9011V36.3493H23.4121V35.1048L26.6266 31.2052C26.9792 30.7627 27.2573 30.3805 27.4607 30.0587C27.6642 29.7369 27.8066 29.4478 27.888 29.1913C27.9739 28.9298 28.0168 28.6759 28.0168 28.4295C28.0168 28.0825 27.958 27.7783 27.8405 27.5168C27.7275 27.2503 27.5602 27.0416 27.3387 26.8908C27.1171 26.7349 26.8481 26.657 26.5316 26.657C26.1654 26.657 25.858 26.745 25.6093 26.921C25.3607 27.097 25.173 27.3408 25.0464 27.6526C24.9198 27.9593 24.8566 28.3113 24.8566 28.7086H23.2222C23.2222 28.07 23.3533 27.4867 23.6155 26.9587C23.8777 26.4257 24.2575 26.0033 24.7548 25.6915C25.2522 25.3747 25.8512 25.2163 26.552 25.2163C27.2121 25.2163 27.7727 25.3395 28.2338 25.5859C28.695 25.8323 29.0454 26.1818 29.285 26.6343C29.5291 27.0869 29.6512 27.6224 29.6512 28.2409C29.6512 28.5829 29.6015 28.9223 29.502 29.2592C29.4025 29.5961 29.2601 29.933 29.0748 30.2699C28.8939 30.6018 28.6792 30.9362 28.4305 31.2731C28.1818 31.605 27.9083 31.9419 27.6099 32.2838L25.4737 34.9011H30.031Z" fill="#1E415F"/>
+              <path d="M37.7619 33.3549C37.7619 34.0388 37.6195 34.6145 37.3347 35.0822C37.0498 35.5498 36.661 35.9043 36.1682 36.1457C35.6799 36.382 35.1283 36.5002 34.5135 36.5002C33.8986 36.5002 33.3448 36.382 32.852 36.1457C32.3592 35.9043 31.9703 35.5498 31.6855 35.0822C31.4007 34.6145 31.2583 34.0388 31.2583 33.3549C31.2583 32.9023 31.3374 32.4925 31.4956 32.1254C31.6539 31.7533 31.8777 31.434 32.167 31.1675C32.4609 30.896 32.8045 30.6873 33.1978 30.5415C33.5957 30.3956 34.0297 30.3227 34.4999 30.3227C35.1238 30.3227 35.6822 30.4509 36.175 30.7074C36.6678 30.9638 37.0543 31.3184 37.3347 31.7709C37.6195 32.2235 37.7619 32.7515 37.7619 33.3549ZM36.1207 33.2644C36.1207 32.8973 36.0529 32.5755 35.9173 32.2989C35.7816 32.0223 35.5918 31.8086 35.3476 31.6578C35.1035 31.5069 34.8209 31.4315 34.4999 31.4315C34.1744 31.4315 33.8918 31.5069 33.6522 31.6578C33.4126 31.8086 33.225 32.0223 33.0893 32.2989C32.9582 32.5755 32.8926 32.8973 32.8926 33.2644C32.8926 33.6365 32.9582 33.9583 33.0893 34.2298C33.2204 34.4963 33.4081 34.7 33.6522 34.8408C33.8963 34.9816 34.1834 35.052 34.5135 35.052C34.8435 35.052 35.1283 34.9816 35.368 34.8408C35.6076 34.7 35.7929 34.4963 35.9241 34.2298C36.0552 33.9583 36.1207 33.6365 36.1207 33.2644ZM37.5381 28.256C37.5381 28.8041 37.407 29.2919 37.1448 29.7193C36.8871 30.1467 36.5299 30.4836 36.0733 30.73C35.6166 30.9714 35.0967 31.0921 34.5135 31.0921C33.9257 31.0921 33.4013 30.9714 32.9401 30.73C32.4835 30.4836 32.1241 30.1467 31.8618 29.7193C31.6041 29.2919 31.4753 28.8041 31.4753 28.256C31.4753 27.6023 31.6041 27.0517 31.8618 26.6042C32.1241 26.1516 32.4835 25.8072 32.9401 25.5708C33.3968 25.3345 33.9189 25.2163 34.5067 25.2163C35.0944 25.2163 35.6166 25.3345 36.0733 25.5708C36.5299 25.8072 36.8871 26.1516 37.1448 26.6042C37.407 27.0517 37.5381 27.6023 37.5381 28.256ZM35.9037 28.3164C35.9037 27.9895 35.8449 27.7029 35.7274 27.4565C35.6144 27.2051 35.4539 27.009 35.2459 26.8682C35.0379 26.7274 34.7915 26.657 34.5067 26.657C34.2219 26.657 33.9755 26.7248 33.7675 26.8606C33.5595 26.9964 33.399 27.1875 33.286 27.4339C33.173 27.6803 33.1164 27.9744 33.1164 28.3164C33.1164 28.6533 33.173 28.9474 33.286 29.1989C33.399 29.4452 33.5595 29.6388 33.7675 29.7796C33.98 29.9204 34.2286 29.9908 34.5135 29.9908C34.7983 29.9908 35.0447 29.9204 35.2527 29.7796C35.4606 29.6388 35.6211 29.4452 35.7342 29.1989C35.8472 28.9474 35.9037 28.6533 35.9037 28.3164Z" fill="#1E415F"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1505 4.63361C7.73967 6.13324 4.51077 8.12474 2.9988 10.0869L2.40203 9.54928L2.99943 10.0861C2.94576 10.156 2.86766 10.3242 2.81174 10.6334C2.75853 10.9277 2.73813 11.2776 2.74465 11.6357L2.74472 11.6397C2.75565 12.429 3.09442 13.1735 3.67889 13.6722L3.68559 13.6779C5.06014 14.8776 7.44243 16.8725 9.0026 17.9168L9.01311 17.9239C9.74362 18.4306 10.6089 18.7181 11.5127 18.7735C13.0441 18.8512 15.4288 18.9429 17.1876 18.882C17.6904 18.8593 18.1858 18.626 18.7866 18.1813C19.1696 17.8977 19.5311 17.5817 19.9382 17.2258C20.2088 16.9892 20.4995 16.7351 20.8302 16.461C22.4225 15.1415 24.497 13.7745 27.7256 13.7409L27.733 13.7408L28.0877 13.7409C31.3166 13.7745 33.3876 15.1417 34.9782 16.4613C35.306 16.7334 35.595 16.9861 35.8638 17.2213C36.2729 17.5791 36.6359 17.8967 37.0204 18.181C37.6214 18.6254 38.1186 18.8593 38.6259 18.882C40.37 18.9428 42.7543 18.8513 44.3008 18.7735C45.2011 18.7183 46.0549 18.4322 46.8052 17.9205L46.8212 17.9099C47.3888 17.5432 48.072 17.0263 48.7821 16.4622L45.4244 5.28537C40.8013 3.42545 34.6869 2.17988 28.0947 2.17988H27.7476C21.9571 2.17988 16.5278 3.14536 12.1505 4.63361ZM11.6845 3.03107C16.2186 1.4895 21.8056 0.5 27.7476 0.5H28.0947C35.0228 0.5 41.4692 1.83937 46.3265 3.85836C46.5452 3.94923 46.7142 4.14196 46.7866 4.38287L50.4322 16.5177C50.535 16.8599 50.4248 17.2349 50.1583 17.4502C49.2924 18.1496 48.3852 18.8556 47.626 19.3469C46.6432 20.015 45.5337 20.3812 44.3844 20.451L44.377 20.4514C42.8284 20.5293 40.3853 20.6244 38.5725 20.5609L38.5664 20.5607C37.6351 20.5204 36.8476 20.0884 36.1436 19.5677C35.719 19.2537 35.2621 18.8556 34.8078 18.4593C34.5464 18.2315 34.2857 18.0043 34.0325 17.7941C32.582 16.5907 30.8347 15.4504 28.0764 15.4207H27.737C24.9784 15.4504 23.2274 16.591 21.7752 17.7944C21.5199 18.0059 21.2572 18.2348 20.9939 18.4642C20.5409 18.8589 20.0861 19.2551 19.6642 19.5674C18.9615 20.0876 18.1754 20.5203 17.2471 20.5606L17.2408 20.5609C15.4135 20.6244 12.9708 20.5293 11.4362 20.4514L11.4291 20.451C10.282 20.3814 9.15416 20.0159 8.17977 19.3417C6.52962 18.2363 4.08623 16.1863 2.71294 14.9879C1.76663 14.1785 1.20991 12.9625 1.19138 11.6668C1.18354 11.231 1.20661 10.756 1.28708 10.311C1.36498 9.88035 1.51111 9.39433 1.80463 9.01243L1.80526 9.01162C3.60618 6.67442 7.18383 4.56127 11.6845 3.03107Z" fill="#1E415F"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M46.1527 3.82556C46.4475 3.86899 46.6936 4.09084 46.7862 4.39676L50.4608 16.5472C50.5391 16.806 50.4963 17.0898 50.3464 17.3085C50.1964 17.5272 49.9578 17.6538 49.7059 17.648C48.346 17.6169 46.9624 17.57 45.9642 17.5069C44.7701 17.4475 43.6384 16.8141 42.9308 15.7593L42.9285 15.7557C42.7003 15.4117 42.4589 15.0129 42.281 14.6017C42.1113 14.2098 41.9586 13.7153 42.0043 13.2017C42.1654 10.6758 43.3586 7.51557 45.401 4.19288C45.5659 3.92482 45.8577 3.78216 46.1527 3.82556ZM45.8256 6.62513C44.414 9.23045 43.6644 11.5502 43.5534 13.3287C43.5527 13.3393 43.552 13.3499 43.5509 13.3605C43.5439 13.4325 43.5632 13.601 43.6883 13.8898C43.8067 14.1636 43.9843 14.465 44.1897 14.7747C44.6094 15.3995 45.2975 15.7932 46.0392 15.829L46.0499 15.8295C46.7565 15.8742 47.6721 15.9111 48.6427 15.9399L45.8256 6.62513Z" fill="#1E415F"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M23.3706 8.66443C23.3697 8.66644 23.3686 8.67032 23.3686 8.67717C23.3686 8.684 23.3697 8.68786 23.3706 8.68987C23.3716 8.69218 23.3727 8.69415 23.3744 8.69586C23.376 8.69757 23.3778 8.69912 23.3806 8.70033C23.3829 8.70141 23.3874 8.70282 23.3943 8.70282H31.1196C31.1268 8.70282 31.1312 8.70141 31.1335 8.70033C31.1361 8.69912 31.1381 8.69757 31.1398 8.69586C31.1414 8.69415 31.1426 8.69218 31.1435 8.68987C31.1442 8.68786 31.1453 8.684 31.1453 8.67717C31.1453 8.67032 31.1442 8.66644 31.1435 8.66443C31.1426 8.66215 31.1414 8.66016 31.1398 8.65846C31.1381 8.65673 31.1361 8.65517 31.1335 8.65396C31.1312 8.65289 31.1268 8.65148 31.1196 8.65148H23.3943C23.3874 8.65148 23.3829 8.65289 23.3806 8.65396C23.3778 8.65517 23.376 8.65673 23.3744 8.65846C23.3727 8.66016 23.3716 8.66215 23.3706 8.66443ZM22.4365 8.67717C22.4365 8.10085 22.8641 7.64355 23.3943 7.64355H31.1196C31.65 7.64355 32.0776 8.10085 32.0776 8.67717C32.0776 9.25346 31.65 9.71074 31.1196 9.71074H23.3943C22.8641 9.71074 22.4365 9.25346 22.4365 8.67717Z" fill="#1E415F"/>
+            </svg>
+            ' %}
+          {% assign planId = '' %}
+        {% endif %}
+
+        {% if variant.title == '1 Pack' or variant.title == '1 Pack / Gentle' %}
+          {% assign active = 'active' %}
+        {% endif %}
+
+        {% assign extra = '' %}
+
+        {% if variant.title contains 'Extra' %}
+          {% assign extra = 'swatchCustom__item_new__extra' %}
+        {% endif %}
+
+        <div
+          class="
+            swatchCustom__item_new flx {% if variant.title contains " 1 Pack" %} nosale {% endif %}
+            {{active}} {{ extra }}
+          "
+          data-variant="{{variant.id}}"
+          data-title="{{variant.title}}"
+          data-price="{{price | divided_by: 100.0}}"
+          data-planid="{{planId}}"
+          data-week="{{ week }}"
+          data-compare="{{compare}}"
+          data-strips="{{strips}}"
+        >
+          <div class="flx">
+            {{ icon }}    
+            <div>
+              <p class="for-week">{{ price_week }} / week</p>
+              <p class="item_total">
+                Total:
+                {% if variant.title != '1 Pack'
+                  and variant.title != '1 Pack /
+                              Gentle'
+                  and variant.title != '1 Pack / Extra'
+                -%}
+                  <span class="l-through"> {{ compare }} </span>
+                {%- endif %}
+                <span>{{ price | money }}</span>
+              </p>
+            </div>
+          </div>
+          <div>
+            {% if variant.title contains '12 Pack' %}
+              <div class="best-deal">Best deal</div>
+            {% elsif variant.title contains '3 Pack' %}
+              <div class="top-seller">Top-seller</div>
+            {% endif %}
+            {% if variant.title != '1 Pack'
+              and variant.title != '1 Pack / Gentle'
+              and variant.title != '1 Pack
+                      / Extra'
+            %}
+              <div class="sale">{{ sale }}</div>
+            {% endif %}
+            <p class="months">{{ month }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="part2 gray_bg">
+    <div class="d-flex justify-between">
+      <p class="total_price">
+        <span>{{ pack_1.price | money }}</span>
+      </p>
+      <p class="sale d-flex items-center" style="display: none;">
+        <span class="">Save 22% </span>
+        <span class="tooltip-wrap">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M6 0C2.68548 0 0 2.70968 0 6C0 9.31452 2.68548 12 6 12C9.29032 12 12 9.31452 12 6C12 2.70968 9.29032 0 6 0ZM6 2.66129C6.55645 2.66129 7.01613 3.12097 7.01613 3.67742C7.01613 4.25806 6.55645 4.69355 6 4.69355C5.41935 4.69355 4.98387 4.25806 4.98387 3.67742C4.98387 3.12097 5.41935 2.66129 6 2.66129ZM7.35484 8.80645C7.35484 8.97581 7.20968 9.09677 7.06452 9.09677H4.93548C4.76613 9.09677 4.64516 8.97581 4.64516 8.80645V8.22581C4.64516 8.08064 4.76613 7.93548 4.93548 7.93548H5.22581V6.3871H4.93548C4.76613 6.3871 4.64516 6.26613 4.64516 6.09677V5.51613C4.64516 5.37097 4.76613 5.22581 4.93548 5.22581H6.48387C6.62903 5.22581 6.77419 5.37097 6.77419 5.51613V7.93548H7.06452C7.20968 7.93548 7.35484 8.08064 7.35484 8.22581V8.80645Z"
+                fill="white" />
+          </svg>
+          <span class="tooltip"
+            >Total discount from the à la carte price of <span class="compare"></span>: you save
+            <span class="save">16</span> on the big pack. You can save 10% more with auto delivery.</span
+          >
+        </span>
+      </p>
+    </div>
+    <span class="free-shipping-label">Free shipping above $50</span>
+    {% if section.settings.on_country != blank %}
+      {% assign country = section.settings.on_country | split: ',' %}
+      <div class="flx">
+        <b>Ship to:</b
+        ><label class="for_country_select"
+          ><select class="country_select" name="country">
+            {% for c in country %}
+              {% assign cval = c | split: '/' %}
+              {% assign minDay = cval[1] | split: '-' %}
+              {% assign minday = minDay[0] | times: 24 | times: 60 | times: 60 %}
+              {% assign maxday = minDay[1] | times: 24 | times: 60 | times: 60 %}
+
+              <option
+                value="{{ cval[0] }}"
+                data-free="{{ cval[2] }}"
+                {% if forloop.firsy %}
+                  selected
+                {% endif %}
+                data-value="
+                  {{ "now" | date: "%s" | plus: minday | date: "%d %b" }} - {{ "now" | date: "%s" |
+                  plus: maxday | date: "%d %b" }}
+                "
+              >
+                {{ cval[0] }}
+              </option>
+            {% endfor %}
+          </select></label
+        >
+      </div>
+      {% assign cval = country[0] | split: '/' %}
+      {% assign minDay = cval[1] | split: '-' %}
+      {% assign minday = minDay[0] | times: 24 | times: 60 | times: 60 %}
+      {% assign maxday = minDay[1] | times: 24 | times: 60 | times: 60 %}
+      <span class="delivery_date"
+        >Arrives:
+        <b>
+          {{- 'now' | date: '%s' | plus: minday | date: '%d %b' }} -
+          {{ 'now' | date: '%s' | plus: maxday | date: '%d %b' -}}
+        </b></span
+      >
+    {% endif %}
+
+    <h4 class="stock__header">In Stock.</h4>
+    <select class="stock__select">
+      {% for c in (1..20) %}
+        <option value="{{c}}">Qty: {{ c }}</option>
+      {% endfor %}
+    </select>
+    <p class="stock__pack">1 pack = <span>28</span> strips</p>
+
+    <label class="subscribe-custom" style="display: none;">
+      <input class="subscribe-custom__checkbox" type="checkbox">
+      <span class="check-customer"></span>
+      <h5 class="subscribe-custom__header">Subscribe and <span>save 10%</span></h5>
+      <span class="subscibe-custom__info">Auto delivery every 3 month for $50.37. No hidden fees. Сancel anytime.</span>
+    </label>
+    <button class="to_checkout" data-product="{{ product.id }}">Add to cart</button>
+  </div>
+</div>
+<div class="flx desktop">
+  <ul class="checkmark part1">
+    <li>4 out of 5 customers say they sleep better using SomniFix</li>
+    <li>
+      Hypoallergenic and good for sensitive skin
+      <div class="tooltip">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+              d="M7.5 0.749939C3.77386 0.749939 0.75 3.7738 0.75 7.49994C0.75 11.2261 3.77386 14.2499 7.5 14.2499C11.2261 14.2499 14.25 11.2261 14.25 7.49994C14.25 3.7738 11.2261 0.749939 7.5 0.749939ZM7.375 10.1249V7.37494H7.625V10.1249H7.375ZM7.375 5.12494V4.87494H7.625V5.12494H7.375Z"
+              stroke="#4090D1" />
+        </svg>
+        <span
+          >The hypoallergenic, silicone-based adhesive is very gentle on sensitive skin and lips. Many SomniFix users
+          say the strip feels like a second skin.</span
+        >
+      </div>
+    </li>
+    <li>
+      Does not block breathing
+      <div class="tooltip">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+              d="M7.5 0.749939C3.77386 0.749939 0.75 3.7738 0.75 7.49994C0.75 11.2261 3.77386 14.2499 7.5 14.2499C11.2261 14.2499 14.25 11.2261 14.25 7.49994C14.25 3.7738 11.2261 0.749939 7.5 0.749939ZM7.375 10.1249V7.37494H7.625V10.1249H7.375ZM7.375 5.12494V4.87494H7.625V5.12494H7.375Z"
+              stroke="#4090D1" />
+        </svg>
+        <span
+          >Breathing vent allows for mouth breathing anytime if necessary. Although the breathing vent allows for mouth
+          breathing, normal breathing with the strip will be nasal.</span
+        >
+      </div>
+    </li>
+    <li>
+      CPAP-friendly with nasal mask or nasal pillows
+      <div class="tooltip">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+              d="M7.5 0.749939C3.77386 0.749939 0.75 3.7738 0.75 7.49994C0.75 11.2261 3.77386 14.2499 7.5 14.2499C11.2261 14.2499 14.25 11.2261 14.25 7.49994C14.25 3.7738 11.2261 0.749939 7.5 0.749939ZM7.375 10.1249V7.37494H7.625V10.1249H7.375ZM7.375 5.12494V4.87494H7.625V5.12494H7.375Z"
+              stroke="#4090D1" />
+        </svg>
+        <span
+          >SomniFix is not a standalone solution for sleep apnea, and is not indicated to be used by those with sleep
+          apnea unless used in combination with CPAP.</span
+        >
+      </div>
+    </li>
+  </ul>
+  <div class="part2 moneyback">
+    <img src="https://i.ibb.co/kXqgv3n/image-44-2.png" alt="moneyback">
+    <p>
+      30-day <br>
+      Money-Back <br>
+      Guarantee
+    </p>
+  </div>
+</div>
+
+<div class="mobile">
+  <ul class="checklist tablet">
+    <li>Promote nose breathing</li>
+    <li>Reduce open-mouth snoring</li>
+    <li>Boost CPAP exprerience</li>
+    <li>Improve sleep quality</li>
+  </ul>
+
+  <p class="choose-pack">Number of weeks:</p>
+  <div class="parent-items">
+    {% for variant in product.variants %}
+      {% assign comparePrice = variant.compare_at_price | plus: 0 %}
+      {% assign price = variant.price | plus: 0 %}
+
+      {% assign active = '' %}
+      {% assign price_week = '' %}
+
+      {% if variant.title contains '12 Pack' %}
+        {% assign week = '52 week pack' %}
+        {% assign days = '364 strips - 364 days' %}
+        {% assign sale = 'Save 30%' %}
+        {% assign strips = '364' %}
+        {% assign month = '12 months' %}
+        {% assign compare = comparePrice | money %}
+        {% assign price_week = variant.price | divided_by: 52.0 | round: 2 | money %}
+        {% assign icon = '<svg class="svg-strips" width="52" height="42" viewBox="0 0 52 42" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M11.9509 4.64345C7.31333 6.19199 3.91838 8.24845 2.32864 10.2747L1.70118 9.71947L2.3293 10.2738C2.27287 10.346 2.19076 10.5197 2.13196 10.839C2.07602 11.1429 2.05456 11.5042 2.06142 11.8739L2.06149 11.878C2.07299 12.6931 2.42918 13.4619 3.04371 13.9769L3.05076 13.9828C4.49599 15.2215 7.00081 17.2815 8.6412 18.3599L8.65227 18.3673C9.42034 18.8904 10.3301 19.1873 11.2804 19.2446C12.8905 19.3249 15.3979 19.4195 17.2472 19.3566C17.7758 19.3331 18.2966 19.0923 18.9284 18.633C19.3311 18.3402 19.7112 18.0139 20.1393 17.6463C20.4237 17.4021 20.7294 17.1396 21.0771 16.8567C22.7513 15.4941 24.9324 14.0825 28.327 14.0478L28.3348 14.0477L28.7079 14.0478C32.1027 14.0825 34.2802 15.4943 35.9528 16.857C36.2973 17.138 36.6013 17.3989 36.8839 17.6418C37.3139 18.0113 37.6956 18.3391 38.0999 18.6328C38.7317 19.0916 39.2546 19.3331 39.7881 19.3566C41.6219 19.4194 44.1288 19.3249 45.7548 19.2446C46.7012 19.1875 47.599 18.8921 48.3878 18.3638L48.4047 18.3528C49.0014 17.9741 49.7198 17.4404 50.4665 16.8578L46.936 5.31646C42.0753 3.39588 35.6463 2.10967 28.7152 2.10967H28.3502C22.262 2.10967 16.5534 3.10665 11.9509 4.64345ZM11.461 2.98863C16.2283 1.39678 22.1026 0.375 28.3502 0.375H28.7152C35.9996 0.375 42.7776 1.75805 47.8847 3.84291C48.1146 3.93674 48.2922 4.13576 48.3683 4.38453L52.2015 16.9152C52.3097 17.2686 52.1937 17.6558 51.9134 17.8781C51.0029 18.6003 50.0492 19.3293 49.251 19.8367C48.2175 20.5265 47.0512 20.9047 45.8427 20.9767L45.8349 20.9772C44.2065 21.0577 41.638 21.1558 39.7319 21.0903L39.7254 21.09C38.7463 21.0484 37.9182 20.6023 37.1779 20.0647C36.7315 19.7404 36.2513 19.3293 35.7734 18.9202C35.4986 18.6849 35.2246 18.4503 34.9583 18.2332C33.4332 16.9906 31.596 15.8131 28.696 15.7824H28.339C25.4386 15.8131 23.5975 16.9908 22.0707 18.2335C21.8023 18.452 21.5261 18.6883 21.2492 18.9252C20.7729 19.3327 20.2947 19.7419 19.8511 20.0644C19.1122 20.6016 18.2858 21.0483 17.3097 21.09L17.3031 21.0903C15.3819 21.1558 12.8135 21.0576 11.1999 20.9772L11.1925 20.9768C9.98639 20.9049 8.80058 20.5275 7.77605 19.8313C6.04104 18.6898 3.47201 16.573 2.02808 15.3355C1.03311 14.4997 0.44775 13.244 0.428276 11.9061C0.420026 11.456 0.444279 10.9656 0.528896 10.5061C0.610796 10.0613 0.764445 9.55946 1.07306 9.1651L1.07372 9.16427C2.96727 6.75082 6.7289 4.56875 11.461 2.98863Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M47.6995 3.80921C48.0094 3.85406 48.2681 4.08315 48.3656 4.39904L52.2292 16.9458C52.3114 17.2131 52.2664 17.5061 52.1088 17.732C51.951 17.9578 51.7001 18.0885 51.4354 18.0826C50.0054 18.0504 48.5507 18.002 47.5014 17.9368C46.2458 17.8755 45.0558 17.2215 44.312 16.1322L44.3093 16.1285V16.1285C44.0694 15.7733 43.8156 15.3614 43.6287 14.9369C43.4503 14.5321 43.2896 14.0215 43.3377 13.4912C43.5073 10.8829 44.7618 7.61959 46.9091 4.18851C47.0825 3.9117 47.3893 3.7644 47.6995 3.80921ZM47.3555 6.7001C45.8712 9.3904 45.0831 11.7858 44.9664 13.6223C44.9659 13.6333 44.9651 13.6442 44.9638 13.6551C44.9565 13.7295 44.9768 13.9035 45.1083 14.2018C45.2329 14.4844 45.4196 14.7957 45.6356 15.1155C46.0768 15.7607 46.8002 16.1672 47.5802 16.2042L47.5913 16.2047V16.2048C48.3344 16.251 49.2969 16.289 50.3174 16.3187L47.3555 6.7001Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M23.7449 8.80564C23.7439 8.80772 23.7427 8.81171 23.7427 8.81879C23.7427 8.82584 23.7439 8.82983 23.7449 8.8319C23.7459 8.83429 23.7471 8.83633 23.7488 8.8381C23.7505 8.83986 23.7524 8.84147 23.7554 8.84271C23.7578 8.84382 23.7624 8.84528 23.7698 8.84528H31.8924C31.9 8.84528 31.9046 8.84382 31.907 8.84271C31.9096 8.84147 31.9119 8.83986 31.9135 8.8381C31.9153 8.83633 31.9166 8.83429 31.9174 8.8319C31.9182 8.82983 31.9195 8.82584 31.9195 8.81879C31.9195 8.81171 31.9182 8.80772 31.9174 8.80564C31.9166 8.80328 31.9153 8.80124 31.9135 8.79947C31.9119 8.79769 31.9096 8.79608 31.907 8.79483C31.9046 8.79372 31.9 8.79227 31.8924 8.79227H23.7698C23.7624 8.79227 23.7578 8.79372 23.7554 8.79483C23.7524 8.79608 23.7505 8.79769 23.7488 8.79947C23.7471 8.80124 23.7459 8.80328 23.7449 8.80564ZM22.7627 8.81879C22.7627 8.22367 23.2123 7.75146 23.7698 7.75146H31.8924C32.4501 7.75146 32.8997 8.22367 32.8997 8.81879C32.8997 9.41388 32.4501 9.88608 31.8924 9.88608H23.7698C23.2123 9.88608 22.7627 9.41388 22.7627 8.81879Z"
+                      fill="#1E415F" />
+              
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M9.46032 35.7703C9.12529 35.5368 9.08012 35.1204 9.35954 34.8403L15.4274 28.755C15.7066 28.4749 16.2046 28.4372 16.5394 28.6708C16.8744 28.9043 16.9193 29.3207 16.6401 29.6008L10.5721 35.6861C10.2931 35.9662 9.79513 36.0039 9.46032 35.7703Z"
+                  fill="#1E415F" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M16.5594 35.7575C16.2383 36.0016 15.7502 35.9733 15.4695 35.6942L9.36715 29.6308C9.08646 29.3518 9.1191 28.9277 9.44021 28.6836C9.7611 28.4395 10.2492 28.4679 10.5301 28.7469L16.6323 34.8103C16.9132 35.0894 16.8805 35.5135 16.5594 35.7575Z"
+                  fill="#1E415F" />
+              <path
+                  d="M21.6865 30.9033H22.6709C23.0537 30.9033 23.3704 30.8372 23.6211 30.7051C23.8763 30.5729 24.0654 30.3906 24.1885 30.1582C24.3115 29.9258 24.373 29.6592 24.373 29.3584C24.373 29.0439 24.3161 28.7751 24.2021 28.5518C24.0928 28.3239 23.9242 28.1484 23.6963 28.0254C23.473 27.9023 23.1882 27.8408 22.8418 27.8408C22.5501 27.8408 22.2858 27.9001 22.0488 28.0186C21.8164 28.1325 21.6318 28.2965 21.4951 28.5107C21.3584 28.7204 21.29 28.971 21.29 29.2627H19.6357C19.6357 28.734 19.7747 28.2646 20.0527 27.8545C20.3307 27.4443 20.709 27.123 21.1875 26.8906C21.6706 26.6536 22.2129 26.5352 22.8145 26.5352C23.457 26.5352 24.0176 26.6423 24.4961 26.8564C24.9792 27.0661 25.3551 27.3805 25.624 27.7998C25.8929 28.2191 26.0273 28.7386 26.0273 29.3584C26.0273 29.641 25.9613 29.9281 25.8291 30.2197C25.6969 30.5114 25.501 30.778 25.2412 31.0195C24.9814 31.2565 24.6579 31.4502 24.2705 31.6006C23.8831 31.7464 23.4342 31.8193 22.9238 31.8193H21.6865V30.9033ZM21.6865 32.1885V31.2861H22.9238C23.5072 31.2861 24.0039 31.3545 24.4141 31.4912C24.8288 31.6279 25.166 31.8171 25.4258 32.0586C25.6855 32.2956 25.8747 32.5667 25.9932 32.8721C26.1162 33.1774 26.1777 33.501 26.1777 33.8428C26.1777 34.3076 26.0934 34.7223 25.9248 35.0869C25.7607 35.4469 25.526 35.7523 25.2207 36.0029C24.9154 36.2536 24.5576 36.4427 24.1475 36.5703C23.7419 36.6979 23.2998 36.7617 22.8213 36.7617C22.3929 36.7617 21.9827 36.7025 21.5908 36.584C21.1989 36.4655 20.848 36.29 20.5381 36.0576C20.2282 35.8206 19.9821 35.5267 19.7998 35.1758C19.6221 34.8203 19.5332 34.4102 19.5332 33.9453H21.1807C21.1807 34.2415 21.249 34.5036 21.3857 34.7314C21.527 34.9548 21.723 35.1302 21.9736 35.2578C22.2288 35.3854 22.5205 35.4492 22.8486 35.4492C23.195 35.4492 23.4935 35.3877 23.7441 35.2646C23.9948 35.1416 24.1862 34.9593 24.3184 34.7178C24.4551 34.4762 24.5234 34.1846 24.5234 33.8428C24.5234 33.4554 24.4482 33.141 24.2979 32.8994C24.1475 32.6579 23.9333 32.4801 23.6553 32.3662C23.3773 32.2477 23.0492 32.1885 22.6709 32.1885H21.6865ZM32.6855 26.6104H32.8906V27.957H32.7744C32.1865 27.957 31.6784 28.0482 31.25 28.2305C30.8262 28.4128 30.4775 28.6634 30.2041 28.9824C29.9307 29.3014 29.7256 29.6751 29.5889 30.1035C29.4567 30.5273 29.3906 30.9785 29.3906 31.457V33.0225C29.3906 33.4189 29.4339 33.7699 29.5205 34.0752C29.6071 34.376 29.7279 34.6289 29.8828 34.834C30.0423 35.0345 30.2246 35.1872 30.4297 35.292C30.6348 35.3968 30.8558 35.4492 31.0928 35.4492C31.3389 35.4492 31.5622 35.3991 31.7627 35.2988C31.9632 35.194 32.1341 35.0505 32.2754 34.8682C32.4167 34.6859 32.5238 34.4694 32.5967 34.2188C32.6696 33.9681 32.7061 33.6947 32.7061 33.3984C32.7061 33.1159 32.6696 32.8516 32.5967 32.6055C32.5283 32.3548 32.4258 32.1361 32.2891 31.9492C32.1523 31.7578 31.9814 31.6097 31.7764 31.5049C31.5758 31.3955 31.3434 31.3408 31.0791 31.3408C30.751 31.3408 30.4525 31.4183 30.1836 31.5732C29.9193 31.7282 29.7051 31.931 29.541 32.1816C29.3815 32.4277 29.2949 32.6898 29.2812 32.9678L28.6523 32.7627C28.6888 32.3389 28.7822 31.9583 28.9326 31.6211C29.0876 31.2839 29.2904 30.9967 29.541 30.7598C29.7917 30.5228 30.0811 30.3428 30.4092 30.2197C30.7419 30.0921 31.1064 30.0283 31.5029 30.0283C31.986 30.0283 32.4053 30.1195 32.7607 30.3018C33.1162 30.484 33.4102 30.7324 33.6426 31.0469C33.8796 31.3568 34.055 31.7122 34.1689 32.1133C34.2874 32.5098 34.3467 32.9245 34.3467 33.3574C34.3467 33.8359 34.2738 34.2826 34.1279 34.6973C33.9821 35.1074 33.7679 35.4674 33.4854 35.7773C33.2074 36.0872 32.8678 36.3288 32.4668 36.502C32.0703 36.6751 31.6191 36.7617 31.1133 36.7617C30.5801 36.7617 30.1038 36.6592 29.6846 36.4541C29.2699 36.249 28.9167 35.9665 28.625 35.6064C28.3379 35.2464 28.1191 34.8317 27.9688 34.3623C27.8184 33.8929 27.7432 33.3962 27.7432 32.8721V32.1885C27.7432 31.432 27.8389 30.7188 28.0303 30.0488C28.2217 29.3743 28.5156 28.7796 28.9121 28.2646C29.3132 27.7497 29.8258 27.3464 30.4502 27.0547C31.0745 26.7585 31.8197 26.6104 32.6855 26.6104ZM42.5225 33.0771V34.3896H35.3447L35.29 33.3984L39.583 26.6719H40.9023L39.4736 29.1191L37.0059 33.0771H42.5225ZM41.2783 26.6719V36.625H39.6309V26.6719H41.2783Z"
+                  fill="#1E415F" />
+          </svg>' %}
+        {% assign planId = '2086633587' %}
+
+      {% elsif variant.title contains '3 Pack' %}
+        {% assign week = '12 week pack' %}
+        {% assign days = '84 strips - 84 days' %}
+        {% assign sale = 'Save 22%' %}
+        {% assign strips = '84' %}
+        {% assign month = '3 months' %}
+        {% assign compare = comparePrice | money %}
+        {% assign price_week = variant.price | divided_by: 12.0 | round: 2 | money %}
+        {% assign icon = '<svg class="svg-strips" width="52" height="36" viewBox="0 0 52 36" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M13.1505 3.96356C8.73967 5.40149 5.51077 7.31107 3.9988 9.19255L3.40203 8.67701L3.99943 9.19178C3.94576 9.25874 3.86766 9.42005 3.81174 9.71656C3.75853 9.99873 3.73813 10.3343 3.74465 10.6776L3.74472 10.6814C3.75565 11.4383 4.09442 12.1521 4.67889 12.6303L4.68559 12.6358C6.06014 13.7861 8.44243 15.6989 10.0026 16.7003L10.0131 16.7071C10.7436 17.1929 11.6089 17.4686 12.5127 17.5218C14.0441 17.5963 16.4288 17.6841 18.1876 17.6258C18.6904 17.604 19.1858 17.3803 19.7866 16.9539C20.1696 16.682 20.5311 16.379 20.9382 16.0377C21.2088 15.8109 21.4995 15.5672 21.8302 15.3044C23.4225 14.0391 25.497 12.7284 28.7256 12.6962L28.733 12.6961L29.0877 12.6961C32.3166 12.7284 34.3876 14.0394 35.9782 15.3047C36.306 15.5656 36.595 15.8079 36.8638 16.0334C37.2729 16.3765 37.6359 16.681 38.0204 16.9537C38.6214 17.3797 39.1186 17.604 39.6259 17.6258C41.37 17.6841 43.7543 17.5963 45.3008 17.5218C46.2011 17.4688 47.0549 17.1945 47.8052 16.7038L47.8212 16.6937C48.3888 16.3421 49.072 15.8465 49.7821 15.3055L46.4244 4.5885C41.8013 2.8051 35.6869 1.61077 29.0947 1.61077H28.7476C22.9571 1.61077 17.5278 2.53653 13.1505 3.96356ZM12.6845 2.42694C17.2186 0.948795 22.8056 0 28.7476 0H29.0947C36.0228 0 42.4692 1.28427 47.3265 3.2202C47.5452 3.30733 47.7142 3.49214 47.7866 3.72313L51.4322 15.3588C51.535 15.6869 51.4248 16.0464 51.1583 16.2529C50.2924 16.9235 49.3852 17.6005 48.626 18.0716C47.6432 18.7121 46.5337 19.0633 45.3844 19.1302L45.377 19.1306C43.8284 19.2053 41.3853 19.2965 39.5725 19.2356L39.5664 19.2354C38.6351 19.1967 37.8476 18.7825 37.1436 18.2833C36.719 17.9822 36.2621 17.6004 35.8078 17.2205C35.5464 17.0021 35.2857 16.7842 35.0325 16.5827C33.582 15.4288 31.8347 14.3354 29.0764 14.3069H28.737C25.9784 14.3354 24.2274 15.429 22.7752 16.5829C22.5199 16.7858 22.2572 17.0052 21.9939 17.2252C21.5409 17.6036 21.0861 17.9836 20.6642 18.283C19.9615 18.7818 19.1754 19.1966 18.2471 19.2354L18.2408 19.2356C16.4135 19.2965 13.9708 19.2053 12.4362 19.1306L12.4291 19.1302C11.282 19.0635 10.1542 18.7131 9.17977 18.0666C7.52962 17.0066 5.08623 15.041 3.71294 13.8919C2.76663 13.1158 2.20991 11.9498 2.19138 10.7075C2.18354 10.2895 2.20661 9.83412 2.28708 9.40742C2.36498 8.99446 2.51111 8.52843 2.80463 8.16223L2.80526 8.16146C4.60618 5.92041 8.18383 3.89419 12.6845 2.42694Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M47.1528 3.18902C47.4476 3.23066 47.6937 3.44338 47.7863 3.73672L51.4609 15.3873C51.5392 15.6355 51.4964 15.9076 51.3465 16.1173C51.1965 16.327 50.9579 16.4484 50.706 16.4428C49.3461 16.413 47.9625 16.368 46.9643 16.3075C45.7702 16.2506 44.6385 15.6432 43.9309 14.6318L43.9286 14.6283V14.6283C43.7004 14.2985 43.459 13.9161 43.2811 13.5219C43.1114 13.146 42.9587 12.6719 43.0044 12.1795C43.1655 9.7574 44.3587 6.72722 46.4011 3.54122C46.566 3.28419 46.8578 3.1474 47.1528 3.18902ZM46.8257 5.87341C45.4141 8.37155 44.6645 10.5959 44.5535 12.3012C44.5528 12.3114 44.5521 12.3215 44.551 12.3317C44.544 12.4007 44.5633 12.5623 44.6884 12.8392C44.8068 13.1017 44.9844 13.3908 45.1898 13.6877C45.6095 14.2868 46.2976 14.6643 47.0393 14.6986L47.05 14.6991V14.6992C47.7566 14.7421 48.6722 14.7774 49.6428 14.805L46.8257 5.87341Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M24.3705 7.82849C24.3696 7.83041 24.3685 7.83412 24.3685 7.84069C24.3685 7.84724 24.3696 7.85095 24.3705 7.85287C24.3715 7.85509 24.3726 7.85699 24.3743 7.85862C24.3759 7.86026 24.3777 7.86175 24.3805 7.86291C24.3828 7.86394 24.3873 7.86529 24.3942 7.86529H32.1195C32.1267 7.86529 32.1311 7.86394 32.1334 7.86291C32.136 7.86175 32.138 7.86026 32.1397 7.85862C32.1413 7.85699 32.1425 7.85509 32.1434 7.85287C32.1441 7.85095 32.1452 7.84724 32.1452 7.84069C32.1452 7.83412 32.1441 7.83041 32.1434 7.82849C32.1425 7.8263 32.1413 7.8244 32.1397 7.82276C32.138 7.8211 32.136 7.81961 32.1334 7.81845C32.1311 7.81742 32.1267 7.81607 32.1195 7.81607H24.3942C24.3873 7.81607 24.3828 7.81742 24.3805 7.81845C24.3777 7.81961 24.3759 7.8211 24.3743 7.82276C24.3726 7.8244 24.3715 7.8263 24.3705 7.82849ZM23.4364 7.84069C23.4364 7.28808 23.864 6.84961 24.3942 6.84961H32.1195C32.6499 6.84961 33.0775 7.28808 33.0775 7.84069C33.0775 8.39328 32.6499 8.83175 32.1195 8.83175H24.3942C23.864 8.83175 23.4364 8.39328 23.4364 7.84069Z"
+                      fill="#1E415F" />
+              
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M13.2682 35.3953C12.9519 35.1618 12.9092 34.7454 13.173 34.4653L18.9039 28.38C19.1676 28.0999 19.6379 28.0622 19.9541 28.2958C20.2704 28.5293 20.3129 28.9457 20.0493 29.2258L14.3184 35.3111C14.0547 35.5912 13.5844 35.6289 13.2682 35.3953Z"
+                  fill="#1E415F" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M19.973 35.3825C19.6698 35.6266 19.2088 35.5983 18.9436 35.3192L13.1803 29.2558C12.9151 28.9768 12.946 28.5527 13.2493 28.3086C13.5525 28.0645 14.0134 28.0929 14.2786 28.3719L20.0419 34.4353C20.3071 34.7144 20.2762 35.1385 19.973 35.3825Z"
+                  fill="#1E415F" />
+              <path
+                  d="M29.8749 32.9844C29.8749 33.6402 29.7268 34.1922 29.4305 34.6406C29.1343 35.0891 28.7299 35.429 28.2174 35.6604C27.7096 35.887 27.136 36.0003 26.4965 36.0003C25.857 36.0003 25.281 35.887 24.7685 35.6604C24.256 35.429 23.8516 35.0891 23.5554 34.6406C23.2592 34.1922 23.1111 33.6402 23.1111 32.9844C23.1111 32.5505 23.1934 32.1575 23.3579 31.8055C23.5225 31.4487 23.7553 31.1426 24.0562 30.887C24.3618 30.6267 24.7192 30.4266 25.1282 30.2867C25.542 30.1469 25.9934 30.077 26.4824 30.077C27.1313 30.077 27.712 30.2 28.2245 30.4459C28.737 30.6918 29.139 31.0317 29.4305 31.4656C29.7268 31.8996 29.8749 32.4058 29.8749 32.9844ZM28.168 32.8976C28.168 32.5457 28.0975 32.2371 27.9565 31.9719C27.8154 31.7067 27.6179 31.5018 27.364 31.3571C27.1101 31.2125 26.8162 31.1402 26.4824 31.1402C26.1439 31.1402 25.85 31.2125 25.6008 31.3571C25.3516 31.5018 25.1564 31.7067 25.0154 31.9719C24.879 32.2371 24.8108 32.5457 24.8108 32.8976C24.8108 33.2544 24.879 33.563 25.0154 33.8234C25.1517 34.0789 25.3469 34.2742 25.6008 34.4092C25.8547 34.5442 26.1533 34.6117 26.4965 34.6117C26.8397 34.6117 27.136 34.5442 27.3852 34.4092C27.6344 34.2742 27.8272 34.0789 27.9635 33.8234C28.0999 33.563 28.168 33.2544 28.168 32.8976ZM29.6421 28.0953C29.6421 28.6209 29.5058 29.0886 29.233 29.4984C28.965 29.9082 28.5936 30.2313 28.1187 30.4675C27.6438 30.699 27.1031 30.8147 26.4965 30.8147C25.8852 30.8147 25.3398 30.699 24.8602 30.4675C24.3853 30.2313 24.0115 29.9082 23.7388 29.4984C23.4708 29.0886 23.3368 28.6209 23.3368 28.0953C23.3368 27.4685 23.4708 26.9405 23.7388 26.5114C24.0115 26.0775 24.3853 25.7472 24.8602 25.5206C25.3351 25.294 25.8782 25.1807 26.4894 25.1807C27.1007 25.1807 27.6438 25.294 28.1187 25.5206C28.5936 25.7472 28.965 26.0775 29.233 26.5114C29.5058 26.9405 29.6421 27.4685 29.6421 28.0953ZM27.9424 28.1532C27.9424 27.8398 27.8812 27.5649 27.759 27.3287C27.6414 27.0876 27.4745 26.8996 27.2582 26.7646C27.0419 26.6296 26.7857 26.5621 26.4894 26.5621C26.1932 26.5621 25.937 26.6271 25.7207 26.7573C25.5044 26.8875 25.3375 27.0707 25.2199 27.307C25.1024 27.5432 25.0436 27.8253 25.0436 28.1532C25.0436 28.4762 25.1024 28.7583 25.2199 28.9994C25.3375 29.2356 25.5044 29.4213 25.7207 29.5563C25.9417 29.6913 26.2003 29.7588 26.4965 29.7588C26.7927 29.7588 27.049 29.6913 27.2653 29.5563C27.4816 29.4213 27.6485 29.2356 27.766 28.9994C27.8836 28.7583 27.9424 28.4762 27.9424 28.1532Z"
+                  fill="#1E415F" />
+              <path
+                  d="M38.4442 32.1021V33.4907H31.0386L30.9822 32.442L35.4114 25.3253H36.7727L35.2986 27.9145L32.7525 32.1021H38.4442ZM37.1606 25.3253V35.8557H35.4608V25.3253H37.1606Z"
+                  fill="#1E415F" />
+              
+          </svg>' %}
+        {% assign planId = '2086568051' %}
+
+      {% elsif variant.title contains '1 Pack' %}
+        {% assign week = '4 week pack' %}
+        {% assign days = '28 strips - 28 days' %}
+        {% assign sale = '' %}
+        {% assign strips = '28' %}
+        {% assign compare = '' %}
+        {% assign price_week = variant.price | divided_by: 4.0 | round: 2 | money %}
+        {% assign month = '1 month' %}
+        {% assign icon = '<svg class="svg-strips" width="52" height="37" viewBox="0 0 50 37" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M12.758 35.8691C12.4537 35.6255 12.4127 35.1913 12.6664 34.8992L18.1767 28.5528C18.4303 28.2607 18.8825 28.2214 19.1866 28.465C19.4908 28.7085 19.5316 29.1428 19.2781 29.4349L13.7676 35.7813C13.5142 36.0734 13.062 36.1127 12.758 35.8691Z"
+                  fill="#1E415F" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M19.2048 35.8558C18.9132 36.1103 18.4699 36.0807 18.215 35.7897L12.6733 29.4662C12.4184 29.1751 12.4481 28.7329 12.7397 28.4783C13.0311 28.2238 13.4743 28.2533 13.7295 28.5444L19.2709 34.8679C19.526 35.1589 19.4964 35.6012 19.2048 35.8558Z"
+                  fill="#1E415F" />
+              <path
+                  d="M29.031 34.9011V36.3493H22.4121V35.1048L25.6266 31.2052C25.9792 30.7627 26.2573 30.3805 26.4607 30.0587C26.6642 29.7369 26.8066 29.4478 26.888 29.1913C26.9739 28.9298 27.0168 28.6759 27.0168 28.4295C27.0168 28.0825 26.958 27.7783 26.8405 27.5168C26.7275 27.2503 26.5602 27.0416 26.3387 26.8908C26.1171 26.7349 25.8481 26.657 25.5316 26.657C25.1654 26.657 24.858 26.745 24.6093 26.921C24.3607 27.097 24.173 27.3408 24.0464 27.6526C23.9198 27.9593 23.8566 28.3113 23.8566 28.7086H22.2222C22.2222 28.07 22.3533 27.4867 22.6155 26.9587C22.8777 26.4257 23.2575 26.0033 23.7548 25.6915C24.2522 25.3747 24.8512 25.2163 25.552 25.2163C26.2121 25.2163 26.7727 25.3395 27.2338 25.5859C27.695 25.8323 28.0454 26.1818 28.285 26.6343C28.5291 27.0869 28.6512 27.6224 28.6512 28.2409C28.6512 28.5829 28.6015 28.9223 28.502 29.2592C28.4025 29.5961 28.2601 29.933 28.0748 30.2699C27.8939 30.6018 27.6792 30.9362 27.4305 31.2731C27.1818 31.605 26.9083 31.9419 26.6099 32.2838L24.4737 34.9011H29.031Z"
+                  fill="#1E415F" />
+              <path
+                  d="M36.7621 33.3549C36.7621 34.0388 36.6197 34.6145 36.3349 35.0822C36.05 35.5498 35.6612 35.9043 35.1684 36.1457C34.6801 36.382 34.1285 36.5002 33.5137 36.5002C32.8988 36.5002 32.345 36.382 31.8522 36.1457C31.3594 35.9043 30.9705 35.5498 30.6857 35.0822C30.4009 34.6145 30.2585 34.0388 30.2585 33.3549C30.2585 32.9023 30.3376 32.4925 30.4958 32.1254C30.6541 31.7533 30.8779 31.434 31.1672 31.1675C31.4611 30.896 31.8047 30.6873 32.198 30.5415C32.5959 30.3956 33.0299 30.3227 33.5001 30.3227C34.124 30.3227 34.6824 30.4509 35.1752 30.7074C35.668 30.9638 36.0545 31.3184 36.3349 31.7709C36.6197 32.2235 36.7621 32.7515 36.7621 33.3549ZM35.1209 33.2644C35.1209 32.8973 35.0531 32.5755 34.9175 32.2989C34.7818 32.0223 34.592 31.8086 34.3478 31.6578C34.1037 31.5069 33.8211 31.4315 33.5001 31.4315C33.1746 31.4315 32.892 31.5069 32.6524 31.6578C32.4128 31.8086 32.2252 32.0223 32.0895 32.2989C31.9584 32.5755 31.8928 32.8973 31.8928 33.2644C31.8928 33.6365 31.9584 33.9583 32.0895 34.2298C32.2206 34.4963 32.4083 34.7 32.6524 34.8408C32.8965 34.9816 33.1836 35.052 33.5137 35.052C33.8437 35.052 34.1285 34.9816 34.3682 34.8408C34.6078 34.7 34.7931 34.4963 34.9243 34.2298C35.0554 33.9583 35.1209 33.6365 35.1209 33.2644ZM36.5383 28.256C36.5383 28.8041 36.4072 29.2919 36.145 29.7193C35.8873 30.1467 35.5301 30.4836 35.0735 30.73C34.6168 30.9714 34.0969 31.0921 33.5137 31.0921C32.9259 31.0921 32.4015 30.9714 31.9403 30.73C31.4837 30.4836 31.1243 30.1467 30.862 29.7193C30.6043 29.2919 30.4755 28.8041 30.4755 28.256C30.4755 27.6023 30.6043 27.0517 30.862 26.6042C31.1243 26.1516 31.4837 25.8072 31.9403 25.5708C32.397 25.3345 32.9191 25.2163 33.5069 25.2163C34.0946 25.2163 34.6168 25.3345 35.0735 25.5708C35.5301 25.8072 35.8873 26.1516 36.145 26.6042C36.4072 27.0517 36.5383 27.6023 36.5383 28.256ZM34.9039 28.3164C34.9039 27.9895 34.8451 27.7029 34.7276 27.4565C34.6146 27.2051 34.4541 27.009 34.2461 26.8682C34.0381 26.7274 33.7917 26.657 33.5069 26.657C33.2221 26.657 32.9757 26.7248 32.7677 26.8606C32.5597 26.9964 32.3992 27.1875 32.2862 27.4339C32.1732 27.6803 32.1166 27.9744 32.1166 28.3164C32.1166 28.6533 32.1732 28.9474 32.2862 29.1989C32.3992 29.4452 32.5597 29.6388 32.7677 29.7796C32.9802 29.9204 33.2288 29.9908 33.5137 29.9908C33.7985 29.9908 34.0449 29.9204 34.2529 29.7796C34.4608 29.6388 34.6213 29.4452 34.7344 29.1989C34.8474 28.9474 34.9039 28.6533 34.9039 28.3164Z"
+                  fill="#1E415F" />
+              
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M11.1505 4.63361C6.73967 6.13324 3.51077 8.12474 1.9988 10.0869L1.40203 9.54928L1.99943 10.0861C1.94576 10.156 1.86766 10.3242 1.81174 10.6334C1.75853 10.9277 1.73813 11.2776 1.74465 11.6357L1.74472 11.6397C1.75565 12.429 2.09442 13.1735 2.67889 13.6722L2.68559 13.6779C4.06014 14.8776 6.44243 16.8725 8.0026 17.9168L8.01311 17.9239C8.74362 18.4306 9.60886 18.7181 10.5127 18.7735C12.0441 18.8512 14.4288 18.9429 16.1876 18.882C16.6904 18.8593 17.1858 18.626 17.7866 18.1813C18.1696 17.8977 18.5311 17.5817 18.9382 17.2258C19.2088 16.9892 19.4995 16.7351 19.8302 16.461C21.4225 15.1415 23.497 13.7745 26.7256 13.7409L26.733 13.7408L27.0877 13.7409C30.3166 13.7745 32.3876 15.1417 33.9782 16.4613C34.306 16.7334 34.595 16.9861 34.8638 17.2213C35.2729 17.5791 35.6359 17.8967 36.0204 18.181C36.6214 18.6254 37.1186 18.8593 37.6259 18.882C39.37 18.9428 41.7543 18.8513 43.3008 18.7735C44.2011 18.7183 45.0549 18.4322 45.8052 17.9205L45.8212 17.9099C46.3888 17.5432 47.072 17.0263 47.7821 16.4622L44.4244 5.28537C39.8013 3.42545 33.6869 2.17988 27.0947 2.17988H26.7476C20.9571 2.17988 15.5278 3.14536 11.1505 4.63361ZM10.6845 3.03107C15.2186 1.4895 20.8056 0.5 26.7476 0.5H27.0947C34.0228 0.5 40.4692 1.83937 45.3265 3.85836C45.5452 3.94923 45.7142 4.14196 45.7866 4.38287L49.4322 16.5177C49.535 16.8599 49.4248 17.2349 49.1583 17.4502C48.2924 18.1496 47.3852 18.8556 46.626 19.3469C45.6432 20.015 44.5337 20.3812 43.3844 20.451L43.377 20.4514C41.8284 20.5293 39.3853 20.6244 37.5725 20.5609L37.5664 20.5607C36.6351 20.5204 35.8476 20.0884 35.1436 19.5677C34.719 19.2537 34.2621 18.8556 33.8078 18.4593C33.5464 18.2315 33.2857 18.0043 33.0325 17.7941C31.582 16.5907 29.8347 15.4504 27.0764 15.4207H26.737C23.9784 15.4504 22.2274 16.591 20.7752 17.7944C20.5199 18.0059 20.2572 18.2348 19.9939 18.4642C19.5409 18.8589 19.0861 19.2551 18.6642 19.5674C17.9615 20.0876 17.1754 20.5203 16.2471 20.5606L16.2408 20.5609C14.4135 20.6244 11.9708 20.5293 10.4362 20.4514L10.4291 20.451C9.28198 20.3814 8.15416 20.0159 7.17977 19.3417C5.52962 18.2363 3.08623 16.1863 1.71294 14.9879C0.766632 14.1785 0.209907 12.9625 0.191384 11.6668C0.18354 11.231 0.206606 10.756 0.287083 10.311C0.364978 9.88035 0.511112 9.39433 0.804634 9.01243L0.805261 9.01162C2.60618 6.67442 6.18383 4.56127 10.6845 3.03107Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M45.1528 3.82556C45.4476 3.86899 45.6937 4.09084 45.7863 4.39676L49.4609 16.5472C49.5392 16.806 49.4964 17.0898 49.3465 17.3085C49.1965 17.5272 48.9579 17.6538 48.706 17.648C47.3461 17.6169 45.9625 17.57 44.9643 17.5069C43.7702 17.4475 42.6385 16.8141 41.9309 15.7593L41.9286 15.7557V15.7557C41.7004 15.4117 41.459 15.0129 41.2811 14.6017C41.1114 14.2098 40.9587 13.7153 41.0044 13.2017C41.1655 10.6758 42.3587 7.51557 44.4011 4.19288C44.566 3.92482 44.8578 3.78216 45.1528 3.82556ZM44.8257 6.62513C43.4141 9.23045 42.6645 11.5502 42.5535 13.3287C42.5528 13.3393 42.5521 13.3499 42.551 13.3605C42.544 13.4325 42.5633 13.601 42.6884 13.8898C42.8068 14.1636 42.9844 14.465 43.1898 14.7747C43.6095 15.3995 44.2976 15.7932 45.0393 15.829L45.05 15.8295V15.8296C45.7566 15.8743 46.6722 15.9111 47.6428 15.9399L44.8257 6.62513Z"
+                      fill="#1E415F" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M22.3705 8.66443C22.3696 8.66644 22.3685 8.67031 22.3685 8.67716C22.3685 8.68399 22.3696 8.68785 22.3705 8.68986C22.3715 8.69217 22.3726 8.69415 22.3743 8.69586C22.3759 8.69757 22.3777 8.69912 22.3805 8.70033C22.3828 8.70141 22.3873 8.70281 22.3942 8.70281H30.1195C30.1267 8.70281 30.1311 8.70141 30.1334 8.70033C30.136 8.69912 30.138 8.69757 30.1397 8.69586C30.1413 8.69415 30.1425 8.69217 30.1434 8.68986C30.1441 8.68785 30.1452 8.68399 30.1452 8.67716C30.1452 8.67031 30.1441 8.66644 30.1434 8.66443C30.1425 8.66215 30.1413 8.66016 30.1397 8.65846C30.138 8.65673 30.136 8.65517 30.1334 8.65396C30.1311 8.65289 30.1267 8.65148 30.1195 8.65148H22.3942C22.3873 8.65148 22.3828 8.65289 22.3805 8.65396C22.3777 8.65517 22.3759 8.65673 22.3743 8.65846C22.3726 8.66016 22.3715 8.66215 22.3705 8.66443ZM21.4364 8.67716C21.4364 8.10084 21.864 7.64355 22.3942 7.64355H30.1195C30.6499 7.64355 31.0775 8.10084 31.0775 8.67716C31.0775 9.25345 30.6499 9.71074 30.1195 9.71074H22.3942C21.864 9.71074 21.4364 9.25345 21.4364 8.67716Z"
+                      fill="#1E415F" />
+              
+              
+          </svg>' %}
+        {% assign planId = '' %}
+      {% endif %}
+
+      {% if variant.title == '3 Pack' or variant.title == '3 Pack / Gentle' %}
+        {% assign active = 'active' %}
+      {% endif %}
+
+      {% assign extra = '' %}
+
+      {% if variant.title contains 'Extra' %}
+        {% assign extra = 'swatchCustom__item_new__extra' %}
+      {% endif %}
+
+      <div
+        class="
+          swatchCustom__item_new flx {% if variant.title contains " 1 Pack" %} nosale {% endif %} {{active}}
+          {{ extra }}
+        "
+        data-variant="{{variant.id}}"
+        data-title="{{variant.title}}"
+        data-price="{{price | divided_by: 100.0}}"
+        data-planid="{{planId}}"
+        data-week="{{ week }}"
+        data-compare="{{compare}}"
+        data-strips="{{strips}}"
+      >
+        <div class="flx">
+          {{ icon }}
+          <div>
+            <p class="for-week">{{ price_week }} / week</p>
+            <p class="item_total">
+              Total:
+              {% if variant.title != '1 Pack'
+                and variant.title != '1 Pack / Gentle'
+                and variant.title != '1 Pack / Extra'
+              -%}
+                <span class="l-through"> {{ compare }} </span>
+              {%- endif %}
+              <span>{{ price | money }}</span>
+            </p>
+          </div>
+        </div>
+        <div>
+          {% if variant.title contains '12 Pack' %}
+            <div class="best-deal">Best deal</div>
+          {% elsif variant.title contains '3 Pack' %}
+            <div class="top-seller">Top-seller</div>
+          {% endif %}
+          {% if variant.title != '1 Pack'
+            and variant.title != '1 Pack / Gentle'
+            and variant.title != '1 Pack /
+                  Extra'
+          %}
+            <div class="sale">{{ sale }}</div>
+          {% endif %}
+          <p class="months">{{ month }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% for variant in product.variants %}
+    {% assign comparePrice = variant.compare_at_price | plus: 0 %}
+    {% assign price = variant.price | divided_by: 100.0 %}
+    {% assign active = '' %}
+
+    {% if variant.title contains '12 Pack' %}
+      {% assign sale = 'SAVE 30%' %}
+
+    {% elsif variant.title contains '3 Pack' %}
+      {% assign sale = 'SAVE 22%' %}
+
+    {% elsif variant.title contains '1 Pack' %}
+      {% assign sale = '' %}
+    {% endif %}
+
+    {% if variant.title == '3 Pack' or variant.title == '3 Pack / Gentle' %}
+      {% assign active = 'active' %}
+    {% endif %}
+
+    {% if active == 'active' %}
+      <div class="footer-prices">
+        <p>Total price</p>
+
+        <div class="d-flex items-center">
+          <p class="pr">{{ variant.price | money }}</p>
+          <p class="sale d-flex items-center">
+            <span class="">{{ sale }}</span>
+            <span class="tooltip-wrap">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M6 0C2.68548 0 0 2.70968 0 6C0 9.31452 2.68548 12 6 12C9.29032 12 12 9.31452 12 6C12 2.70968 9.29032 0 6 0ZM6 2.66129C6.55645 2.66129 7.01613 3.12097 7.01613 3.67742C7.01613 4.25806 6.55645 4.69355 6 4.69355C5.41935 4.69355 4.98387 4.25806 4.98387 3.67742C4.98387 3.12097 5.41935 2.66129 6 2.66129ZM7.35484 8.80645C7.35484 8.97581 7.20968 9.09677 7.06452 9.09677H4.93548C4.76613 9.09677 4.64516 8.97581 4.64516 8.80645V8.22581C4.64516 8.08064 4.76613 7.93548 4.93548 7.93548H5.22581V6.3871H4.93548C4.76613 6.3871 4.64516 6.26613 4.64516 6.09677V5.51613C4.64516 5.37097 4.76613 5.22581 4.93548 5.22581H6.48387C6.62903 5.22581 6.77419 5.37097 6.77419 5.51613V7.93548H7.06452C7.20968 7.93548 7.35484 8.08064 7.35484 8.22581V8.80645Z"
+                    fill="white"></path>
+              </svg>
+              <span class="tooltip"
+                >Total discount from the à la carte price of <span class="compare">{{ comparePrice | money }}</span>:
+                you save $<span class="save">
+                  {{- variant.compare_at_price | plus: 0 | minus: variant.price | divided_by: 100.0 | round: 0 -}}
+                </span>
+                on the big pack. You can save 10% more with auto delivery.</span
+              >
+            </span>
+          </p>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% if section.settings.on_country != blank %}
+    {% assign country = section.settings.on_country | split: ',' %}
+    <span>Ship to:</span>
+    <select class="country_select" name="country">
+      {% for c in country %}
+        {% assign cval = c | split: '/' %}
+        {% assign minDay = cval[1] | split: '-' %}
+        {% assign minday = minDay[0] | times: 24 | times: 60 | times: 60 %}
+        {% assign maxday = minDay[1] | times: 24 | times: 60 | times: 60 %}
+
+        <option
+          value="{{ cval[0] }}"
+          data-free="{{ cval[2] }}"
+          {% if forloop.firsy %}
+            selected
+          {% endif %}
+          data-value="
+            {{ "now" | date: "%s" | plus: minday | date: "%d %b" }} - {{ "now" | date: "%s" | plus: maxday
+            | date: "%d %b" }}
+          "
+        >
+          {{ cval[0] }}
+        </option>
+      {% endfor %}</select
+    ><br>
+    {% assign cval = country[0] | split: '/' %}
+    {% assign minDay = cval[1] | split: '-' %}
+    {% assign minday = minDay[0] | times: 24 | times: 60 | times: 60 %}
+    {% assign maxday = minDay[1] | times: 24 | times: 60 | times: 60 %}
+    <span class="delivery_date"
+      >Arrives:
+      <b>
+        {{- 'now' | date: '%s' | plus: minday | date: '%d %b' }} -
+        {{ 'now' | date: '%s' | plus: maxday | date: '%d %b' -}}
+      </b></span
+    ><br>
+  {% endif %}
+  <span class="free-shipping-label">Free shipping above $50</span>
+
+  <h4 class="stock__header">In Stock.</h4>
+  <select class="stock__select">
+    {% for c in (1..20) %}
+      <option value="{{c}}">Qty: {{ c }}</option>
+    {% endfor %}
+  </select>
+  <span class="stock__pack">1 pack = <span>84</span> strips</span>
+
+  <label class="subscribe-custom" style="display: block;">
+    <input class="subscribe-custom__checkbox" type="checkbox">
+    <span class="check-customer"></span>
+    <h5 class="subscribe-custom__header">Subscribe and <span>save 10%</span></h5>
+    <span class="subscibe-custom__info">Auto delivery every 3 month for $50.37. No hidden fees. Сancel anytime.</span>
+  </label>
+  <button class="to_checkout" data-product="{{ product.id }}">Add to cart</button>
+  <div class="moneyback">
+    <img src="https://i.ibb.co/kXqgv3n/image-44-2.png" alt="moneyback">
+    <p>
+      30-day <br>
+      Money-Back <br>
+      Guarantee
+    </p>
+  </div>
+  <ul class="checklist">
+    <li>Promote nose breathing</li>
+    <li>Reduce open-mouth snoring</li>
+    <li>Boost CPAP exprerience</li>
+    <li>Improve sleep quality</li>
+  </ul>
+</div>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+  let currency = '$';
+  let priceSubscribe = (+$('.mobile .swatchCustom__item_new.active').data('price') - (+$('.mobile .swatchCustom__item_new.active').data('price') * 10 / 100)).toFixed(2);
+  $('.mobile .subscibe-custom__info').text(`Auto delivery every 3 month for ${currency + priceSubscribe}. No hidden fees. Сancel anytime.`)
+  // let sellingPlanGroups = ''
+  //  fetch(window.location.pathname + '.js')
+  //   .then(response => response.json())
+  //   .then(data => { 
+  //       console.log(data)
+  //       sellingPlanGroups = data['selling_plan_groups'][0]['app_id']
+
+  //     let variants = data.variants;
+  //     for (let i = 0; i < variants.length; i++) {
+  //         document.querySelectorAll('.swatchCustom__item_new').forEach(item => {
+  //           if (variants[i].id == item.dataset.variant && !item.dataset.title.includes('1 Pack')) {
+  //             item.dataset.planid = variants[i]['selling_plan_allocations'][0]['selling_plan_id']
+  //           }
+  //         })
+  //     }
+
+  //   });
+  let matMedia = window.matchMedia("(max-width: 1023px)").matches ? '.mobile' : '.desktop';
+  let matMediaFun = () => {
+      matMedia = window.matchMedia("(max-width: 1023px)").matches ? '.mobile' : '.desktop';
+  }
+
+  window.addEventListener('resize', () => matMediaFun())
+
+
+
+  // select delivery country
+
+  $('.product__information .country_select').change(function () {
+      $('.product__information .delivery_date b').text($(this).find(':selected').data('value'))
+      console.log()
+      if ($(this).find(':selected').data('free') !== 'free') {
+          $('.product__information .free-shipping-label').text(`Shipping from ${$(this).find(':selected').data('free')}`)
+      } else {
+          $('.product__information .free-shipping-label').text(`Free Shipping`)
+          if($(this).find(':selected').val() === 'United States') {
+            $('.product__information .free-shipping-label').text(`Free shipping above $50`)
+          }
+      }
+  })
+
+
+
+  // for mobile blocks 
+
+  $('.select_pack').click(function () {
+      $('.dark_bg').addClass('active')
+  })
+
+  $('.close_btn').click(function () {
+      $('.dark_bg').removeClass('active')
+  })
+
+  $(`.subscribe-custom__checkbox`).change(function (e) {
+      clearInterval(intervalSubscribePDP)
+      let sale = $(`${matMedia} .parent-items .swatchCustom__item_new.active`).find('.sale').text();
+      let price = $(`${matMedia} .parent-items .swatchCustom__item_new.active`).data(`price`);
+      let priceSubscribe = (+price - (+price * 10 / 100)).toFixed(2);
+
+      if (e.currentTarget.checked) {
+          $(`${matMedia} .stock__select`).prop('disabled', 'true');
+          $(`${matMedia} .stock__select`).val('1');
+
+
+          if ($(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('title').includes('3 Pack')) {
+              if (matMedia == '.mobile') {
+                  $('.footer-prices .pr').text(currency + priceSubscribe)
+                  $('.footer-prices .sale > span:first-child').text('Save 30%')
+              } else {
+                  $('.total_price span').text(currency + priceSubscribe)
+                  $('.part2 .sale > span:first-child').text('Save 30%');
+              }
+          } else {
+              if (matMedia == '.mobile') {
+                  $('.footer-prices .pr').text(currency + priceSubscribe)
+                  $('.footer-prices .sale > span:first-child').text('Save 37%')
+
+              } else {
+                  $('.total_price span').text(currency + priceSubscribe)
+                  $('.part2 .sale > span:first-child').text('Save 37%');
+
+              }
+          }
+      } else {
+          $(`${matMedia} .stock__select`).removeAttr('disabled')
+
+          if (matMedia == '.mobile') {
+              $('.footer-prices .pr').text(currency + price)
+              $('.footer-prices .sale > span:first-child').text(sale)
+
+          } else {
+              $('.total_price span').text(currency + price)
+              $('.part2 .sale > span:first-child').text(sale);
+
+          }
+      }
+  })
+
+  $(`.parent-items .swatchCustom__item_new`).click(function () {
+      console.log(matMedia)
+      if (!$(this).hasClass('active')) {
+          $(this).siblings().removeClass('active')
+          $(this).addClass('active')
+          $(`${matMedia} .stock__select`).prop("disabled", false)
+          $(`${matMedia} .subscribe-custom__checkbox`).prop("checked", false)
+
+          let price = $(this).data('price')
+          let total = $(this).find('.item_total > span:not(.l-through)').html();
+
+          if (matMedia == '.mobile') {
+              $('.footer-prices .pr').html(total)
+          } else {
+              $('.total_price span').text(currency + price)
+          }
+
+          $(`${matMedia} .stock__select`).val('1')
+
+
+          let priceSubscribe = (+price - (+price * 10 / 100)).toFixed(2);
+
+          if ($(this).data('title').includes('3 Pack') || $(this).data('title').includes('12 Pack')) {
+
+              let compare = $(this).find('.item_total > span.l-through').html();
+              let save = +compare.replace(currency, '') - +total.replace(currency, '');
+
+              $(`${matMedia} .sale .tooltip .compare`).text(compare)
+              $(`${matMedia} .sale .tooltip .save`).text(save)
+          }
+          if ($(this).data('title').includes('3 Pack')) {
+              $(`${matMedia} .subscribe-custom`).css('display', 'block')
+              $(`${matMedia} .stock__pack span`).text('84')
+              $(`${matMedia} .subscibe-custom__info`).text(`Auto delivery every 3 month for ${currency + priceSubscribe}. No hidden fees. Сancel anytime.`)
+
+              if (matMedia == '.desktop') {
+                  $(`.subheading`).text(`12 week pack (84 strips in a pack)`);
+                  $('.part2 .sale > span:first-child').text('SAVE 22%');
+                  $('.part2 .sale').css('display', 'flex')
+              } else {
+                  $('.footer-prices .sale > span:first-child').text('SAVE 22%');
+                  $('.footer-prices .sale').css('display', 'flex')
+              } 
+
+
+          } else if ($(this).data('title').includes('12 Pack')) {
+              $(`${matMedia} .subscribe-custom`).css('display', 'block')
+              $(`${matMedia} .stock__pack span`).text('364')
+              $(`${matMedia} .subscibe-custom__info`).text(`Auto delivery every 12 month for ${currency + priceSubscribe}. No hidden fees. Сancel anytime.`)
+
+              if (matMedia == '.desktop') {
+                  $('.subheading').text(`52 week pack (364 strips in a pack)`);
+                  $('.part2 .sale > span:first-child').text('SAVE 30%');
+                  $('.part2 .sale').css('display', 'flex')
+              } else {
+                  $('.footer-prices .sale > span:first-child').text('SAVE 30%');
+                  $('.footer-prices .sale').css('display', 'flex')
+              }
+          } else {
+              $(`${matMedia} .subscribe-custom`).css('display', 'none')
+              $(`${matMedia} .stock__pack span`).text('28')
+              if (matMedia == '.desktop') {
+                  $('.subheading').text(`4 week pack (28 strips in a pack)`);
+                  $('.part2 .sale').css('display', 'none')
+              } else {
+                  $('.footer-prices .sale').css('display', 'none')
+              }
+          }
+      } else {
+          if (matMedia == '.mobile') {
+              $('.popup_btn').eq(1).click()
+          } else if (matMedia == '.desktop') {
+              $('.popup_btn').eq(0).click()
+          }
+
+      }
+  })
+
+//to checkout
+
+  $('.to_checkout').click(async function () {
+      try {
+          let matMedia = window.matchMedia("(max-width: 1023px)").matches ? '.mobile' : '.desktop';
+
+          const itemId = $(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('variant');
+          const planId = $(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('planid')
+          const itemQuantity = $(`${matMedia} .stock__select`).val();
+          const productId = $(this).data('product');
+
+          let sale = 0;
+          let add = true
+          let compare = $(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('title') == '1 Pack' ? 0 : $(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('compare').replace(currency, '');
+          if ($(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('title') == '3 Pack') {
+              sale = document.querySelector(`${matMedia} .subscribe-custom__checkbox`).checked ? 30 : 22;
+          } else if ($(`${matMedia} .parent-items .swatchCustom__item_new.active`).data('title') == '12 Pack') {
+              sale = document.querySelector(`${matMedia} .subscribe-custom__checkbox`).checked ? 37 : 30;
+          }
+
+          $('.loader_custom').addClass('active')
+          let formData = {
+              'items': [{
+                  'id': itemId,
+                  'quantity': itemQuantity
+              }]
+          };
+          if (document.querySelector(`${matMedia} .subscribe-custom__checkbox`).checked) {
+              formData = {
+                  items: [{
+                      id: itemId,
+                      quantity: itemQuantity,
+                      selling_plan: planId
+                  }]
+              }
+              const cart = await fetch('/cart.js').then(res => res.json())
+
+              if (cart.items.length == 0) {
+                  const addCart = await addToCart(formData)
+                  window.location.href = '/cart'
+              } else {
+                  cart.items.forEach(item => {
+                      if (item.selling_plan_allocation && item.selling_plan_allocation.selling_plan.id == planId) {
+                          add = false
+                      }
+                  })
+
+                  if (add) {
+                      const addCart = await addToCart(formData)
+                      window.location.href = '/cart'
+                  } else {
+                      window.location.href = '/cart'
+                  }
+              }
+          } else {
+              const addCart = await addToCart(formData)
+              window.location.href = '/cart'
+          }
+          $('.loader_custom').removeClass('active')
+
+
+      } catch (e) {
+          console.log(e)
+      }
+
+  })
+
+  // calculating the total price
+  $(`.stock__select`).change(function () {
+      let price = +$(`${matMedia} .swatchCustom__item_new.active`).data('price')
+      let total = (price * document.querySelector(`${matMedia} .stock__select`).value).toFixed(2)
+      if (matMedia == '.desktop') {
+          $(`.total_price span`).text(currency + total)
+      } else {
+          $('.footer-prices .pr').text(currency + total)
+      }
+  })
+
+  let intervalSubscribePDP = setInterval(() => {
+      if ($(".mobile .subscribe-custom .subscribe-custom__checkbox").is(':checked')) {
+          clearInterval(intervalSubscribePDP)
+          $(".mobile .subscribe-custom .subscribe-custom__checkbox").prop('checked', false);
+      }
+  }, 200)
+
+
+  document.querySelectorAll('.part1 i.stamped-fa-star').forEach(item => {
+      item.style.cssText = 'color: rgb(242, 180, 19) !important;'
+  })
+
+  {% if customer != blank %}
+
+  var cid = "{{ customer.id }}";
+  localStorage.setItem('customer', cid);
+
+  fetch('https://crs-dev.fun/api/somnifix/recharge/get_subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+          'params': {
+              "shopify_customer_id": cid,
+              "status": "active"
+          }
+      })
+  }).then(res => res.json()).then(data => {
+      console.log(data)
+      if (data.errors || data.subscriptions.length === 0) {
+          dataLayer.push({ 'event': 'popup_start' });
+      }
+  })
+
+  {% else %}
+  localStorage.removeItem('customer');
+  dataLayer.push({ 'event': 'popup_start' });
+  {% endif %}
+
+
+  document.querySelectorAll('.to_checkout').forEach((item, i) => {
+      item.addEventListener('click', function () {
+          if (document.querySelectorAll('.subscribe-custom__checkbox')[i].checked) {
+              dataLayer.push({ 'event': 'buying_subscription' });
+          }
+      })
+  })
+
+
+  async function addToCart(item) {
+      return await (fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(item)
+      }).then(res => res.json()))
+  }
+
+});
+</script>
