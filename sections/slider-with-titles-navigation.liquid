@@ -1,0 +1,275 @@
+{% unless template contains 'theme' %}
+	<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+	/>
+{% endunless %}
+
+<style>
+    .sf-slider-container {
+        display: flex;
+        padding: clamp(1rem, 0.714rem + 0.6vw, 1.25rem);
+	    background-color: #1F5C8A;
+	    border-radius: 12px;
+    }
+
+    .sf-slider-content-wrapper {
+        width: 50%;
+        padding-right: clamp(0rem, -2rem + 4.17vw, 1.75rem);
+    }
+
+    .sf-swiper-container {
+        width: 50%;
+    }
+
+    .sf-slider-content-wrapper__title {
+        margin-bottom: clamp(1rem, -0.143rem + 2.38vw, 2rem);
+        color: #FFF;
+        font-family: Inter, serif;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .sf-slider-content-wrapper__title--sm {
+        display: none;
+    }
+
+    .sf-slider-navigation {
+        margin-bottom: clamp(0.75rem, -0.393rem + 2.38vw, 1.75rem);
+    }
+
+    .sf-slider-nav {
+        display: flex;
+	    gap: 12px;
+        margin-bottom: clamp(1.25rem, 0.393rem + 1.79vw, 2rem);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+	    h3 {
+		    cursor: pointer;
+
+            font-size: clamp(2.25rem, 1.393rem + 1.79vw, 3rem);
+            line-height: clamp(2.688rem, 1.973rem + 1.49vw, 3.313rem);
+            color: rgba(255, 255, 255, 0.50);
+            font-family: "Instrument Serif", serif;
+            font-weight: 400;
+            text-transform: unset;
+	    }
+
+        .sf-slider-nav__number {
+            color: rgba(255, 255, 255, 0.50);
+            font-family: Inter, sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 22px;
+            letter-spacing: -0.4px;
+        }
+    }
+
+    .sf-slider-nav.active {
+	    h3 {
+            color: #fff;
+	    }
+
+        .sf-slider-nav__number {
+	        color: #fff;
+        }
+    }
+
+    .sf-slider-description {
+        max-width: 288px;
+        margin-left: auto;
+    }
+
+    .sf-slider-desc {
+        transition: opacity .3s linear;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+
+	    color: rgba(255, 255, 255, 0.80);
+
+	    em, strong {
+		    color: #fff;
+	    }
+    }
+
+    .sf-slider-desc.active {
+        opacity: 1;
+        height: auto;
+    }
+
+    .sf-swiper-slide {
+	    img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+		    border-radius: 10px;
+	    }
+    }
+
+    @media screen and (max-width: 1024px) {
+        .sf-slider-description {
+            max-width: 100%;
+            margin: 0;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+	    .sf-slider-content-wrapper,
+        .sf-swiper-container {
+            width: 100%;
+	    }
+
+	    .sf-slider-container {
+		    flex-wrap: wrap;
+	    }
+
+        .sf-slider-content-wrapper__title {
+            display: none;
+        }
+
+        .sf-slider-content-wrapper__title--sm {
+            display: block;
+	        order: 1;
+        }
+
+        .sf-swiper-container {
+	        order: 2;
+            margin-bottom: 16px;
+        }
+
+        .sf-slider-content-wrapper {
+            order: 3;
+        }
+    }
+</style>
+
+<div class="sf-slider-container">
+	<div class="sf-slider-content-wrapper">
+		<h2 class="sf-slider-content-wrapper__title">What makes SomniFix different?</h2>
+		<div class="sf-slider-navigation">
+			{% for block in section.blocks %}
+				<div class="sf-slider-nav"
+				     data-slide-index="{{ forloop.index0 }}">
+					<span class="sf-slider-nav__number">{{ forloop.index }}</span>
+					<h3>{{ block.settings.title }}</h3>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="sf-slider-description">
+			{% for block in section.blocks %}
+				<div class="sf-slider-desc" data-desc-index="{{ forloop.index0 }}">
+					{{ block.settings.description }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<h2 class="sf-slider-content-wrapper__title sf-slider-content-wrapper__title--sm">What makes SomniFix different?</h2>
+	<div class="sf-swiper-container swiper">
+		<div class="sf-swiper-wrapper swiper-wrapper">
+			{% for block in section.blocks %}
+				<div class="sf-swiper-slide swiper-slide">
+					{% if block.settings.image %}
+						<img src="{{ block.settings.image | img_url: 'master' }}"
+						     alt="{{ block.settings.title }}" loading="lazy">
+						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let swiper = new Swiper(".sf-swiper-container", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: false,
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+        });
+
+        // Initially set the first navigation item as active
+        document.querySelectorAll(".sf-slider-nav")[0].classList.add("active");
+        // Initially show the first description
+        document.querySelectorAll(".sf-slider-desc")[0].classList.add("active");
+
+        // Change slide & description on navigation click
+        document.querySelectorAll(".sf-slider-nav").forEach((nav, index) => {
+            nav.addEventListener("click", () => {
+                swiper.slideTo(index);
+            });
+        });
+
+        // Update description when Swiper slide changes
+        swiper.on("slideChange", function () {
+            let activeIndex = swiper.activeIndex;
+
+            // Remove active class from all navigation items
+            document.querySelectorAll(".sf-slider-nav").forEach((nav) => {
+                nav.classList.remove("active");
+            });
+
+            // Add active class to the currently active navigation item
+            document
+                .querySelector(`.sf-slider-nav[data-slide-index="${activeIndex}"]`)
+                .classList.add("active");
+
+            // Hide all descriptions
+            document.querySelectorAll(".sf-slider-desc").forEach((desc) => {
+                desc.classList.remove("active");
+            });
+
+            // Show only the active description
+            document
+                .querySelector(`.sf-slider-desc[data-desc-index="${activeIndex}"]`)
+                .classList.add("active");
+        });
+    });
+</script>
+
+{% schema %}
+{
+  "name": "Slider with titles nav",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider with titles nav",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

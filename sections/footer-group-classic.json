@@ -1,0 +1,155 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer_icon_bar": {
+      "type": "footer__icon-bar",
+      "blocks": {
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "icon": "leaf",
+            "text": "100% Organic",
+            "link": ""
+          }
+        },
+        "text_2": {
+          "type": "text",
+          "settings": {
+            "icon": "bunny",
+            "text": "Cruelty free",
+            "link": ""
+          }
+        },
+        "text_3": {
+          "type": "text",
+          "settings": {
+            "icon": "chat",
+            "text": "24/7 support",
+            "link": ""
+          }
+        },
+        "text_4": {
+          "type": "text",
+          "settings": {
+            "icon": "truck",
+            "text": "Free shipping",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_1",
+        "text_2",
+        "text_3",
+        "text_4"
+      ],
+      "disabled": true,
+      "settings": {
+        "show_icon_bar": true,
+        "icon_position": "row",
+        "alignment": "center",
+        "mobile_alignment": "none",
+        "size": "medium",
+        "background": "#8b8b8b",
+        "link_color": "#ffffff",
+        "link_hover_color": "#000000",
+        "text_color": "#ffffff",
+        "width": "standard",
+        "css_class": "",
+        "custom_css": ""
+      }
+    },
+    "footer": {
+      "type": "footer-classic",
+      "blocks": {
+        "logo": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/logo.png",
+            "size": "small",
+            "text": "",
+            "social_icons_footer": true
+          }
+        },
+        "link_list": {
+          "type": "link_list",
+          "settings": {
+            "menu": "use",
+            "social_icons_footer": false
+          }
+        },
+        "link_list_FABcDQ": {
+          "type": "link_list",
+          "settings": {
+            "menu": "partner",
+            "social_icons_footer": false
+          }
+        },
+        "link_list_WCQNU3": {
+          "type": "link_list",
+          "settings": {
+            "menu": "about",
+            "social_icons_footer": false
+          }
+        },
+        "html_8feDyL": {
+          "type": "html",
+          "settings": {
+            "html_content": "<div class=\"klaviyo-form-TXzCvP\"></div>"
+          }
+        }
+      },
+      "block_order": [
+        "logo",
+        "link_list",
+        "link_list_FABcDQ",
+        "link_list_WCQNU3",
+        "html_8feDyL"
+      ],
+      "disabled": true,
+      "settings": {
+        "copyright_text": "",
+        "display_designed_by": false,
+        "display_shopify": false,
+        "show_follow_on_shop": false,
+        "show_locale_selector": false,
+        "show_currency_selector": false,
+        "display_payment_methods": true,
+        "css_class": "",
+        "custom_css": ""
+      }
+    },
+    "footer_classic_2025_j7aTWj": {
+      "type": "footer-classic-2025",
+      "settings": {
+        "subscribe_title": "Ready for the <em>deepest sleep</em> of your life?",
+        "subscribe_description": "Get expert sleep advice, exclusive offers, and surprises  for your inbox.",
+        "menu_1_title": "About",
+        "menu_1": "footer-about-2025",
+        "menu_2_title": "Support",
+        "menu_2": "footer-support-2025",
+        "social_icons_footer": true,
+        "footer_logo": "shopify://shop_images/footer-logo.svg",
+        "copyright_text": "",
+        "menu_3": "footer-terms-2025",
+        "css_class": "",
+        "custom_css": ""
+      }
+    }
+  },
+  "order": [
+    "footer_icon_bar",
+    "footer",
+    "footer_classic_2025_j7aTWj"
+  ]
+}

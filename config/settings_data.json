@@ -1,0 +1,239 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "header_background": "#eceae5",
+    "header_link_color": "#0d4160",
+    "header_link_hover_color": "#414b56",
+    "footer_background": "#ffffff",
+    "footer_link_color": "#0d4160",
+    "footer_link_hover_color": "#414b56",
+    "footer_text_color": "#414b56",
+    "regular__font": "roboto_n4",
+    "regular_font_size": 16,
+    "logo__font": "roboto_n4",
+    "logo_font_size": 16,
+    "logo_font_style": "uppercase",
+    "nav__font": "roboto_n4",
+    "nav_font_size": 16,
+    "nav_letter_spacing": 0,
+    "nav_font_style": "uppercase",
+    "button__font": "roboto_n4",
+    "button_font_style": "uppercase",
+    "heading__font": "lora_n4",
+    "heading_size": 40,
+    "heading_letter_spacing": 1,
+    "preheading_font": "roboto_n4",
+    "preheading_size": 15,
+    "subheading_font": "roboto_n4",
+    "subheading_size": 18,
+    "banner_heading__font": "lora_n7",
+    "banner_heading_size": 50,
+    "banner_text__font": "roboto_n4",
+    "banner_text_size": 16,
+    "logo_mobile": "shopify://shop_images/logo-2025.svg",
+    "show_locale_selector": false,
+    "show_currency_selector": false,
+    "mobile_menu_background_color": "#ffffff",
+    "mobile_menu_link_color": "#0d4160",
+    "mobile_menu_link_hover_color": "#414b56",
+    "button_primary_bg_color": "#0d4160",
+    "button_primary_bg_color--highlight": "#0d4160",
+    "button_primary_border_radius": 35,
+    "button_secondary_border_color": "#0d4160",
+    "button_secondary_text_color": "#0d4160",
+    "button_secondary_bg_color--highlight": "#0d4160",
+    "button_secondary_border_color--highlight": "#0d4160",
+    "button_secondary_border_radius": 35,
+    "button_cart_bg_color": "#0d4160",
+    "button_cart_bg_color--highlight": "#0d4160",
+    "button_cart_border_color": "rgba(0,0,0,0)",
+    "button_cart_border_color--highlight": "#0d4160",
+    "button_cart_border_radius": 35,
+    "use_placeholders": false,
+    "display_heading_divider": false,
+    "heading_divider_style": "short",
+    "email_link": "",
+    "facebook_link": "https://www.facebook.com/somnifix",
+    "instagram_link": "https://www.instagram.com/somnifix/",
+    "tiktok_link": "https://www.tiktok.com/@somnifix",
+    "x_link": "#",
+    "favicon": "shopify://shop_images/SMFX-Favicon_30x30_c977f1d3-33c7-4c12-9b2d-22f5ce211b60.png",
+    "show_lock_icon": false,
+    "sections": {
+      "product__main__strips": {
+        "type": "product__main__strips",
+        "settings": {
+          "product_images_position": "left",
+          "set_product_height": false,
+          "product_height": 500,
+          "video_looping": false,
+          "gallery_arrows": true,
+          "enable_zoom": true,
+          "enable_product_lightbox": true,
+          "slideshow_speed": 0,
+          "slideshow_transition": "slide",
+          "display_thumbnails": true,
+          "thumbnail_position": "bottom-thumbnails",
+          "enable_thumbnail_slider": true,
+          "width": "standard",
+          "padding_top": 20,
+          "padding_bottom": 20,
+          "animation": "none",
+          "css_class": "",
+          "custom_css": "",
+          "on_country": "United States/2-3/free,\nCanada/12-15/$5,\nUnited Kingdom/14-17/free,\nAustralia/14-17/$10,\nFrance/14-17/free,\nGermany/14-17/free,\nThe Netherlands/14-17/free,\nBelgium/14-17/free,\nSpain/14-17/free,\nAustria/14-17/free,\nPoland/14-17/free,\nSwitzerland/14-17/free,\nAland Islands/14-17/$10,\nAlbania/14-17/$10,\nAndorra/14-17/$10,\nArmenia/14-17/$10,\nBelarus/14-17/$10,\nBosnia And Herzegovina/14-17/$10,\nBouvet Island/14-17/$10,\nBulgaria/14-17/$10,\nCroatia/14-17/$10,\nCyprus/14-17/$10,\nCzech Republic14-17/$10,\nDenmark/14-17/free,\nEstonia/14-17/free,\nFaroe Islands/14-17/$10,\nFinland/14-17/$10,\nGeorgia/14-17/$10,\nGibraltar/14-17/$10,\nGreece/14-17/$10,\nGreenland/14-17/$10,\nGuadeloupe/14-17/$10,\nGuernsey/14-17/$10,\nHungary/14-17/free,\nIceland/14-17/$10,\nIreland/14-17/$10,\nIsle of Man/14-17/$10,\nItaly/14-17/free,\nJersey/14-17/$10,\nKosovo/14-17/$10,\nLatvia/14-17/free,\nLiechtenstein/14-17/$10,\nLithuania/14-17/free,\nLuxembourg/14-17/free,\nMalta/14-17/free,\nMayotte/14-17/$10,\nMonaco/14-17/$10,\nMontenegro/14-17/$10,\nNew Zealand/14-17/$10,\nNorway/14-17/$10,\nPortugal/14-17/free,\nReunion/14-17/$10,\nRomania/14-17/$10,\nSan Marino/14-17/$10,\nSerbia/14-17/$10,\nSlovakia/14-17/$10,\nSlovenia/14-17/$10,\nSvlabard And Jan Mayen/14-17/$10,\nSweden/14-17/free,\nTurkey/14-17/$10,\nUkraine/14-17/$10"
+        }
+      },
+      "product__reviews": {
+        "type": "product__reviews",
+        "settings": {}
+      },
+      "section-eta": {
+        "type": "section-eta",
+        "settings": {
+          "quick_add_strips_title": "Results in just 7 days"
+        }
+      },
+      "quick-add__strips": {
+        "type": "quick-add__strips",
+        "settings": {
+          "quick_add_strips_title": "Enjoy better sleep all year long"
+        }
+      },
+      "product__main__strips-replo": {
+        "type": "product__main__strips-replo",
+        "settings": {
+          "product_images_position": "left",
+          "set_product_height": true,
+          "product_height": 600,
+          "video_looping": false,
+          "gallery_arrows": true,
+          "enable_zoom": true,
+          "enable_product_lightbox": true,
+          "slideshow_speed": 0,
+          "slideshow_transition": "slide",
+          "display_thumbnails": true,
+          "thumbnail_position": "bottom-thumbnails",
+          "enable_thumbnail_slider": true,
+          "width": "standard",
+          "padding_top": 40,
+          "padding_bottom": 60,
+          "padding_right": 32,
+          "padding_left": 32,
+          "animation": "none",
+          "css_class": "",
+          "custom_css": "",
+          "on_country": "United States/2-3/free,\nCanada/12-15/$5,\nUnited Kingdom/14-17/free,\nAustralia/14-17/$10,\nFrance/14-17/free,\nGermany/14-17/free,\nThe Netherlands/14-17/free,\nBelgium/14-17/free,\nSpain/14-17/free,\nAustria/14-17/free,\nPoland/14-17/free,\nSwitzerland/14-17/free,\nAland Islands/14-17/$10,\nAlbania/14-17/$10,\nAndorra/14-17/$10,\nArmenia/14-17/$10,\nBelarus/14-17/$10,\nBosnia And Herzegovina/14-17/$10,\nBouvet Island/14-17/$10,\nBulgaria/14-17/$10,\nCroatia/14-17/$10,\nCyprus/14-17/$10,\nCzech Republic14-17/$10,\nDenmark/14-17/free,\nEstonia/14-17/free,\nFaroe Islands/14-17/$10,\nFinland/14-17/$10,\nGeorgia/14-17/$10,\nGibraltar/14-17/$10,\nGreece/14-17/$10,\nGreenland/14-17/$10,\nGuadeloupe/14-17/$10,\nGuernsey/14-17/$10,\nHungary/14-17/free,\nIceland/14-17/$10,\nIreland/14-17/$10,\nIsle of Man/14-17/$10,\nItaly/14-17/free,\nJersey/14-17/$10,\nKosovo/14-17/$10,\nLatvia/14-17/free,\nLiechtenstein/14-17/$10,\nLithuania/14-17/free,\nLuxembourg/14-17/free,\nMalta/14-17/free,\nMayotte/14-17/$10,\nMonaco/14-17/$10,\nMontenegro/14-17/$10,\nNew Zealand/14-17/$10,\nNorway/14-17/$10,\nPortugal/14-17/free,\nReunion/14-17/$10,\nRomania/14-17/$10,\nSan Marino/14-17/$10,\nSerbia/14-17/$10,\nSlovakia/14-17/$10,\nSlovenia/14-17/$10,\nSvlabard And Jan Mayen/14-17/$10,\nSweden/14-17/free,\nTurkey/14-17/$10,\nUkraine/14-17/$10"
+        }
+      },
+      "slider-with-titles-navigation": {
+        "type": "slider-with-titles-navigation",
+        "blocks": {
+          "slide_jt3XbN": {
+            "type": "slide",
+            "settings": {
+              "title": "Our Approach",
+              "description": "<p>SomniFix pioneered mouth taping and created a biohacking movement that is now a mainstream solution for better sleep.</p><p>Developed by a doctor of Internal Medicine who personally struggled with chronic sleep-wake disorders for over 30 years, SomniFix takes a <em><strong>science-backed approach</strong></em> to helping you achieve truly restorative sleep.</p>",
+              "image": "shopify://shop_images/Slide-image-Our-Approach.png"
+            }
+          },
+          "slide_wPDQch": {
+            "type": "slide",
+            "settings": {
+              "title": "Innovative solution",
+              "description": "<p>Our innovative solution is backed by <em><strong>over 50 patents</strong></em>, and it is the only mouth tape product specifically validated in a <em><strong>Harvard Medical School</strong></em> clinical study for its effect on sleep breathing and open mouth snoring.</p>",
+              "image": "shopify://shop_images/Slide-image-Innovative-solution.png"
+            }
+          },
+          "slide_Aq4xPa": {
+            "type": "slide",
+            "settings": {
+              "title": "Highest quality",
+              "description": "<p>Our unique medical-grade adhesive delivers unmatched comfort for nightly use. While others cut corners, we maintain a 100% USA-based supply chain, ensuring the <em><strong>highest quality</strong></em> in every strip. This commitment to excellence has made us the trusted choice of sleep specialists, dentists, and <em><strong>over 1 million satisfied sleepers. </strong></em></p>",
+              "image": "shopify://shop_images/slide-image-Highest-quality.png"
+            }
+          },
+          "slide_Ydep7D": {
+            "type": "slide",
+            "settings": {
+              "title": "Simplicity",
+              "description": "<p>The beauty of SomniFix lies in its simplicity. Unlike complex devices or supplements, it's a straightforward solution that <em><strong>travels easily</strong></em> and works with your <em><strong>body's natural processes.</strong></em> Just apply and experience the difference.</p>",
+              "image": "shopify://shop_images/slide-image-Simplicity.png"
+            }
+          }
+        },
+        "block_order": [
+          "slide_jt3XbN",
+          "slide_wPDQch",
+          "slide_Aq4xPa",
+          "slide_Ydep7D"
+        ],
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "15351435345818755577": {
+        "type": "shopify://apps/pandectes-gdpr-compliance/blocks/banner/58c0baa2-6cc1-480c-9ea6-38d6d559556a",
+        "disabled": false,
+        "settings": {}
+      },
+      "855628211100114053": {
+        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
+        "disabled": false,
+        "settings": {}
+      },
+      "7079518687644006178": {
+        "type": "shopify://apps/checkout-blocks/blocks/app-embed/b0024ca5-9de8-4bf0-a92f-cd0783877ae2",
+        "disabled": false,
+        "settings": {
+          "utm_id": true,
+          "utm_source": true,
+          "utm_medium": true,
+          "utm_campaign": true,
+          "utm_term": true,
+          "ref": true
+        }
+      },
+      "16278478101612877664": {
+        "type": "shopify://apps/pagefly-page-builder/blocks/app-embed/83e179f7-59a0-4589-8c66-c0dddf959200",
+        "disabled": true,
+        "settings": {}
+      },
+      "14327677521557774844": {
+        "type": "shopify://apps/simprosys-google-shopping-feed/blocks/core_settings_block/1f0b859e-9fa6-4007-97e8-4513aff5ff3b",
+        "disabled": false,
+        "settings": {}
+      },
+      "15685250022964305326": {
+        "type": "shopify://apps/elevar-conversion-tracking/blocks/dataLayerEmbed/bc30ab68-b15c-4311-811f-8ef485877ad6",
+        "disabled": false,
+        "settings": {}
+      },
+      "17151115064775110295": {
+        "type": "shopify://apps/recharge-subscriptions/blocks/recharge-theme/371eed76-0b44-4869-9813-730372ea378e",
+        "disabled": false,
+        "settings": {
+          "color_brand": "#467c99",
+          "contrast_color": "#ffffff",
+          "color_brand_secondary": "#467c99",
+          "corners": "8px",
+          "app_background": "#faf9f8",
+          "app_container": 1200,
+          "app_vertical_padding": 32,
+          "images_aspect_ratio": "1",
+          "cards_background": "#ffffff",
+          "cards_border_color": "rgba(0,0,0,0)"
+        }
+      }
+    }
+  }
+}
