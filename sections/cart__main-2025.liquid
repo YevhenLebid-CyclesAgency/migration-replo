@@ -67,6 +67,51 @@
   }
 
   .cart-section-2025 {
+      .section__cart-is-not-empty {
+          padding-bottom: clamp(3.125rem, -0.946rem + 8.48vw, 6.688rem);
+          padding-top: clamp(0.75rem, -0.107rem + 1.79vw, 1.5rem);
+      }
+
+      .cart__empty-cart-message {
+          padding-top: clamp(11.125rem, 9.268rem + 3.87vw, 12.75rem);
+          padding-bottom: clamp(9.375rem, 1.446rem + 16.52vw, 16.313rem);
+
+          .quote {
+              font-size: clamp(2rem, 1.714rem + 0.6vw, 2.25rem);
+              line-height: clamp(2.375rem, 2.018rem + 0.74vw, 2.688rem);
+              color: #333;
+              font-family: "Instrument Serif", serif !important;
+              font-weight: 400;
+              letter-spacing: 0;
+
+              margin-bottom: 20px;
+          }
+
+          .continue-button {
+              display: inline-block;
+              padding: 13px 28px;
+              border-radius: 10px;
+              background: #1F5C8A;
+              border: none;
+              cursor: pointer;
+              color: #FFF;
+              font-family: "Instrument Serif", serif;
+              font-size: 24px;
+              font-weight: 400;
+              line-height: 1;
+              transition: opacity .3s linear;
+              text-transform: none;
+
+              &:hover {
+                  opacity: 0.9;
+              }
+
+              &:focus {
+                  opacity: 0.8;
+              }
+          }
+      }
+
       .heading-wrapper {
           margin-bottom: 20px;
       }
@@ -78,6 +123,7 @@
         color: #333;
         font-family: "Instrument Serif", serif !important;
         font-weight: 400;
+        letter-spacing: 0;
       }
 
       .section.is-width-wide {
@@ -516,11 +562,21 @@
 {% comment %} HTML markup {% endcomment %}
 <section class="section
         {{ css_class }}
-        is-width-{{ width }}"
+        is-width-{{ width }}
+        {% if cart.item_count > 0 %}
+            section__cart-is-not-empty
+        {% endif %}
+        "
         {% if animation != "none" %}
           data-scroll-class="{{ animation }}"
         {% endif %}>
-  <div class="container cart__heading-container">
+  <div class="
+          container
+          cart__heading-container
+          {% if cart.item_count == 0 %}
+            is-hidden
+          {% endif %}
+  ">
     {% capture heading_title %}{{ 'cart.general.title' | t }} (<span id="cart-count" data-bind="itemCount">{{ cart.item_count }}</span>){% endcapture %}
     {%
       render 'heading',
@@ -545,8 +601,6 @@
         column
         one-whole
         text-align-center
-        has-padding-top
-        has-padding-bottom
       "
     >
       <h2 class="quote">

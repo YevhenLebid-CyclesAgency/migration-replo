@@ -1,15 +1,87 @@
-<div class="section">
-  <div id="stamped-main-widget" class="stamped-main-widget stamped-style-borderless" data-widget-style="standard" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: " ? ", " % 3F" | replace: "& "," % 26"}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}"> {{ product.metafields.stamped.reviews }} </div>
+<style>
+    .section__product-reviews {
+        max-width: 1430px;
+
+        div.stamped-container[data-widget-style], div[data-widget-style] div.stamped-container {
+            max-width: 100%;
+        }
+
+        .summary-rating-bar > div {
+            background: #C9C433 !important;
+        }
+
+        div[data-widget-style] .summary-rating:first-child .summary-rating-title:before,
+        div[data-widget-style] .summary-rating:nth-child(2) .summary-rating-title:before,
+        div[data-widget-style] .summary-rating:nth-child(3) .summary-rating-title:before,
+        div[data-widget-style] .summary-rating:nth-child(4) .summary-rating-title:before,
+        div[data-widget-style] .summary-rating:nth-child(5) .summary-rating-title:before {
+            color: #C9C433;
+        }
+
+        .fa-star, .fa-star-o,
+        .fa-star-half-o,
+        .stamped-fa-star,
+        .stamped-fa-star-o,
+        .stamped-fa-star-half-o {
+            color: #C9C433 !important;
+        }
+
+        ul.stamped-tabs li.active {
+            color: #C9C433 !important;
+            border-color: #C9C433 !important;
+        }
+
+        .stamped-summary-actions-newquestion:before,
+        .stamped-summary-actions-newreview:before,
+        .stamped-summary-actions-mobile-filter i:before,
+        .stamped-summary-actions-clear:before {
+            color: #C9C433;
+        }
+
+        .stamped-pagination li {
+            font-family: "Instrument Serif", serif;
+            font-weight: 400;
+            line-height: 1;
+            transition: opacity .3s linear;
+            text-transform: none;
+        }
+
+        div[data-load-type=continue] ul.stamped-pagination li.next a,
+        div[data-widget-load-type=continue] ul.stamped-pagination li.next a {
+            padding: 13px 28px;
+            border-radius: 10px;
+            background: #1F5C8A;
+            border: none;
+
+
+            &:before {
+                font-size: 24px;
+            }
+
+            &:hover {
+                border: none;
+            }
+        }
+    }
+</style>
+
+<div class="section section__product-reviews">
+  <div id="stamped-main-widget" class="stamped-main-widget stamped-style-borderless" data-widget-style="standard"
+       data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}"
+       data-url="{{ shop.url }}{{ product.url }}"
+       data-image-url="{{ product.featured_image | product_img_url: "large" | replace: " ? ", " % 3F" | replace: "& ", " % 26" }}"
+       data-description="{{ product.description | escape }}"
+       data-product-sku="{{ product.handle }}"> {{ product.metafields.stamped.reviews }} </div>
 </div>
 {% schema %}
-  {
-    "name": "Product Reviews",
-    "settings": [
-    ],
-    "presets": [
-      {
-        "name": "Product Reviews"
-      }
-    ]
-  }
+{
+  "name": "Product Reviews",
+  "settings": [
+  ],
+  "presets": [
+    {
+      "name": "Product Reviews"
+    }
+  ]
+}
 {% endschema %}

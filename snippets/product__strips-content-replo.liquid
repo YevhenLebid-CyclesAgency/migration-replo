@@ -541,12 +541,12 @@
 
         .swatchCustom__item_new__benefits {
             margin-top: 16px;
-            margin-bottom: 39px;
+            margin-bottom: 22px;
 
             .swatchCustom__item_new__benefit-item {
                 color: #65645F;
                 font-family: Inter, sans-serif;
-                font-size: 14px;
+                font-size: 13px;
                 line-height: 1;
                 letter-spacing: -0.28px;
 
@@ -561,6 +561,10 @@
                 }
             }
         }
+    }
+
+    .swatchCustom__item_new__footer {
+        margin-top: 17px;
     }
 
     @media (max-width: 1024px) {
@@ -585,10 +589,6 @@
 
             .swatchCustom__item_new__benefits {
                 margin-bottom: 0;
-            }
-
-            .swatchCustom__item_new__footer {
-                margin-top: 17px;
             }
         }
     }
@@ -687,7 +687,7 @@
 		<h2 class="subtitle">The Original Mouth Tape&#8482;</h2>
 		<div class="d-flex justify-between">
 			<p class="total_price">
-				<span>{{ pack_1.price | money }}</span>
+				<span>{{ pack_3.price | money }}</span>
 			</p>
 		</div>
 
@@ -705,7 +705,8 @@
 		</div>
 
 		<div class="parent-items">
-			{% for variant in product.variants %}
+      {% assign checkoutButtonPrice = product.price | money %}
+      {% for variant in product.variants %}
 				{% assign comparePrice = variant.compare_at_price | plus: 0 %}
 				{% assign price = variant.price | plus: 0 %}
 
@@ -713,24 +714,29 @@
 				{% assign price_week = '' %}
 				{% assign benefits = '' %}
 
+        {% assign isSelected = false %}
+
 				{% if variant.title contains '12 Pack' %}
 					{% assign strips = '364' %}
-					{% assign month = '12 month' %}
+					{% assign month = '12 months' %}
 					{% assign compare = comparePrice | money %}
 					{% assign price_week = variant.price | divided_by: 52.0 | round: 2 | money %}
 					{% assign label = 'Best value' %}
 					{% assign labelClass = 'best-value' %}
 					{% assign planId = '2086633587' %}
+          {% assign isSelected = false %}
 
 				{% elsif variant.title contains '3 Pack' %}
+          {% assign checkoutButtonPrice = price %}
 					{% assign strips = '84' %}
-					{% assign month = '3 month' %}
+					{% assign month = '3 months' %}
 					{% assign compare = comparePrice | money %}
 					{% assign price_week = variant.price | divided_by: 12.0 | round: 2 | money %}
 					{% assign label = 'Most popular' %}
 					{% assign labelClass = 'most-popular' %}
 					{% assign planId = '2086568051' %}
-					{% assign benefits = "Modify or cancel anytime, Free shipping, Auto ships (every 3 mo)" %}
+					{% assign benefits = "Modify or cancel anytime, Free shipping, Auto ships (every 3 months)" %}
+          {% assign isSelected = true %}
 
 				{% elsif variant.title contains '1 Pack' %}
 					{% assign strips = '28' %}
@@ -742,7 +748,7 @@
 					{% assign planId = '' %}
 				{% endif %}
 
-				{% if variant.title == '1 Pack' or variant.title == '1 Pack / Gentle' %}
+				{% if variant.title == '3 Pack' %}
 					{% assign active = 'active' %}
 				{% endif %}
 
@@ -767,14 +773,24 @@
 						data-compare="{{ compare }}"
 						data-strips="{{ strips }}"
 				>
+          {% assign originalPrice = price | divided_by: 100.0 %}
+          {% assign subscriptionDiscount = 10 %}
+          {% assign discountFactor = subscriptionDiscount | divided_by: 100.0 %}
+          {% assign discountAmount = originalPrice | times: discountFactor %}
+          {% assign discountedPrice = originalPrice | minus: discountAmount | round: 2 %}
+          {% assign savings = comparePrice | minus: variant.price %}
 					<span class="swatchCustom__item_new-label swatchCustom__item_new-label--{{ labelClass }}">{{ label }}</span>
 					<div class="swatchCustom__item_new__wrapper">
 						<div class="swatchCustom__item_new__header">
 							<div class="swatchCustom__item_new__month">{{ month }}</div>
 							<div class="swatchCustom__item_new__strips">{{ strips }} mouth strips</div>
                             {% if month != '1 month' %}
-                                <label class="subscribe-custom">
-                                    <input class="subscribe-custom__checkbox" type="checkbox">
+                                <label
+                                  class="subscribe-custom"
+                                  data-original-price="{{ originalPrice }}"
+                                  data-discount-price="{{ discountedPrice }}"
+                                  data-original-savings="{{ savings | money }}">
+                                    <input class="subscribe-custom__checkbox {% if isSelected %}subscribe-custom__checkbox--checked{% endif %}" type="checkbox">
                                     <h5 class="subscribe-custom__header">Subscribe & save</h5>
                                 </label>
                             {% endif %}
@@ -802,13 +818,12 @@
 								and variant.title != '1 Pack / Gentle'
 								and variant.title != '1 Pack / Extra'
 								-%}
-                                    {% assign savings = comparePrice | minus: variant.price %}
                                     {% if savings > 0 %}
-                                        <span class="item_total__savings">Save {{ savings | money }}</span>
+                                        <span class="item_total__savings js_item_total__savings">Save <span class="js_item__savings">{{ savings | money }}</span></span>
                                     {% endif %}
                                     <div class="item_total__price_wrapper">
-                                        <span>{{ price | money }}</span>
-									    <span class="l-through"> {{ compare }} </span>
+                                        <span class="js_item__total_price">{{ price | money }}</span>
+									    <span class="l-through js_item__compare_price"> {{ compare }} </span>
                                     </div>
                                 {% else %}
                                     <span>{{ price | money }}</span>
@@ -820,31 +835,48 @@
 			{% endfor %}
 		</div>
 
-		<button class="to_checkout" data-product="{{ product.id }}">Add to cart <span class="to_checkout__price">{{ product.price | money }}</span></button>
+		<button class="to_checkout" data-product="{{ product.id }}">Add to cart <span class="to_checkout__price">{{ checkoutButtonPrice | money }}</span></button>
 
-        <span class="purchase-notice">* 30 day Risk-Free Trial</span>
+    <span class="purchase-notice">* 30 day Risk-Free Trial</span>
 	</div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        let $checkbox = $('.subscribe-custom__checkbox--checked');
+
+        setTimeout(() => {
+            $checkbox.prop('checked', true).trigger('change');
+        });
+
         let currency = '$';
 
         $(`.subscribe-custom__checkbox`).change(function (e) {
+            let $swatchCustom = $(this).closest('.swatchCustom__item_new');
+            let $subscribeCustom = $swatchCustom.find('.subscribe-custom');
+            let originalPrice = $subscribeCustom.data('originalPrice');
+            let discountPrice = $subscribeCustom.data('discountPrice');
+            let savingsAmount = (originalPrice - discountPrice).toFixed(2);
+            let $savings = $swatchCustom.find('.js_item__savings');
+            let originalSavings = ($subscribeCustom.data('originalSavings').replace('$', ''));
+            let totalSavings = (parseFloat(savingsAmount) + parseFloat(originalSavings)).toFixed(2);
+
+            let $itemTotalPrice = $swatchCustom.find('.js_item__total_price');
+
             let price = $('.parent-items .swatchCustom__item_new.active').data(`price`);
             let priceSubscribe = (+price - (+price * 10 / 100)).toFixed(2);
 
             if (e.currentTarget.checked) {
-                if ($('.parent-items .swatchCustom__item_new.active').data('title').includes('3 Pack')) {
-                    $('.total_price span').text(currency + priceSubscribe);
-                    $('.to_checkout__price').text(currency + priceSubscribe);
-                } else {
-                    $('.total_price span').text(currency + priceSubscribe);
-                    $('.to_checkout__price').text(currency + priceSubscribe);
-                }
+                $('.total_price span').text(currency + priceSubscribe);
+                $('.to_checkout__price').text(currency + priceSubscribe);
+                $savings.text(currency + totalSavings);
+                $itemTotalPrice.text(currency + discountPrice);
             } else {
                 $('.total_price span').text(currency + price);
                 $('.to_checkout__price').text(currency + price);
+                $savings.text(currency + originalSavings);
+                console.log(originalPrice)
+                $itemTotalPrice.text(currency + originalPrice);
             }
         })
 
@@ -853,7 +885,7 @@
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
 
-                $('.subscribe-custom__checkbox').prop("checked", false);
+                $('.subscribe-custom__checkbox').prop("checked", false).trigger('change');
 
                 let price = $(this).data('price');
 

@@ -91,6 +91,16 @@ enable_product_lightbox: <boolean>
     width: 25%;
   }
 
+  .product-gallery__image,
+  .product-gallery__link,
+  .image__container {
+    height: 100% !important;
+  }
+
+  .product-gallery__main img {
+    max-height: unset !important;
+  }
+
 {% endstyle %}
 
 {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
@@ -244,7 +254,6 @@ enable_product_lightbox: <boolean>
 </div>
 
 <script>
-
     document.addEventListener('DOMContentLoaded', function () {
         let galleryElement = document.querySelector('.product-gallery__main');
         let thumbnails = document.querySelectorAll('.product-gallery__thumbnails .product-gallery__thumbnail');
@@ -255,8 +264,30 @@ enable_product_lightbox: <boolean>
                 contain: true,
                 wrapAround: true,
                 pageDots: window.innerWidth < 768,
-                prevNextButtons: window.innerWidth > 768
+                prevNextButtons: window.innerWidth > 768,
+                on: {
+                    cellSelect: function () {
+                        updateViewportHeight();
+                    }
+                }
             });
+
+            function updateViewportHeight() {
+                let flickityViewport = document.querySelector(".flickity-viewport");
+                let selectedImage = document.querySelector(".flickity-slider .is-selected img");
+
+                if (!flickityViewport) {
+                    console.error("Flickity viewport not found!");
+                    return;
+                }
+
+                if (selectedImage) {
+                    let imageWidth = selectedImage.offsetWidth;
+                    flickityViewport.style.height = `${imageWidth}px`;
+                } else {
+                    console.error("No selected image found!");
+                }
+            }
 
             function updateActiveThumbnail(index) {
                 thumbnails.forEach(thumb => thumb.classList.remove('is-selected'));
