@@ -847,7 +847,8 @@
 
         setTimeout(() => {
             $checkbox.prop('checked', true).trigger('change');
-        });
+            console.log($checkbox.prop('checked'));
+        }, 0);
 
         let currency = '$';
 
@@ -875,7 +876,6 @@
                 $('.total_price span').text(currency + price);
                 $('.to_checkout__price').text(currency + price);
                 $savings.text(currency + originalSavings);
-                console.log(originalPrice)
                 $itemTotalPrice.text(currency + originalPrice);
             }
         })
@@ -901,7 +901,8 @@
         $('.to_checkout').click(async function () {
             try {
                 const itemId = $('.parent-items .swatchCustom__item_new.active').data('variant');
-                const planId = $('.parent-items .swatchCustom__item_new.active').data('planid')
+                const planId = $('.parent-items .swatchCustom__item_new.active').data('planid');
+
                 const productId = $(this).data('product');
 
                 let sale = 0;
@@ -919,13 +920,15 @@
                         'id': itemId,
                     }]
                 };
-                if (document.querySelector('.subscribe-custom__checkbox').checked) {
+
+                if (document.querySelector('.subscribe-custom__checkbox:checked')) {
                     formData = {
                         items: [{
                             id: itemId,
                             selling_plan: planId
                         }]
                     }
+
                     const cart = await fetch('/cart.js').then(res => res.json())
 
                     if (cart.items.length == 0) {
