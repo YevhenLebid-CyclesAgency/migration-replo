@@ -10,304 +10,366 @@
 %}
 
 <style>
-  .footer-2025 {
-    position: relative;
-    margin-top: clamp(9.063rem, 5.277rem + 7.89vw, 12.375rem);
+    .footer-2025 {
+        position: relative;
+        margin-top: clamp(9.063rem, 5.277rem + 7.89vw, 12.375rem);
 
-    .section {
-      max-width: 1400px;
-    }
-
-    background-color: #1F5C8A;
-
-    .footer__content {
-      background-color: #1F5C8A;
-      padding-top: clamp(2.5rem, 1.071rem + 2.98vw, 3.75rem);
-    }
-
-    .footer__content > .section {
-      flex-direction: column;
-    }
-
-    .footer-2025__content-left {
-      width: 50%;
-    }
-
-    .footer-2025__content-right {
-      width: 50%;
-    }
-
-    /* ========================= */
-    /* == Footer Subscribe == */
-    /* ========================= */
-
-    .footer-2025-subscribe {
-      max-width: 380px;
-
-      h4 {
-        color: #FFF;
-        font-family: "Instrument Serif", serif;
-        font-size: clamp(2.5rem, 1.929rem + 1.19vw, 3rem);
-        font-weight: 400;
-        line-height: clamp(2.75rem, 2.107rem + 1.34vw, 3.313rem);
-        margin-bottom: 20px;
-      }
-
-      .footer-2025-subscribe__description {
-        color: rgba(255, 255, 255, 0.80);
-        font-family: Inter, sans-serif;
-        font-size: 16px;
-        line-height: 24px;
-        margin-bottom: clamp(1.25rem, -0.75rem + 4.17vw, 3rem);
-      }
-    }
-
-    /* ========================= */
-    /* == Footer main content == */
-    /* ========================= */
-
-    .footer-2025__main-content {
-      .footer-2025__content-right {
-        display: flex;
-        column-gap: clamp(1.5rem, -2.5rem + 8.33vw, 5rem);
-        row-gap: clamp(2rem, -1.429rem + 7.14vw, 5rem);
-      }
-    }
-
-    .footer__heading {
-      color: #FFF;
-      font-family: "Instrument Serif", serif;
-      font-size: 28px;
-      font-weight: 400;
-      line-height: 31px;
-      margin-bottom: 20px;
-    }
-
-    .footer__menu-link {
-      margin-bottom: 24px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      a {
-        color: rgba(255, 255, 255, 0.80);
-        font-family: Inter, sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 16px;
-        transition: color .3s linear;
-
-        &:hover {
-          color: #fff;
-        }
-      }
-    }
-
-    .social-icons {
-      li {
-        padding-right: 16px;
-
-        &:last-child {
-          padding-right: 0;
-        }
-      }
-    }
-
-    .footer-2025__extra-content {
-      padding-top: clamp(2.5rem, -0.357rem + 5.95vw, 5rem);
-      padding-bottom: 16px;
-      gap: clamp(1.25rem, 0.679rem + 1.19vw, 1.75rem);
-
-      .footer-2025__content-right {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: end;
-        justify-content: space-between;
-        gap: 20px;
-
-        .footer__menu {
-          .footer__heading {
-            display: none;
-          }
+        .section {
+            max-width: 1400px;
         }
 
-        ul {
-          display: flex;
-          gap: 16px;
-          flex-wrap: wrap;
+        background-color: #1F5C8A;
 
-          li {
-            margin: 0;
+        .footer__content {
+            background-color: #1F5C8A;
+            padding-top: clamp(2.5rem, 1.071rem + 2.98vw, 3.75rem);
+        }
+
+        .footer__content > .section {
+            flex-direction: column;
+        }
+
+        .footer-2025__content-left {
+            width: 50%;
+        }
+
+        .footer-2025__content-right {
+            width: 50%;
+        }
+
+        /* ========================= */
+        /* == Footer Subscribe == */
+        /* ========================= */
+
+        .footer-2025-subscribe {
+            max-width: 380px;
+
+            h4 {
+                color: #FFF;
+                font-family: "Instrument Serif", serif;
+                font-size: clamp(2.5rem, 1.929rem + 1.19vw, 3rem);
+                font-weight: 400;
+                line-height: clamp(2.75rem, 2.107rem + 1.34vw, 3.313rem);
+                margin-bottom: 20px;
+            }
+
+            .footer-2025-subscribe__description {
+                color: rgba(255, 255, 255, 0.80);
+                font-family: Inter, sans-serif;
+                font-size: 16px;
+                line-height: 24px;
+                margin-bottom: clamp(1.25rem, -0.75rem + 4.17vw, 3rem);
+            }
+
+            button[type="button"] {
+                font-family: "Instrument Serif", serif !important;
+
+                transition: background-color .3s linear;
+
+                &:hover {
+                    background-color: #ffffffe6 !important;
+                }
+
+                &:focus {
+                    background-color: #fffc !important;
+                }
+            }
+        }
+
+        /* ========================= */
+        /* == Footer main content == */
+        /* ========================= */
+
+        .footer-2025__main-content {
+            .footer-2025__content-right {
+                display: flex;
+                column-gap: clamp(1.5rem, -2.5rem + 8.33vw, 5rem);
+                row-gap: clamp(2rem, -1.429rem + 7.14vw, 5rem);
+            }
+        }
+
+        .footer__heading {
+            color: #FFF;
+            font-family: "Instrument Serif", serif;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 31px;
+            margin-bottom: 20px;
+        }
+
+        .footer__menu-link {
+            margin-bottom: 24px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
 
             a {
-              color: rgba(255, 255, 255, 0.5);
-              font-family: Inter, sans-serif;
-              font-size: 16px;
-              font-weight: 400;
-              line-height: 24px;
-              transition: color .3s linear;
+                color: rgba(255, 255, 255, 0.80);
+                font-family: Inter, sans-serif;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 16px;
+                transition: color .3s linear;
 
-              &:hover {
-                color: #fff;
-              }
+                &:hover {
+                    color: #fff;
+                }
             }
-          }
-        }
-      }
-
-      .footer-2025__copyright {
-        p, a {
-          color: rgba(255, 255, 255, 0.5);
-          font-family: Inter, sans-serif;
-          font-size: 16px;
-          font-weight: 400;
-          line-height: 24px;
-          transition: color .3s linear;
         }
 
-        a {
-          &:hover {
-            color: #fff;
-          }
+        .social-icons {
+            li {
+                padding-right: 16px;
+
+                &:last-child {
+                    padding-right: 0;
+                }
+            }
         }
-      }
-    }
 
-    .footer-2025__decorative-element {
-      position: absolute;
-      top: calc(clamp(9.063rem, 5.277rem + 7.89vw, 12.375rem) * -1);
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+        .footer-2025__extra-content {
+            padding-top: clamp(2.5rem, -0.357rem + 5.95vw, 5rem);
+            padding-bottom: 16px;
+            gap: clamp(1.25rem, 0.679rem + 1.19vw, 1.75rem);
 
-    .footer-2025__decorative-element-mobile {
-        display: none;
-    }
+            .footer-2025__content-right {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: end;
+                justify-content: space-between;
+                gap: 20px;
 
-    @media screen and (max-width: 1024px) {
-      .footer-2025__decorative-element {
-        object-fit: cover;
-      }
+                .footer__menu {
+                    .footer__heading {
+                        display: none;
+                    }
+                }
 
-      .footer-2025__content-left,
-      .footer-2025__content-right {
-        width: 100%;
-      }
+                ul {
+                    display: flex;
+                    gap: 16px;
+                    flex-wrap: wrap;
 
-      .footer-2025-subscribe {
-        margin: 0 auto;
-      }
+                    li {
+                        margin: 0;
 
-      .social-icons {
-        justify-content: center;
-      }
+                        a {
+                            color: rgba(255, 255, 255, 0.5);
+                            font-family: Inter, sans-serif;
+                            font-size: 16px;
+                            font-weight: 400;
+                            line-height: 24px;
+                            transition: color .3s linear;
 
-      .footer-2025__main-content {
-        flex-wrap: wrap;
-        gap: 40px;
+                            &:hover {
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+            }
 
-        .footer-2025__content-right {
-          flex-wrap: wrap;
-          justify-content: center;
+            .footer-2025__copyright {
+                p, a {
+                    color: rgba(255, 255, 255, 0.5);
+                    font-family: Inter, sans-serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    transition: color .3s linear;
+                }
+
+                a {
+                    &:hover {
+                        color: #fff;
+                    }
+                }
+            }
         }
-      }
 
-      .footer-2025__extra-content {
-        flex-wrap: wrap;
-
-        .footer-2025__content-right {
-          flex-direction: column;
-          align-items: flex-start;
-          justify-content: end;
-
-          .footer__menu {
-            order: 1;
+        .footer-2025__decorative-element {
+            position: absolute;
+            top: calc(clamp(9.063rem, 5.277rem + 7.89vw, 12.375rem) * -1);
+            left: 0;
             width: 100%;
+            height: 100%;
+        }
 
-            ul {
-              justify-content: center;
+        .footer-2025__decorative-element-mobile {
+            display: none;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .footer-2025__decorative-element {
+                object-fit: cover;
             }
-          }
-        }
 
-        .footer-2025__content-left {
-          text-align: center;
-        }
-
-        .footer-2025__copyright {
-          order: 2;
-          width: 100%;
-          text-align: center;
-        }
-      }
-    }
-
-    @media screen and (max-width: 576px) {
-      .footer-2025-subscribe {
-        margin: 0;
-      }
-
-      .social-icons {
-        justify-content: flex-start;
-      }
-
-      .footer-2025__socials-wrapper {
-        width: 100%;
-      }
-
-      .footer-2025__main-content {
-        .footer-2025__content-right {
-          justify-content: flex-start;
-          column-gap: 56px;
-        }
-      }
-
-      .footer-2025__extra-content {
-
-        .footer-2025__content-left {
-          text-align: left;
-        }
-
-        .footer-2025__content-right {
-          .footer__menu {
-            ul {
-              justify-content: space-between;
+            .footer-2025__content-left,
+            .footer-2025__content-right {
+                width: 100%;
             }
-          }
+
+            .footer-2025-subscribe {
+                margin: 0 auto;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+
+            .footer-2025__main-content {
+                flex-wrap: wrap;
+                gap: 40px;
+
+                .footer-2025__content-right {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+            }
+
+            .footer-2025__extra-content {
+                flex-wrap: wrap;
+
+                .footer-2025__content-right {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: end;
+
+                    .footer__menu {
+                        order: 1;
+                        width: 100%;
+
+                        ul {
+                            justify-content: center;
+                        }
+                    }
+                }
+
+                .footer-2025__content-left {
+                    text-align: center;
+                }
+
+                .footer-2025__copyright {
+                    order: 2;
+                    width: 100%;
+                    text-align: center;
+                }
+            }
         }
 
-        .footer-2025__copyright {
-          text-align: left;
+        @media screen and (max-width: 576px) {
+            .footer-2025-subscribe {
+                margin: 0;
+            }
+
+            .social-icons {
+                justify-content: flex-start;
+            }
+
+            .footer-2025__socials-wrapper {
+                width: 100%;
+            }
+
+            .footer-2025__main-content {
+                .footer-2025__content-right {
+                    justify-content: flex-start;
+                    column-gap: 56px;
+                }
+            }
+
+            .footer-2025__extra-content {
+
+                .footer-2025__content-left {
+                    text-align: left;
+                }
+
+                .footer-2025__content-right {
+                    .footer__menu {
+                        ul {
+                            justify-content: space-between;
+                        }
+                    }
+                }
+
+                .footer-2025__copyright {
+                    text-align: left;
+                }
+            }
+
+            .footer-2025__decorative-element {
+                display: none;
+            }
+
+            .footer-2025__decorative-element-mobile {
+                display: block;
+                position: relative;
+                top: calc(clamp(3.438rem, 2.656rem + 3.91vw, 4.063rem) * -1);
+                width: 100%;
+            }
         }
-      }
 
-      .footer-2025__decorative-element {
-          display: none;
-      }
+        /* ========================= */
+        /* == Success Message == */
+        /* ========================= */
 
-      .footer-2025__decorative-element-mobile {
-          display: block;
-          position: relative;
-          top: calc(clamp(3.438rem, 2.656rem + 3.91vw, 4.063rem) * -1);
-          width: 100%;
-      }
+        .klaviyo-form-TXzCvP:empty + .newsletter-form-2025-success .newsletter-form-2025-success__wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .newsletter-form-2025-success__wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s ease-out;
+        }
+
+        .newsletter-form-2025-success__inner {
+            overflow: hidden;
+        }
+
+        .newsletter-form-2025-success {
+            max-width: 360px;
+            border-radius: 10px;
+            background: #ECEAE5;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .newsletter-form-2025-success__header {
+            padding: 16px 16px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+
+            color: #333;
+            font-family: "Instrument Serif", serif;
+            font-size: 28px;
+            line-height: 31px;
+        }
+
+        .newsletter-form-2025-success__content {
+            padding: 0 16px 16px 16px;
+            color: #65645F;
+            font-family: Inter, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        }
     }
-  }
 </style>
 
 {% style %}
   {% render 'css-loop',
-          css: custom_css,
-          id: id
+    css: custom_css,
+    id: id
   %}
 {% endstyle %}
 
 {% comment %} HTML markup {% endcomment %}
 <footer class="footer__container {{ css_class }}">
-  <img class="footer-2025__decorative-element-mobile" src="{{ 'footer-decorative-element-mobile.png' | asset_url }}" alt="footer decorative element">
-  <img class="footer-2025__decorative-element" src="{{ 'footer-decorative-element.png' | asset_url }}" alt="footer decorative element">
+  <img class="footer-2025__decorative-element-mobile" src="{{ 'footer-decorative-element-mobile.png' | asset_url }}"
+       alt="footer decorative element">
+  <img class="footer-2025__decorative-element" src="{{ 'footer-decorative-element.png' | asset_url }}"
+       alt="footer decorative element">
   <section class="footer__content
                   section">
     <div class="container is-flex-column">
@@ -316,29 +378,50 @@
           <div class="footer-2025__subscribe footer-2025-subscribe">
             <h4>{{ section.settings.subscribe_title }}</h4>
             <div class="footer-2025-subscribe__description">{{ section.settings.subscribe_description }}</div>
-            {%
-                    render 'newsletter-form-2025',
-                    type: 'block',
-                    id: 'footer',
-            %}
+            <div class="klaviyo-form-TXzCvP"></div>
+            <div class="newsletter-form-2025__success newsletter-form-2025-success">
+              <div class="newsletter-form-2025-success__wrapper">
+                <div class="newsletter-form-2025-success__inner">
+                  <div class="newsletter-form-2025-success__header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                      <g clip-path="url(#clip0_2081_927)">
+                        <circle cx="16" cy="16" r="16" fill="#E3E1D8"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M0.389218 29.9233L6.9325 16.2187C7.10969 15.8478 7.45562 15.5863 7.86062 15.5167C8.26562 15.447 8.67906 15.5787 8.96973 15.8689L16.1311 23.0302C16.4213 23.3209 16.5529 23.7344 16.4833 24.1394C16.4137 24.5444 16.1522 24.8903 15.7813 25.0675L2.07672 31.6108C1.59241 31.842 1.0157 31.7428 0.636437 31.3635C0.257171 30.9843 0.158031 30.4076 0.389218 29.9233ZM2.78083 26.8727L1.1507 30.2869C1.0735 30.4485 1.10641 30.6405 1.23297 30.767C1.35953 30.8936 1.55191 30.9265 1.71306 30.8493L7.15778 28.2497C5.66814 27.9046 4.2093 27.4452 2.78083 26.8727ZM8.4078 27.6527L12.1848 25.8496C11.5271 25.7564 10.8732 25.6488 10.2235 25.5265C9.99447 25.4835 9.84386 25.2628 9.88689 25.0337C9.92992 24.8051 10.1506 24.654 10.3796 24.6971C11.4398 24.8966 12.511 25.0569 13.5926 25.1772L15.4177 24.306C15.5413 24.2469 15.6286 24.1318 15.6518 23.9968C15.675 23.8618 15.6311 23.7238 15.5341 23.6268L8.3732 16.4659C8.27617 16.3688 8.13822 16.325 8.00322 16.3482C7.86822 16.3714 7.75305 16.4587 7.69398 16.5823L4.55059 23.1661C5.27411 23.412 6.00269 23.6382 6.73633 23.8445C6.96076 23.9073 7.09155 24.1406 7.02869 24.3646C6.96541 24.5887 6.73253 24.7199 6.50809 24.6566C5.72762 24.4372 4.95306 24.1959 4.18441 23.9326L3.14491 26.1099C4.85476 26.7908 6.60892 27.306 8.4078 27.6527ZM8.13906 25.081C7.91252 25.0266 7.77287 24.7987 7.82687 24.5726C7.8813 24.3461 8.10911 24.206 8.33566 24.2604C8.4812 24.2955 8.62675 24.3292 8.77272 24.363C8.99969 24.4144 9.14228 24.641 9.09039 24.8679C9.0385 25.0949 8.81195 25.2371 8.58498 25.1852C8.43606 25.1514 8.28756 25.1164 8.13906 25.081ZM12.5316 9.48722L12.9885 8.87212C13.148 8.65739 13.399 8.53125 13.666 8.53125C13.9331 8.53125 14.1841 8.65739 14.3436 8.87212L14.8005 9.48722L15.5274 9.73191C15.7801 9.81712 15.9779 10.0171 16.0606 10.2711C16.1429 10.525 16.1003 10.8026 15.9459 11.0203L15.5016 11.6455L15.4936 12.4121C15.4907 12.6791 15.362 12.9289 15.146 13.0858C14.93 13.2427 14.6524 13.2883 14.3976 13.2082L13.666 12.9791L12.9345 13.2082C12.6793 13.2883 12.4021 13.2427 12.1861 13.0858C11.9701 12.9289 11.841 12.6791 11.8385 12.4121L11.8305 11.6455L11.3862 11.0203C11.2314 10.8026 11.1892 10.525 11.2715 10.2711C11.3542 10.0171 11.552 9.81712 11.8047 9.73191L12.5316 9.48722ZM12.0739 10.5318L12.5181 11.1566C12.6177 11.2971 12.6721 11.4645 12.6738 11.6367L12.6822 12.4032L13.4138 12.1737C13.5779 12.1222 13.7542 12.1222 13.9183 12.1737L14.6499 12.4032L14.6579 11.6367C14.66 11.4645 14.7144 11.2971 14.814 11.1566L15.2582 10.5318L14.5313 10.2871C14.368 10.2322 14.2259 10.1289 14.1234 9.99052L13.666 9.375L13.2087 9.99052C13.1062 10.1289 12.9636 10.2322 12.8008 10.2871L12.0739 10.5318ZM21.164 8.22159L21.6213 7.6065C21.7804 7.39177 22.0318 7.26562 22.2985 7.26562C22.5655 7.26562 22.8169 7.39177 22.976 7.6065L23.4333 8.22159L24.1598 8.46628C24.4129 8.5515 24.6108 8.75147 24.693 9.00544C24.7757 9.25941 24.7331 9.537 24.5783 9.75469L24.1345 10.3799L24.126 11.1465C24.1235 11.4135 23.9944 11.6632 23.7784 11.8202C23.5624 11.9771 23.2848 12.0227 23.0304 11.9425L22.2985 11.7135L21.5669 11.9425C21.3121 12.0227 21.0349 11.9771 20.8189 11.8202C20.6029 11.6632 20.4738 11.4135 20.4709 11.1465L20.4629 10.3799L20.0186 9.75469C19.8642 9.537 19.8216 9.25941 19.9043 9.00544C19.9866 8.75147 20.1844 8.5515 20.4376 8.46628L21.164 8.22159ZM20.7067 9.26616L21.1505 9.89095C21.2505 10.0314 21.3049 10.1989 21.3066 10.371L21.3146 11.1376L22.0462 10.9081C22.2107 10.8566 22.3866 10.8566 22.5507 10.9081L23.2827 11.1376L23.2907 10.371C23.2924 10.1989 23.3468 10.0314 23.4464 9.89095L23.8906 9.26616L23.1641 9.02147C23.0009 8.96662 22.8583 8.86327 22.7558 8.72489L22.2985 8.10937L21.8416 8.72489C21.7386 8.86327 21.5965 8.96662 21.4332 9.02147L20.7067 9.26616ZM19.8984 15.3935L20.3557 14.7784C20.5148 14.5636 20.7662 14.4375 21.0328 14.4375C21.2999 14.4375 21.5513 14.5636 21.7104 14.7784L22.1677 15.3935L22.8941 15.6382C23.1473 15.7234 23.3451 15.9233 23.4274 16.1773C23.5101 16.4313 23.4675 16.7089 23.3126 16.9266L22.8688 17.5518L22.8604 18.3183C22.8579 18.5854 22.7288 18.8351 22.5128 18.9921C22.2968 19.149 22.0192 19.1946 21.7648 19.1144L21.0328 18.8853L20.3013 19.1144C20.0465 19.1946 19.7693 19.149 19.5533 18.9921C19.3373 18.8351 19.2082 18.5854 19.2053 18.3183L19.1973 17.5518L18.753 16.9266C18.5986 16.7089 18.556 16.4313 18.6387 16.1773C18.721 15.9233 18.9188 15.7234 19.1719 15.6382L19.8984 15.3935ZM19.4411 16.438L19.8849 17.0628C19.9849 17.2033 20.0393 17.3708 20.041 17.5429L20.049 18.3095L20.7805 18.08C20.9451 18.0285 21.121 18.0285 21.2851 18.08L22.0171 18.3095L22.0251 17.5429C22.0268 17.3708 22.0812 17.2033 22.1807 17.0628L22.625 16.438L21.8985 16.1933C21.7352 16.1385 21.5927 16.0351 21.4901 15.8968L21.0328 15.2812L20.5759 15.8968C20.473 16.0351 20.3308 16.1385 20.1676 16.1933L19.4411 16.438ZM14.4858 18.1108C14.3212 18.2753 14.0537 18.2753 13.8892 18.1108C13.7247 17.9462 13.7247 17.6788 13.8892 17.5142L18.9517 12.4517C19.1162 12.2872 19.3837 12.2872 19.5483 12.4517C19.7128 12.6163 19.7128 12.8837 19.5483 13.0483L14.4858 18.1108ZM13.2066 16.8582C13.0345 17.0156 12.767 17.0033 12.6105 16.8316C12.4532 16.6595 12.4654 16.3925 12.6371 16.2355C13.361 15.574 13.7504 14.918 13.3893 14.2063C13.2843 13.9987 13.3669 13.7448 13.5749 13.6393C13.7825 13.5343 14.0365 13.617 14.1419 13.8249C14.6714 14.8687 14.2685 15.8883 13.2066 16.8582ZM16.1927 19.3557C16.0391 19.5312 15.7725 19.5489 15.5974 19.3958C15.4219 19.2422 15.4042 18.9756 15.5573 18.8005C16.2973 17.9547 17.1001 17.3919 17.9839 17.3906C18.2168 17.3902 18.4058 17.5792 18.4062 17.8121C18.4067 18.045 18.2177 18.234 17.9848 18.2344C17.3191 18.2352 16.75 18.7187 16.1927 19.3557Z"
+                              fill="#333333"/>
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_2081_927">
+                          <rect width="32" height="32" rx="16" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    You’ve been subscribed!
+                  </div>
+                  <div class="newsletter-form-2025-success__content">
+                    Check you inbox. You will receive advice, exclusive offers, and surprises.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="footer-2025__content-right">
           {% render 'footer__menu-2025', menu_link: section.settings.menu_1, menu_title: section.settings.menu_1_title %}
           {% render 'footer__menu-2025', menu_link: section.settings.menu_2, menu_title: section.settings.menu_2_title %}
-            {% if section.settings.social_icons_footer %}
-              <div class="footer-2025__socials-wrapper is-justify-space-between">
-                  <p class="footer__heading">Socials</p>
-                  {% render 'social-icons-2025' %}
-              </div>
-            {% endif %}
+          {% if section.settings.social_icons_footer %}
+            <div class="footer-2025__socials-wrapper is-justify-space-between">
+              <p class="footer__heading">Socials</p>
+              {% render 'social-icons-2025' %}
+            </div>
+          {% endif %}
         </div>
       </div>
 
       <div class="footer-2025__extra-content is-flex">
         <div class="footer-2025__content-left">
           <a href="{{ shop.url }}">
-            <img src="{{ section.settings.footer_logo | img_url }}" alt="{{ shop.name }}" />
+            <img src="{{ section.settings.footer_logo | img_url }}" alt="{{ shop.name }}"/>
           </a>
         </div>
 
@@ -354,87 +437,108 @@
   </section>
 </footer>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const formElement = document.querySelector(".klaviyo-form-TXzCvP");
+        const targetElement = document.querySelector("#targetElement");
+
+        if (formElement && targetElement) {
+            const checkForm = () => {
+                console.log(formElement)
+                if (!formElement.innerHTML.trim() || getComputedStyle(formElement).display === "none") {
+                    targetElement.style.display = "block";
+                }
+            };
+
+            const observer = new MutationObserver(checkForm);
+            observer.observe(formElement, {childList: true, subtree: true, attributes: true});
+
+            checkForm();
+        }
+    });
+</script>
+
 {% schema %}
-  {
-    "name": "Footer 2025",
-    "class": "footer footer--classic footer-2025",
-    "settings": [
-      {
-        "type": "textarea",
-        "id": "subscribe_title",
-        "label": "Subscribe Title"
-      },
-      {
-        "type": "textarea",
-        "id": "subscribe_description",
-        "label": "Subscribe Description"
-      },
-      {
-        "type": "text",
-        "id": "menu_1_title",
-        "label": "Menu 1 Title",
-        "default": "About"
-      },
-      {
-        "type": "link_list",
-        "id": "menu_1",
-        "label": "Menu 1",
-        "info": "Select the first menu."
-      },
-      {
-        "type": "text",
-        "id": "menu_2_title",
-        "label": "Menu 2 Title",
-        "default": "Socials"
-      },
-      {
-        "type": "link_list",
-        "id": "menu_2",
-        "label": "Menu 2",
-        "info": "Select the second menu."
-      },
-      {
-        "type": "checkbox",
-        "id": "social_icons_footer",
-        "label": "Show social media icons",
-        "default": false
-      },
-      {
-        "type": "image_picker",
-        "id": "footer_logo",
-        "label": "Image"
-      },
-      {
-        "type": "richtext",
-        "id": "copyright_text",
-        "label": "Copyright text"
-      },
-      {
-        "type": "link_list",
-        "id": "menu_3",
-        "label": "Menu 3",
-        "info": "Select the third menu."
-      },
-      {
-        "type": "paragraph",
-        "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
-      },
-      {
-        "type": "text",
-        "id": "css_class",
-        "label": "CSS Class"
-      },
-      {
-        "type": "textarea",
-        "id": "custom_css",
-        "label": "Custom CSS"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Footer 2025",
-        "category": "Image"
-      }
-    ]
-  }
+{
+  "name": "Footer 2025",
+  "class": "footer footer--classic footer-2025",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "subscribe_title",
+      "label": "Subscribe Title"
+    },
+    {
+      "type": "textarea",
+      "id": "subscribe_description",
+      "label": "Subscribe Description"
+    },
+    {
+      "type": "text",
+      "id": "menu_1_title",
+      "label": "Menu 1 Title",
+      "default": "About"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu 1",
+      "info": "Select the first menu."
+    },
+    {
+      "type": "text",
+      "id": "menu_2_title",
+      "label": "Menu 2 Title",
+      "default": "Socials"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu 2",
+      "info": "Select the second menu."
+    },
+    {
+      "type": "checkbox",
+      "id": "social_icons_footer",
+      "label": "Show social media icons",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Image"
+    },
+    {
+      "type": "richtext",
+      "id": "copyright_text",
+      "label": "Copyright text"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Menu 3",
+      "info": "Select the third menu."
+    },
+    {
+      "type": "paragraph",
+      "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer 2025",
+      "category": "Image"
+    }
+  ]
+}
 {% endschema %}

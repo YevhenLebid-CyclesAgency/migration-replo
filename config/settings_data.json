@@ -65,7 +65,8 @@
     "instagram_link": "https://www.instagram.com/somnifix/",
     "tiktok_link": "https://www.tiktok.com/@somnifix",
     "x_link": "https://x.com/SomniFix",
-    "favicon": "shopify://shop_images/SMFX-Favicon_30x30_c977f1d3-33c7-4c12-9b2d-22f5ce211b60.png",
+    "favicon": "shopify://shop_images/Screenshot_2025-03-14_at_18.10.37.png",
+    "cart_action": "mini_cart",
     "show_lock_icon": false,
     "sections": {
       "product__main__strips": {
