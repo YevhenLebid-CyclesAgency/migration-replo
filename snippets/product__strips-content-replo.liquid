@@ -567,6 +567,12 @@
         }
     }
 
+    .swatchCustom__item_new:not(.active) {
+        .subscribe-custom {
+            pointer-events: none;
+        }
+    }
+
     .swatchCustom__item_new__footer {
         margin-top: 17px;
     }
@@ -890,12 +896,7 @@
                 $(this).addClass('active');
 
                 $('.subscribe-custom__checkbox').prop("checked", false).trigger('change');
-
-                let price = $(this).data('price');
-
-                $('.to_checkout__price').text(currency + price);
-
-                $('.total_price span').text(currency + price);
+                $(this).find('.subscribe-custom__checkbox').prop("checked", true).trigger('change');
             } else {
                 $('.popup_btn').eq(0).click();
             }
