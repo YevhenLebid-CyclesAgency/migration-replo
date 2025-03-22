@@ -120,11 +120,16 @@
     {% endif %}
 >
   <div class="product-{{ product.id }}">
+    {% if section.settings.product != blank %}
+      {% assign product = all_products[section.settings.product] %}
+    {% endif %}
+
     {% render 'product__strips-replo',
         product: product,
         sold_out_options: settings.sold_out_options,
         selected_variant: selected_variant,
         width: width,
+
         css_class: css_class,
         display_thumbnails: section.settings.display_thumbnails,
         enable_product_lightbox: section.settings.enable_product_lightbox,
@@ -152,20 +157,20 @@
 >
   {
       "product": {{ product | json }},
-        "section_id": {{ section.id | json }},
-        "product_recommendation_limit": {{ product_recommendation_limit | json }},
-        "display_savings": {{ display_savings }},
-        "gallery_arrows": {{ section.settings.gallery_arrows | json }},
-        "thumbnail_arrows": {{ section.settings.gallery_arrows | json }},
-        "enable_zoom": {{ section.settings.enable_zoom | json }},
-        "enable_product_lightbox": {{ section.settings.enable_product_lightbox | json }},
-        "enable_thumbnail_slider": {{ section.settings.enable_thumbnail_slider | json }},
-        "slideshow_speed": {{ section.settings.slideshow_speed | json }},
-        "slideshow_transition": {{ section.settings.slideshow_transition | json }},
-        "thumbnails_enabled": {{ section.settings.display_thumbnails | json }},
-        "thumbnail_position": {{ section.settings.thumbnail_position | json }},
-        "product_media_amount": {{ product.media.size }},
-        "template": "classic"
+      "section_id": {{ section.id | json }},
+      "product_recommendation_limit": {{ product_recommendation_limit | json }},
+      "display_savings": {{ display_savings }},
+      "gallery_arrows": {{ section.settings.gallery_arrows | json }},
+      "thumbnail_arrows": {{ section.settings.gallery_arrows | json }},
+      "enable_zoom": {{ section.settings.enable_zoom | json }},
+      "enable_product_lightbox": {{ section.settings.enable_product_lightbox | json }},
+      "enable_thumbnail_slider": {{ section.settings.enable_thumbnail_slider | json }},
+      "slideshow_speed": {{ section.settings.slideshow_speed | json }},
+      "slideshow_transition": {{ section.settings.slideshow_transition | json }},
+      "thumbnails_enabled": {{ section.settings.display_thumbnails | json }},
+      "thumbnail_position": {{ section.settings.thumbnail_position | json }},
+      "product_media_amount": {{ product.media.size }},
+      "template": "classic"
   }
 </script>
 
@@ -178,6 +183,11 @@
   "name": "Product information replo",
   "class": "product-template product-main has-sidebar-option jsProduct section--has-sidebar-option",
   "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
     {
       "type": "header",
       "content": "Media",

@@ -1,3 +1,7 @@
+{% comment %}
+    @param product
+{% endcomment %}
+
 {%- for variant in product.variants -%}
 	{% assign variant_title = variant.title | downcase %}
 	{% if variant_title contains '1 pack' %}

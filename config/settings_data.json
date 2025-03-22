@@ -112,7 +112,8 @@
       "product__main__strips-replo": {
         "type": "product__main__strips-replo",
         "settings": {
-          "product_images_position": "left",
+          "product": "mouth-strips-snoring-sleep-aids",
+          "product_images_position": "right",
           "set_product_height": true,
           "product_height": 600,
           "video_looping": false,
