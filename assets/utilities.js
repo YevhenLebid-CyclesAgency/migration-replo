@@ -1,5 +1,32 @@
 "use strict";
 
+$(document).on('click', '.js-ajax-cart-form-alert__header-close', function (e) {
+  e.preventDefault();
+  let $ajaxAlertElement = $(this).closest('.js-ajax-cart-form-alert');
+  if ($ajaxAlertElement.length) {
+    $ajaxAlertElement.removeClass('has-info');
+  }
+});
+
+$(document).on('change', '.js-subscribe-custom__checkbox-trigger', function (e) {
+  let $subscribeCheckbox = $(this);
+  let $subscribeCustom = $subscribeCheckbox.parents('.subscribe-custom');
+  let lineId = $subscribeCustom.data('lineItem');
+  let planId = $subscribeCheckbox.is(':checked') ? $subscribeCustom.data('planid') : '';
+  let $ajaxCartProduct = $subscribeCustom.parents('.ajax-cart__product-content');
+  let $quantityBox = $ajaxCartProduct.find('.product-quantity-box');
+  let $input = $('.quantity-input', $quantityBox);
+  let val = parseInt($input.val());
+
+  let $cartCard = $('.cart__card[data-line-item="' + lineId + '"]');
+  let $otherSubscribeCheckbox = $cartCard.find('.subscribe-custom__checkbox');
+
+  if (lineId) {
+    let $disabledElement = $('.ajax-cart.ajax-cart--drawer');
+    window.PXUTheme.quantityBox.updateCart(lineId, val, planId, $disabledElement, $subscribeCheckbox, $otherSubscribeCheckbox);
+  }
+})
+
 window.PXUTheme.contentCreator.accordion = {
   init: function () {
     const $accordionHeading = $('.accordion > dt > a, [data-cc-accordion] > dt > a');
@@ -982,9 +1009,13 @@ window.PXUTheme.quantityBox = {
     const $quantityBox = $el.parents('.product-quantity-box');
     const $input = $('.quantity-input', $quantityBox);
     const lineID = $quantityBox.parents('[data-line-item]').data('line-item');
+    const planId = $quantityBox.parents('[data-line-item]').data('planid');
     let val = parseInt($input.val());
     let valMax = 100000000000000000;
     let valMin = $input.attr('min') || 0;
+
+    let $ajaxFormAlert = $('.js-ajax-cart-form-alert');
+
     if ($input.attr('max') != null) {
       valMax = $input.attr('max');
     }
@@ -992,9 +1023,15 @@ window.PXUTheme.quantityBox = {
       $input.val(valMin);
       return false;
     } else if (val > valMax) {
+      if ($ajaxFormAlert) {
+        $ajaxFormAlert.find('.js-ajax-cart-form-alert__message').text(`Only ${valMax} items could be added to your card due to availability`);
+        $ajaxFormAlert.addClass('has-info');
+      }
+
       $input.val(valMax);
       return false;
     }
+
     if ($el.data('update-quantity') === 'plus') {
       // Increase quantity input by one
       if (val < valMax) {
@@ -1012,18 +1049,22 @@ window.PXUTheme.quantityBox = {
     // Update quantity if within cart (vs on the product page)
     if ($el.parents('[data-line-item]').length) {
       const lineID = $quantityBox.data('line-item-key');
-      window.PXUTheme.quantityBox.updateCart(lineID, val);
+      let $disabledElement = $('.ajax-cart.ajax-cart--drawer');
+      window.PXUTheme.quantityBox.updateCart(lineID, val, planId, $disabledElement);
     }
 
     // Call to update quantity controls
     window.PXUTheme.quantityBox.updateQuantityControls($el);
   },
-  updateCart: function (lineID, quantity) {
+  updateCart: function (lineID, quantity, sellingPlan, $disabledElement = null, $subscribeCheckbox = null, $otherSubscribeCheckbox = null) {
     $('.quantity-warning').removeClass('animated bounceIn');
+    if ($disabledElement) {
+      $disabledElement.addClass('disabled');
+    }
     $.ajax({
       type: 'POST',
       url: '/cart/change.js',
-      data: `quantity=${quantity}&line=${lineID}`,
+      data: `quantity=${quantity}&line=${lineID}&selling_plan=${sellingPlan}`,
       dataType: 'json',
       success: function (cart) {
         let newQuantity = 0;
@@ -1069,10 +1110,24 @@ window.PXUTheme.quantityBox = {
         if (window.PXUTheme.jsCart) {
           window.PXUTheme.jsCart.updateView(cart, lineID);
         }
+
+        if ($disabledElement) {
+          $disabledElement.removeClass('disabled');
+        }
+
+        if ($otherSubscribeCheckbox && $subscribeCheckbox) {
+          if ($otherSubscribeCheckbox.is(':checked') !== $subscribeCheckbox.is(':checked')) {
+            $otherSubscribeCheckbox.prop('checked', $subscribeCheckbox.is(':checked'));
+          }
+        }
       },
       error: function (XMLHttpRequest, textStatus) {
         var response = eval('(' + XMLHttpRequest.responseText + ')');
         response = response.description;
+
+        if ($disabledElement) {
+          $disabledElement.removeClass('disabled');
+        }
       }
     });
   },

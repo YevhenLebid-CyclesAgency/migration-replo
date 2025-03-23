@@ -14,6 +14,46 @@
 {%- endfor -%}
 
 <style>
+    /* ========================= */
+    /* == Loader == */
+    /* ========================= */
+    @keyframes rotation {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    .loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+
+        width: 48px;
+        height: 48px;
+        border: 5px solid #1F5C8A;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: none;
+        pointer-events: none;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    .product__information.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+
+        .loader {
+            display: inline-block;
+            pointer-events: auto;
+        }
+    }
+
     .d-flex {
         display: flex;
     }
@@ -510,6 +550,10 @@
         margin-bottom: 20px;
     }
 
+    .product__information {
+        position: relative;
+    }
+
     .product__information .swatchCustom__item_new {
         position: relative;
 
@@ -845,7 +889,7 @@
 			{% endfor %}
 		</div>
 
-		<button class="to_checkout" data-product="{{ product.id }}">Add to cart <span class="to_checkout__price">{{ checkoutButtonPrice | money }}</span></button>
+		<button class="to_checkout" data-product="{{ product.id }}" data-ajax-cart-trigger>Add to cart <span class="to_checkout__price">{{ checkoutButtonPrice | money }}</span></button>
 
     <span class="purchase-notice">* 30 day Risk-Free Trial</span>
 	</div>
@@ -895,7 +939,7 @@
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
 
-                $('.subscribe-custom__checkbox').prop("checked", false).trigger('change');
+                $(this).parents('.parent-items').find('.subscribe-custom__checkbox').prop("checked", false).trigger('change');
                 $(this).find('.subscribe-custom__checkbox').prop("checked", true).trigger('change');
             } else {
                 $('.popup_btn').eq(0).click();
@@ -905,65 +949,55 @@
         //to checkout
         $('.to_checkout').click(async function () {
             try {
-                const itemId = $('.parent-items .swatchCustom__item_new.active').data('variant');
-                const planId = $('.parent-items .swatchCustom__item_new.active').data('planid');
+                let itemId = $('.parent-items .swatchCustom__item_new.active').data('variant');
+                let planId = $('.parent-items .swatchCustom__item_new.active').data('planid');
+                let $subscribeCheckbox = $('.parent-items .swatchCustom__item_new.active').find('.subscribe-custom__checkbox');
 
-                const productId = $(this).data('product');
+                $('.loader_custom').addClass('active');
 
-                let sale = 0;
-                let add = true
-                let compare = $('.parent-items .swatchCustom__item_new.active').data('title') == '1 Pack' ? 0 : $('.parent-items .swatchCustom__item_new.active').data('compare').replace(currency, '');
-                if ($('.parent-items .swatchCustom__item_new.active').data('title') == '3 Pack') {
-                    sale = document.querySelector('.subscribe-custom__checkbox').checked ? 30 : 22;
-                } else if ($('.parent-items .swatchCustom__item_new.active').data('title') == '12 Pack') {
-                    sale = document.querySelector('.subscribe-custom__checkbox').checked ? 37 : 30;
-                }
+                let cart = await fetch('/cart.js').then(res => res.json());
 
-                $('.loader_custom').addClass('active')
-                let formData = {
-                    'items': [{
-                        'id': itemId,
-                    }]
-                };
+                let lineId = null;
+                let quantity = 1;
+                cart.items.forEach((item, index) => {
+                    if (item.variant_id === itemId) {
+                        lineId = index + 1;
+                        quantity = item.quantity + 1;
+                    }
+                });
 
-                if (document.querySelector('.subscribe-custom__checkbox:checked')) {
-                    formData = {
+                planId = $subscribeCheckbox.is(':checked') ? planId : '';
+                let $disabledElement = $('.ajax-cart.ajax-cart--drawer');
+
+                if (lineId) {
+                    window.PXUTheme.quantityBox.updateCart(lineId, quantity, planId, $disabledElement);
+                } else {
+                    let formData = {
                         items: [{
                             id: itemId,
-                            selling_plan: planId
+                            quantity: 1,
+                            selling_plan: planId || ''
                         }]
-                    }
+                    };
 
-                    const cart = await fetch('/cart.js').then(res => res.json())
+                    await addToCart(formData, $disabledElement);
 
-                    if (cart.items.length == 0) {
-                        const addCart = await addToCart(formData)
-                        window.location.href = '/cart'
-                    } else {
-                        cart.items.forEach(item => {
-                            if (item.selling_plan_allocation && item.selling_plan_allocation.selling_plan.id == planId) {
-                                add = false
-                            }
-                        })
+                    let cart = await fetch('/cart.js').then(res => res.json());
 
-                        if (add) {
-                            const addCart = await addToCart(formData)
-                            window.location.href = '/cart'
-                        } else {
-                            window.location.href = '/cart'
+                    cart.items.forEach((item, index) => {
+                        if (item.variant_id === itemId) {
+                            lineId = index + 1;
+                            quantity = item.quantity;
                         }
-                    }
-                } else {
-                    const addCart = await addToCart(formData)
-                    window.location.href = '/cart'
+                    });
+
+                    window.PXUTheme.quantityBox.updateCart(lineId, quantity, planId, $disabledElement);
                 }
+
                 $('.loader_custom').removeClass('active')
-
-
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
-
         })
 
         // calculating the total price

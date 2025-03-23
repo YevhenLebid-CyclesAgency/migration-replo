@@ -60,14 +60,16 @@
     "use_placeholders": false,
     "display_heading_divider": false,
     "heading_divider_style": "short",
+    "limit_quantity": true,
     "email_link": "",
     "facebook_link": "https://www.facebook.com/somnifix",
     "instagram_link": "https://www.instagram.com/somnifix/",
     "tiktok_link": "https://www.tiktok.com/@somnifix",
     "x_link": "https://x.com/SomniFix",
     "favicon": "shopify://shop_images/Screenshot_2025-03-14_at_18.10.37.png",
-    "cart_action": "mini_cart",
+    "cart_action": "drawer",
     "show_lock_icon": false,
+    "display_ajax_quantity_box": true,
     "sections": {
       "product__main__strips": {
         "type": "product__main__strips",

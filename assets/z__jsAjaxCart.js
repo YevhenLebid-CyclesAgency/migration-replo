@@ -106,6 +106,7 @@ window.PXUTheme.jsAjaxCart = {
     $('.ajax-cart__overlay').removeClass('is-visible');
   },
   removeFromCart: function (lineID, callback) {
+    $('.ajax-cart.ajax-cart--drawer').addClass('disabled');
     $.ajax({
       type: 'POST',
       url: '/cart/change.js',
@@ -113,11 +114,12 @@ window.PXUTheme.jsAjaxCart = {
       dataType: 'json',
       success: function (cart) {
         window.PXUTheme.jsAjaxCart.updateView();
+        $('.ajax-cart.ajax-cart--drawer').removeClass('disabled');
       },
       error: function (XMLHttpRequest, textStatus) {
         var response = eval('(' + XMLHttpRequest.responseText + ')');
         response = response.description;
-
+        $('.ajax-cart.ajax-cart--drawer').removeClass('disabled');
       }
     });
   },

@@ -1,6 +1,7 @@
 <div id="theme-ajax-cart" class="theme-ajax-cart shopify-section {% if context == 'mobile-header' %}jsAjaxCart{% endif %} is-{{ settings.cart_action | replace: '_', '-' }} theme-ajax-cart--header-{{ settings.header_layout }}" data-ajax-cart-{{ settings.cart_action }}>
   <section class="ajax-cart ajax-cart--{{ settings.cart_action | replace: '_', '-' }}">
     {% comment %} Inner ajax cart content can be found in templates/cart.ajax.liquid {% endcomment %}
+    <span class="loader"></span>
 
     {% if settings.cart_action == 'mini_cart' %}
       <div class="card has-shadow">
